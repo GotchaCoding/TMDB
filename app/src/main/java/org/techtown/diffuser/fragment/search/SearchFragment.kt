@@ -1,4 +1,4 @@
-package org.techtown.diffuser.fragment
+package org.techtown.diffuser.fragment.search
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

@@ -10,7 +10,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.navigation.NavigationBarView
 import org.techtown.diffuser.databinding.ActivityMainBinding
 import org.techtown.diffuser.fragment.home.HomeFragment
-import org.techtown.diffuser.fragment.SearchFragment
+import org.techtown.diffuser.fragment.search.SearchFragment
 
 class MainActivity : AppCompatActivity(),
     NavigationBarView.OnItemSelectedListener  {   //이거 대체 가능?
