@@ -1,21 +1,19 @@
 package org.techtown.diffuser.fragment.home
 
-import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
-import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import org.techtown.diffuser.R
+import org.techtown.diffuser.activity.PopularDetailActivity
 import org.techtown.diffuser.application.DiffuserApp
 import org.techtown.diffuser.databinding.ActivityHomeFragmentBinding
-import org.techtown.diffuser.databinding.ActivityMainBinding
+import org.techtown.diffuser.listener.PopularClickListener
 import org.techtown.diffuser.model.Movie
 import org.techtown.diffuser.response.PopularMoviesResponse
-import org.techtown.diffuser.retrofit.RetrofitClient
 import org.techtown.diffuser.retrofit.RetrofitClient.Companion.retrofit
 import org.techtown.diffuser.retrofit.RetrofitInterface
 import retrofit2.Call
@@ -47,7 +45,14 @@ class HomeFragment : Fragment() {
     private fun initView() {
         with(binding) {
             val layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = HomeAdapter()
+            adapter = HomeAdapter(object : PopularClickListener {
+                override fun onClick(v: View) {
+                   Log.e( "log" , "initView() clicklistener 인터페이스 온클릭" )
+                    val intent = Intent(context , PopularDetailActivity::class.java)
+                    startActivity(intent)
+                }
+
+            })
             recyPopularMovie.adapter = adapter
             recyPopularMovie.layoutManager = layoutManager
         }

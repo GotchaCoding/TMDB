@@ -8,16 +8,18 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import org.techtown.diffuser.R
+import org.techtown.diffuser.listener.PopularClickListener
 import org.techtown.diffuser.model.Movie
 import org.techtown.diffuser.response.ResultPopular
 
-class HomeAdapter : RecyclerView.Adapter<HomeViewHolder>() {
+class HomeAdapter(private val ItemClickListener: PopularClickListener) :
+    RecyclerView.Adapter<HomeViewHolder>() {
     var items: ArrayList<Movie> = java.util.ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val itemView = inflater.inflate(R.layout.item_popularmovie, parent, false)
-        return HomeViewHolder(itemView)
+        return HomeViewHolder(itemView, ItemClickListener)
     }
 
     override fun onBindViewHolder(holder: HomeViewHolder, position: Int) {
@@ -30,18 +32,19 @@ class HomeAdapter : RecyclerView.Adapter<HomeViewHolder>() {
     }
 
     fun addMovie(item: List<Movie>) {
-        val positionStart : Int = this.items.size +1
+        val positionStart: Int = this.items.size + 1
         this.items.addAll(item)
         notifyItemRangeChanged(positionStart, items.size)
     }
 
 }
 
-class HomeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class HomeViewHolder(itemView: View , private val popularItemClick: PopularClickListener) : RecyclerView.ViewHolder(itemView) {
 
     var title: TextView
     var rank: TextView
     var image: ImageView
+
 
     init {
         title = itemView.findViewById(R.id.tvPopularTitle)
@@ -52,8 +55,11 @@ class HomeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun setItem(item: Movie) {
         title.text = item.titleM
         rank.text = item.rankM
-        Glide.with(itemView).load("https://image.tmdb.org/t/p/w500"+item.imageM).into(image)
+        Glide.with(itemView).load("https://image.tmdb.org/t/p/w500" + item.imageM).into(image)
 
+        itemView.setOnClickListener{
+            popularItemClick.onClick(it)
+        }
     }
 
 }
