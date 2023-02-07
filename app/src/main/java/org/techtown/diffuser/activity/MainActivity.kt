@@ -23,6 +23,7 @@ class MainActivity : AppCompatActivity(),
 
         //페이저에 어뎁터 연결
         binding.pager.adapter = MyViewPagerAdapter(this)
+        binding.pager.isUserInputEnabled = false
 
         //슬라이드하여 페이지 변경되면 바텀네비게이션의 탭도 그 페이지로 활성화
         binding.pager.registerOnPageChangeCallback(

@@ -1,6 +1,7 @@
 package org.techtown.diffuser.application
 
 import android.app.Application
+import org.techtown.diffuser.BuildConfig
 import org.techtown.diffuser.retrofit.RetrofitClient
 
 class DiffuserApp : Application() {

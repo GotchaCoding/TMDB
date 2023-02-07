@@ -9,7 +9,6 @@ interface RetrofitInterface {
 
     @GET("/3/movie/popular")
     fun getPopularMovie(
-        @Query("api_key") api_key : String,
         @Query("language") lnaguage : String,
         @Query("page") page : Int
     ) : Call<PopularMoviesResponse>

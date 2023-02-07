@@ -5,61 +5,104 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.Glide.init
 import org.techtown.diffuser.R
 import org.techtown.diffuser.listener.PopularClickListener
+import org.techtown.diffuser.model.HorizontalPopularModel
+import org.techtown.diffuser.model.ItemModel
 import org.techtown.diffuser.model.Movie
-import org.techtown.diffuser.response.ResultPopular
+import org.techtown.diffuser.model.Title
 
 class HomeAdapter(private val ItemClickListener: PopularClickListener) :
-    RecyclerView.Adapter<HomeViewHolder>() {
-    var items: ArrayList<Movie> = java.util.ArrayList()
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    private var items: ArrayList<ItemModel> = arrayListOf()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        val itemView = inflater.inflate(R.layout.item_popularmovie, parent, false)
-        return HomeViewHolder(itemView, ItemClickListener)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        when (viewType) {
+            VIEW_TYPE_TITLE -> {
+                val inflater = LayoutInflater.from(parent.context)
+                val itemView = inflater.inflate(R.layout.item_titlepopualr, parent, false)
+                return TitleViewHolder(itemView)
+            }
+            VIEW_TYPE_POPULAR_MOVIE -> {
+                val inflater = LayoutInflater.from(parent.context)
+                val itemView = inflater.inflate(R.layout.viewholder_popularmovies, parent, false)
+                return HorizontalPopularMoviesViewHolder(itemView, ItemClickListener)
+            }
+            else -> {
+                throw Exception()
+            }
+        }
     }
 
-    override fun onBindViewHolder(holder: HomeViewHolder, position: Int) {
-        val item = items[position]
-        holder.setItem(item)
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val itemModel = items[position]
+        when (itemModel.viewType) {
+            VIEW_TYPE_TITLE -> {
+                if (itemModel is Title) {
+                    (holder as TitleViewHolder).setItem(itemModel)
+                }
+            }
+            VIEW_TYPE_POPULAR_MOVIE -> {
+                if (itemModel is HorizontalPopularModel) {
+                    (holder as HorizontalPopularMoviesViewHolder).setItem(itemModel)
+                }
+            }
+        }
     }
 
     override fun getItemCount(): Int {
         return items.size
     }
 
-    fun addMovie(item: List<Movie>) {
-        val positionStart: Int = this.items.size + 1
-        this.items.addAll(item)
-        notifyItemRangeChanged(positionStart, items.size)
+    override fun getItemViewType(position: Int): Int {
+        return items[position].viewType
     }
 
-}
-
-class HomeViewHolder(itemView: View , private val popularItemClick: PopularClickListener) : RecyclerView.ViewHolder(itemView) {
-
-    var title: TextView
-    var rank: TextView
-    var image: ImageView
-
-
-    init {
-        title = itemView.findViewById(R.id.tvPopularTitle)
-        rank = itemView.findViewById(R.id.tvPopularRank)
-        image = itemView.findViewById(R.id.imagePopular)
+    fun addItems(items: List<ItemModel>) {
+        val positionStart: Int = this.items.size
+        this.items.addAll(items)
+        notifyItemRangeInserted(positionStart, items.size)
     }
 
-    fun setItem(item: Movie) {
-        title.text = item.titleM
-        rank.text = item.rankM
-        Glide.with(itemView).load("https://image.tmdb.org/t/p/w500" + item.imageM).into(image)
+    class HorizontalPopularMoviesViewHolder(
+        itemView: View,
+        private val popularItemClick: PopularClickListener
+    ) : RecyclerView.ViewHolder(itemView) {
 
-        itemView.setOnClickListener{
-            popularItemClick.onClick(it)
+        var rvMain: RecyclerView
+        var adapter = HorizontalPopularMoviesRecyclerAdapter(popularItemClick)
+        init {
+            rvMain = itemView.findViewById(R.id.rvMain)
+            rvMain.adapter = adapter
+            rvMain.layoutManager = LinearLayoutManager(itemView.context, LinearLayoutManager.HORIZONTAL, false)
         }
+
+        fun setItem(item: HorizontalPopularModel) {
+            adapter.setMoives(item.movies)
+        }
+
     }
 
+    class TitleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+        var tvTitle: TextView
+
+        init {
+            tvTitle = itemView.findViewById(R.id.tvTitle)
+        }
+
+        fun setItem(item: Title) {
+            tvTitle.text = item.titleM
+        }
+
+    }
+
+    companion object {
+        const val VIEW_TYPE_TITLE = 0
+        const val VIEW_TYPE_POPULAR_MOVIE = 1
+    }
 }

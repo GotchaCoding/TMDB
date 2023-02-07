@@ -9,10 +9,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.techtown.diffuser.activity.PopularDetailActivity
-import org.techtown.diffuser.application.DiffuserApp
 import org.techtown.diffuser.databinding.ActivityHomeFragmentBinding
+import org.techtown.diffuser.fragment.home.HomeAdapter.Companion.VIEW_TYPE_TITLE
 import org.techtown.diffuser.listener.PopularClickListener
+import org.techtown.diffuser.model.HorizontalPopularModel
+import org.techtown.diffuser.model.ItemModel
 import org.techtown.diffuser.model.Movie
+import org.techtown.diffuser.model.Title
 import org.techtown.diffuser.response.PopularMoviesResponse
 import org.techtown.diffuser.retrofit.RetrofitClient.Companion.retrofit
 import org.techtown.diffuser.retrofit.RetrofitInterface
@@ -44,7 +47,7 @@ class HomeFragment : Fragment() {
 
     private fun initView() {
         with(binding) {
-            val layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            val layoutManager = LinearLayoutManager(context)
             adapter = HomeAdapter(object : PopularClickListener {
                 override fun onClick(v: View) {
                    Log.e( "log" , "initView() clicklistener 인터페이스 온클릭" )
@@ -60,7 +63,6 @@ class HomeFragment : Fragment() {
 
     private fun fetch() {
         service.getPopularMovie(
-            DiffuserApp.API_KEY,
             "ko",
             1
         ).enqueue(object : Callback<PopularMoviesResponse> {
@@ -69,6 +71,8 @@ class HomeFragment : Fragment() {
                 response: Response<PopularMoviesResponse>
             ) {
                 val result = response.body()
+                val items = arrayListOf<ItemModel>()
+                items.add(Title("인기영화",HomeAdapter.VIEW_TYPE_TITLE))
                 val list = result!!.results.map {
                     Movie(
                         it.title,
@@ -76,7 +80,10 @@ class HomeFragment : Fragment() {
                         it.posterPath
                     )
                 }
-                adapter.addMovie(list)
+                val horizontalPopularModel = HorizontalPopularModel(list, HomeAdapter.VIEW_TYPE_POPULAR_MOVIE)
+                items.add(horizontalPopularModel)
+
+                adapter.addItems(items)
             }
 
             override fun onFailure(call: Call<PopularMoviesResponse>, t: Throwable) {
