@@ -56,8 +56,8 @@ class HomeFragment : Fragment() {
                 }
 
             })
-            recyPopularMovie.adapter = adapter
-            recyPopularMovie.layoutManager = layoutManager
+            recyclerview.adapter = adapter
+            recyclerview.layoutManager = layoutManager
         }
     }
 
@@ -72,7 +72,7 @@ class HomeFragment : Fragment() {
             ) {
                 val result = response.body()
                 val items = arrayListOf<ItemModel>()
-                items.add(Title("인기영화",HomeAdapter.VIEW_TYPE_TITLE))
+                items.add(Title("인기영화2",HomeAdapter.VIEW_TYPE_TITLE))
                 val list = result!!.results.map {
                     Movie(
                         it.title,
@@ -82,6 +82,9 @@ class HomeFragment : Fragment() {
                 }
                 val horizontalPopularModel = HorizontalPopularModel(list, HomeAdapter.VIEW_TYPE_POPULAR_MOVIE)
                 items.add(horizontalPopularModel)
+                items.add(HorizontalPopularModel(list, 1))
+                val test = Title("d", 0)
+                items.add(test)
 
                 adapter.addItems(items)
             }

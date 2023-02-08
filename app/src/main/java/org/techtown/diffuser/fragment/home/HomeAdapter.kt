@@ -44,6 +44,7 @@ class HomeAdapter(private val ItemClickListener: PopularClickListener) :
             VIEW_TYPE_TITLE -> {
                 if (itemModel is Title) {
                     (holder as TitleViewHolder).setItem(itemModel)
+
                 }
             }
             VIEW_TYPE_POPULAR_MOVIE -> {
@@ -87,7 +88,7 @@ class HomeAdapter(private val ItemClickListener: PopularClickListener) :
 
     }
 
-    class TitleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class TitleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {  //뷰홀더 for title
 
         var tvTitle: TextView
 
