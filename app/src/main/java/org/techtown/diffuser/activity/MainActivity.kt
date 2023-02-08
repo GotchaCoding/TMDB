@@ -13,7 +13,7 @@ import org.techtown.diffuser.fragment.home.HomeFragment
 import org.techtown.diffuser.fragment.search.SearchFragment
 
 class MainActivity : AppCompatActivity(),
-    NavigationBarView.OnItemSelectedListener  {   //이거 대체 가능?
+    NavigationBarView.OnItemSelectedListener  {
     lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
