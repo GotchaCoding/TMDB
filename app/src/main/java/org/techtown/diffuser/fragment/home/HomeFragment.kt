@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.techtown.diffuser.activity.PopularDetailActivity
 import org.techtown.diffuser.databinding.ActivityHomeFragmentBinding
+import org.techtown.diffuser.fragment.home.HomeAdapter.Companion.VIEW_TYPE_NOW_MOVIE
 import org.techtown.diffuser.fragment.home.HomeAdapter.Companion.VIEW_TYPE_POPULAR_MOVIE
 import org.techtown.diffuser.listener.PopularClickListener
 import org.techtown.diffuser.model.*
@@ -43,7 +44,7 @@ class HomeFragment : Fragment() {
             Title("인기영화", HomeAdapter.VIEW_TYPE_TITLE),
             WrappingModel(true, null, VIEW_TYPE_POPULAR_MOVIE),
             Title("상영중 영화", HomeAdapter.VIEW_TYPE_TITLE),
-            WrappingModel(true, null, VIEW_TYPE_POPULAR_MOVIE)
+            WrappingModel(true, null, VIEW_TYPE_NOW_MOVIE)
         )
         adapter.addItems(items)
         fetch()
@@ -119,15 +120,15 @@ class HomeFragment : Fragment() {
                     Movie(
                         it.title,
                         it.releaseDate,
-                        it.posterPath
+                        it.backdropPath
                     )
                 }
-                val nowPlaying = HorizontalMoviesModel(list, HomeAdapter.VIEW_TYPE_POPULAR_MOVIE)
+                val nowPlaying = HorizontalMoviesModel(list, HomeAdapter.VIEW_TYPE_NOW_MOVIE)
                 adapter.updateNowPlayingWrappingModel(
                     WrappingModel(
                         isLoading = false,
                         model = nowPlaying,
-                        viewType = VIEW_TYPE_POPULAR_MOVIE
+                        viewType = VIEW_TYPE_NOW_MOVIE
                     )
                 )
             }
