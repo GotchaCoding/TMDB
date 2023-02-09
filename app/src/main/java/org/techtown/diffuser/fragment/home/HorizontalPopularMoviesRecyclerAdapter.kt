@@ -30,7 +30,7 @@ class HorizontalPopularMoviesRecyclerAdapter(private val ItemClickListener: Popu
         return items.size
     }
 
-    fun setMoives(movies: List<Movie>) {
+    fun setMovies(movies: List<Movie>) {
         items = movies
         notifyDataSetChanged()
     }

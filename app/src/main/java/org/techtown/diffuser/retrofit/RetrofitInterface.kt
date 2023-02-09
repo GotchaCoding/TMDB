@@ -1,5 +1,6 @@
 package org.techtown.diffuser.retrofit
 
+import org.techtown.diffuser.response.NowPlayingResponse
 import org.techtown.diffuser.response.PopularMoviesResponse
 import retrofit2.Call
 import retrofit2.http.GET
@@ -12,4 +13,10 @@ interface RetrofitInterface {
         @Query("language") lnaguage : String,
         @Query("page") page : Int
     ) : Call<PopularMoviesResponse>
+
+    @GET("/3/movie/now_playing")
+    fun getNowPlayingMovie(
+        @Query("language") language : String,
+        @Query("page") page : Int
+    ) : Call<NowPlayingResponse>
 }

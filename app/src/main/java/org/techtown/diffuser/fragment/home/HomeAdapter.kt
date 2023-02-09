@@ -3,18 +3,15 @@ package org.techtown.diffuser.fragment.home
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.Glide.init
 import org.techtown.diffuser.R
 import org.techtown.diffuser.listener.PopularClickListener
-import org.techtown.diffuser.model.HorizontalPopularModel
 import org.techtown.diffuser.model.ItemModel
-import org.techtown.diffuser.model.Movie
 import org.techtown.diffuser.model.Title
+import org.techtown.diffuser.model.WrappingModel
 
 class HomeAdapter(private val ItemClickListener: PopularClickListener) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -48,7 +45,7 @@ class HomeAdapter(private val ItemClickListener: PopularClickListener) :
                 }
             }
             VIEW_TYPE_POPULAR_MOVIE -> {
-                if (itemModel is HorizontalPopularModel) {
+                if (itemModel is WrappingModel) {
                     (holder as HorizontalPopularMoviesViewHolder).setItem(itemModel)
                 }
             }
@@ -69,21 +66,45 @@ class HomeAdapter(private val ItemClickListener: PopularClickListener) :
         notifyItemRangeInserted(positionStart, items.size)
     }
 
+    fun setModel(items: List<ItemModel>) {
+        val positionStart: Int = this.items.size
+        this.items.addAll(items)
+        notifyItemRangeInserted(positionStart, items.size)
+    }
+
+    fun updatePopularWrappingModel(item: WrappingModel) {
+        items[1] = item
+        notifyItemChanged(1)
+    }
+
+    fun updateNowPlayingWrappingModel(item: WrappingModel) {
+        items[3] = item
+        notifyItemChanged(3)
+    }
+
     class HorizontalPopularMoviesViewHolder(
         itemView: View,
         private val popularItemClick: PopularClickListener
     ) : RecyclerView.ViewHolder(itemView) {
 
         var rvMain: RecyclerView
+        var vLoading : View
         var adapter = HorizontalPopularMoviesRecyclerAdapter(popularItemClick)
+
         init {
             rvMain = itemView.findViewById(R.id.rvMain)
+            vLoading = itemView.findViewById(R.id.vLoading)
             rvMain.adapter = adapter
-            rvMain.layoutManager = LinearLayoutManager(itemView.context, LinearLayoutManager.HORIZONTAL, false)
+            rvMain.layoutManager =
+                LinearLayoutManager(itemView.context, LinearLayoutManager.HORIZONTAL, false)
         }
 
-        fun setItem(item: HorizontalPopularModel) {
-            adapter.setMoives(item.movies)
+        fun setItem(item: WrappingModel) {
+            vLoading.isVisible = item.isLoading
+
+            if (item.model != null) {
+                adapter.setMovies(item.model.movies)
+            }
         }
 
     }
