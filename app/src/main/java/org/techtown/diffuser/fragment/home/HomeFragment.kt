@@ -8,8 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.airbnb.lottie.LottieAnimationView
-import org.techtown.diffuser.activity.PopularDetailActivity
+import org.techtown.diffuser.activity.detailpage.PopularDetailActivity
 import org.techtown.diffuser.databinding.ActivityHomeFragmentBinding
 import org.techtown.diffuser.fragment.home.HomeAdapter.Companion.VIEW_TYPE_NOW_MOVIE
 import org.techtown.diffuser.fragment.home.HomeAdapter.Companion.VIEW_TYPE_POPULAR_MOVIE
@@ -32,7 +31,7 @@ class HomeFragment : Fragment() {
     private lateinit var adapter: HomeAdapter
 
     private var service = retrofit.create(RetrofitInterface::class.java)
-    lateinit var animationView: LottieAnimationView
+
 
     override fun onCreateView(
         inflater: LayoutInflater,

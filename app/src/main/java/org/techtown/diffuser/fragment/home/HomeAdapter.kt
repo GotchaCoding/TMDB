@@ -99,12 +99,15 @@ class HomeAdapter(private val ItemClickListener: PopularClickListener) :
     ) : RecyclerView.ViewHolder(itemView) {
 
         var rvMain: RecyclerView
-        var vLoading: View
+        var vLoading: LottieAnimationView
         var adapter = HorizontalPopularMoviesRecyclerAdapter(popularItemClick)
 
         init {
             rvMain = itemView.findViewById(R.id.rvMain)
             vLoading = itemView.findViewById(R.id.vLoading)
+            vLoading.setAnimation("loading.json")
+            vLoading.repeatCount
+            vLoading.playAnimation()
             rvMain.adapter = adapter
             rvMain.layoutManager =
                 LinearLayoutManager(itemView.context, LinearLayoutManager.HORIZONTAL, false)

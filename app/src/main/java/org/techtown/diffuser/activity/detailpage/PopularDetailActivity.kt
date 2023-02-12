@@ -1,4 +1,4 @@
-package org.techtown.diffuser.activity
+package org.techtown.diffuser.activity.detailpage
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
