@@ -33,6 +33,7 @@ class HomeFragment : Fragment() {
     private var service = retrofit.create(RetrofitInterface::class.java)
 
 
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -61,10 +62,11 @@ class HomeFragment : Fragment() {
         with(binding) {
             val layoutManager = LinearLayoutManager(context)
             adapter = HomeAdapter(object : PopularClickListener {
-                override fun onClick(v: View) {
+                override fun onClick(movie: Movie) {
                     Log.e("log", "initView() clicklistener 인터페이스 온클릭")
                     val intent = Intent(context, PopularDetailActivity::class.java)
-                    startActivity(intent)
+                    intent.putExtra("movie_id" , movie.id)
+                        startActivity(intent)
                 }
 
             })
@@ -84,11 +86,18 @@ class HomeFragment : Fragment() {
             ) {
                 val result = response.body()
 
+                /**
+                 * movie_id  (응답 변수 :id ) 받는 테스트
+                 */
+//                val movie_id = result.
+
+
                 val list = result!!.results.map {
                     Movie(
-                        it.title,
-                        it.releaseDate,
-                        it.posterPath
+                        title = it.title,
+                        rank = it.releaseDate,
+                        imagePoster = it.posterPath,
+                        id = it.id
                     )
                 }
                 val horizontalPopularModel =
@@ -123,11 +132,13 @@ class HomeFragment : Fragment() {
 
                 val list = result!!.results.map {
                     Movie(
-                        it.title,
-                        it.releaseDate,
-                        it.backdropPath
+                        title = it.title,
+                        rank = it.releaseDate,
+                        imageDrop = it.backdropPath,
+                        id = it.id
                     )
                 }
+
                 val nowPlaying = HorizontalMoviesModel(list, HomeAdapter.VIEW_TYPE_NOW_MOVIE)
                 adapter.updateNowPlayingWrappingModel(
                     WrappingModel(

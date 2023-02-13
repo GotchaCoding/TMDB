@@ -7,7 +7,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.Glide.init
 import org.techtown.diffuser.R
 import org.techtown.diffuser.listener.PopularClickListener
 import org.techtown.diffuser.model.Movie
@@ -54,12 +53,12 @@ class NowMovieViewHolder(itemView: View, private val popularItemClick: PopularCl
         }
 
         fun setItem(item: Movie) {
-            title.text = item.titleM
-            rank.text = item.rankM
-            Glide.with(itemView).load("https://image.tmdb.org/t/p/w500" + item.imageM).into(image)
+            title.text = item.title
+            rank.text = item.rank
+            Glide.with(itemView).load("https://image.tmdb.org/t/p/w500" + item.imageDrop).into(image)
 
             itemView.setOnClickListener {
-                popularItemClick.onClick(it)
+                popularItemClick.onClick(item)
             }
         }
 

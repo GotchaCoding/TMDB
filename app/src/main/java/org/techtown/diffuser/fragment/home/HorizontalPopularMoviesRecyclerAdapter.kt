@@ -50,12 +50,12 @@ class HorizontalPopularMoviesRecyclerAdapter(private val ItemClickListener: Popu
         }
 
         fun setItem(item: Movie) {
-            title.text = item.titleM
-            rank.text = item.rankM
-            Glide.with(itemView).load("https://image.tmdb.org/t/p/w500" + item.imageM).into(image)
+            title.text = item.title
+            rank.text = item.rank
+            Glide.with(itemView).load("https://image.tmdb.org/t/p/w500" + item.imagePoster).into(image)
 
             itemView.setOnClickListener {
-                popularItemClick.onClick(it)
+                popularItemClick.onClick(item)
             }
         }
 

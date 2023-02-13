@@ -19,4 +19,6 @@ interface RetrofitInterface {
         @Query("language") language : String,
         @Query("page") page : Int
     ) : Call<NowPlayingResponse>
+
+
 }
