@@ -24,14 +24,16 @@ class PopularDetailActivity : AppCompatActivity() {
 
     private var service = RetrofitClient.retrofit.create(RetrofitInterface::class.java)
     lateinit var movie: Movie
+    var movieId: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPopualrDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val movieId = intent.getIntExtra("movie_id",0)
-        Log.e("kyh!!!" , "movieId : $movieId")
+        movieId = intent.getIntExtra("movie_id", 0)
+        Log.e("kyh!!!", "movieId : $movieId")
         initView()
+
         fetch()
 
     }
@@ -47,33 +49,28 @@ class PopularDetailActivity : AppCompatActivity() {
 
     private fun fetch() {
         service.getDetailPage(
-
-            1
+            movieId,
+            "ko"
         ).enqueue(object : Callback<DetailPage_3> {
-            override fun onResponse(
-                call: Call<PopularMoviesResponse>,
-                response: Response<PopularMoviesResponse>
-            ) {
+            override fun onResponse(call: Call<DetailPage_3>, response: Response<DetailPage_3>) {
                 val result = response.body()
-
-                val list = result!!.results.map {
-                     movie = Movie(
-                        id = it.id,
-                        title = it.title,
-                        rank = it.releaseDate,
-                        imagePoster = it.posterPath,
-                        imageDrop = it.backdropPath,
+                if (result != null) {
+                    adapter.setTopModel(
+                        DetailTopModel(
+                            title= result.title,
+                            overview = result.overview,
+                            postUrl = result.posterPath,
+                            backDropUrl = result.backdropPath,
+                            viewType = DetailAdapter.VIEW_TYPE_DETAIL_BACKGROND
+                        )
                     )
-
                 }
-                val items = arrayListOf<ItemModel>()
-//                items.add(DetailTopModel(movie.title ,movie.rank,  DetailAdapter.VIEW_TYPE_DETAIL_BACKGROND))
-                adapter.addItem(items)
             }
 
-            override fun onFailure(call: Call<PopularMoviesResponse>, t: Throwable) {
+            override fun onFailure(call: Call<DetailPage_3>, t: Throwable) {
                 TODO("Not yet implemented")
             }
+
 
         })
     }

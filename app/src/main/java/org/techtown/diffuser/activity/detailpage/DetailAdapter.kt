@@ -42,6 +42,10 @@ class DetailAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         return items.size
     }
 
+    override fun getItemViewType(position: Int): Int {
+        return items[position].viewType
+    }
+
     fun addItem(items: List<ItemModel>) {
         val positionStart: Int = this.items.size
         this.items.addAll(items)
@@ -49,8 +53,10 @@ class DetailAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     fun setTopModel(topModel: DetailTopModel) {
-        items[0] = topModel
-        notifyItemChanged(0)
+//        items[0] = topModel
+        items.add(topModel)
+        notifyDataSetChanged()
+//        notifyItemChanged(0)
     }
 
     class BackImageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

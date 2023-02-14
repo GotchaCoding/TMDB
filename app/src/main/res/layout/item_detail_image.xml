@@ -8,33 +8,47 @@
     <ImageView
         android:id="@+id/img_background"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="wrap_content"
         android:background="@mipmap/ic_launcher_round"
+        android:adjustViewBounds="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/img_poster"
-        android:layout_width="146dp"
-        android:layout_height="166dp"
-        android:background="@mipmap/ic_launcher_round"
+        android:layout_width="100dp"
+        android:layout_height="170dp"
+        android:adjustViewBounds="true"
+        android:layout_marginStart="7dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/img_background" />
 
     <TextView
         android:id="@+id/tvTitle_detail"
-        android:layout_width="219dp"
-        android:layout_height="40dp"
-        android:background="@color/black"
+        android:layout_width="285dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:textSize="23sp"
+        android:layout_margin="5dp"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:text="제목"
         app:layout_constraintStart_toEndOf="@+id/img_poster"
         app:layout_constraintTop_toBottomOf="@id/img_background" />
 
     <TextView
         android:id="@+id/tvOverview"
-        android:layout_width="250dp"
-        android:layout_height="206dp"
-        android:background="@color/black"
+        android:layout_width="285dp"
+        android:layout_height="wrap_content"
+        android:textColor="#A8A5A5"
+        android:layout_margin="5dp"
+        android:textSize="13sp"
+        android:text="급격한 기후변화로 지구는 폐허가 되고 인류는 우주에 새로운 터전 쉘터를 만들어 이주한다 .
+급격한 기후변화로 지구는 폐허가 되고 인류는 우주에 새로운 터전 쉘터를 만들어 이주한다 .
+급격한 기후변화로 지구는 폐허가 되고 인류는 우주에 새로운 터전 쉘터를 만들어 이주한다 .
+급격한 기후변화로 지구는 폐허가 되고 인류는 우주에 새로운 터전 쉘터를 만들어 이주한다 ."
         app:layout_constraintStart_toEndOf="@+id/img_poster"
         app:layout_constraintTop_toBottomOf="@+id/tvTitle_detail" />
 </androidx.constraintlayout.widget.ConstraintLayout>

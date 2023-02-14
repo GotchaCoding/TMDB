@@ -23,7 +23,7 @@ interface RetrofitInterface {
     ) : Call<NowPlayingResponse>
 
 
-    @GET("/3/movie")
+    @GET("/3/movie/{movie_id}")
     fun getDetailPage(
         @Path("movie_id") movie_id : Int,
         @Query("language") language : String
