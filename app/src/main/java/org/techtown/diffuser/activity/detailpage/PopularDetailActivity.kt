@@ -10,6 +10,7 @@ import org.techtown.diffuser.fragment.home.HomeAdapter
 import org.techtown.diffuser.model.DetailTopModel
 import org.techtown.diffuser.model.ItemModel
 import org.techtown.diffuser.model.Movie
+import org.techtown.diffuser.response.DetailPage_3
 import org.techtown.diffuser.response.PopularMoviesResponse
 import org.techtown.diffuser.retrofit.RetrofitClient
 import org.techtown.diffuser.retrofit.RetrofitInterface
@@ -45,10 +46,10 @@ class PopularDetailActivity : AppCompatActivity() {
     }
 
     private fun fetch() {
-        service.getPopularMovie(
-            "ko",
+        service.getDetailPage(
+
             1
-        ).enqueue(object : Callback<PopularMoviesResponse> {
+        ).enqueue(object : Callback<DetailPage_3> {
             override fun onResponse(
                 call: Call<PopularMoviesResponse>,
                 response: Response<PopularMoviesResponse>
