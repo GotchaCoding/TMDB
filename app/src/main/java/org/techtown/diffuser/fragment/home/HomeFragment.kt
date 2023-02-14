@@ -86,12 +86,6 @@ class HomeFragment : Fragment() {
             ) {
                 val result = response.body()
 
-                /**
-                 * movie_id  (응답 변수 :id ) 받는 테스트
-                 */
-//                val movie_id = result.
-
-
                 val list = result!!.results.map {
                     Movie(
                         title = it.title,

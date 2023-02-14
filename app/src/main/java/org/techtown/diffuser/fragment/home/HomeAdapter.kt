@@ -51,7 +51,7 @@ class HomeAdapter(private val ItemClickListener: PopularClickListener) :
                 }
             }
             VIEW_TYPE_POPULAR_MOVIE -> {
-                if (itemModel is WrappingModel) {
+                if (itemModel is WrappingModel) {  //is 는 자료 반환형 체크
                     (holder as HorizontalPopularMoviesViewHolder).setItem(itemModel)
                 }
             }
@@ -77,11 +77,6 @@ class HomeAdapter(private val ItemClickListener: PopularClickListener) :
         notifyItemRangeInserted(positionStart, items.size)
     }
 
-    fun setModel(items: List<ItemModel>) {
-        val positionStart: Int = this.items.size
-        this.items.addAll(items)
-        notifyItemRangeInserted(positionStart, items.size)
-    }
 
     fun updatePopularWrappingModel(item: WrappingModel) {
         items[1] = item
