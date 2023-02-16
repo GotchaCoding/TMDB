@@ -101,7 +101,7 @@ class HomeAdapter(private val ItemClickListener: PopularClickListener) :
             rvMain = itemView.findViewById(R.id.rvMain)
             vLoading = itemView.findViewById(R.id.vLoading)
             vLoading.setAnimation("loading.json")
-            vLoading.repeatCount
+            vLoading.repeatCount = 10
             vLoading.playAnimation()
             rvMain.adapter = adapter
             rvMain.layoutManager =
@@ -118,7 +118,7 @@ class HomeAdapter(private val ItemClickListener: PopularClickListener) :
 
     }
 
-    class TitleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {  //뷰홀더 for title
+    class TitleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         var tvTitle: TextView
 
@@ -144,7 +144,7 @@ class HomeAdapter(private val ItemClickListener: PopularClickListener) :
             rvMain = itemView.findViewById(R.id.rvMain)
             vLoading = itemView.findViewById(R.id.vLoading)
             vLoading.setAnimation("loading.json")
-            vLoading.repeatCount
+            vLoading.repeatCount = 10
             vLoading.playAnimation()
             rvMain.adapter = adapter
             rvMain.layoutManager =

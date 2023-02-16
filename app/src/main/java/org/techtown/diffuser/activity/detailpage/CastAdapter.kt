@@ -33,6 +33,7 @@ class CastAdapter : RecyclerView.Adapter<CastAdapter.CastingViewHolder>() {
         }
     }
 
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CastingViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val itemView = inflater.inflate(R.layout.item_cast, parent, false)

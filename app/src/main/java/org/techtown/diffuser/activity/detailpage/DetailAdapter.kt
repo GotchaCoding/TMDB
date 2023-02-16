@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
 import org.techtown.diffuser.R
+import org.techtown.diffuser.fragment.home.HomeAdapter
 import org.techtown.diffuser.model.*
 
 class DetailAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -27,6 +28,11 @@ class DetailAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 val inflater = LayoutInflater.from(parent.context)
                 val itemView = inflater.inflate(R.layout.viewholder_cast, parent, false)
                 return CastViewHolder(itemView)
+            }
+            VIEW_TYPE_DETAIL_TITLE -> {
+                val inflater = LayoutInflater.from(parent.context)
+                val itemView = inflater.inflate(R.layout.item_titlepopualr, parent, false)
+                return TitleViewHolder(itemView)
             }
             else -> {
                 throw Exception()
@@ -47,6 +53,11 @@ class DetailAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                     (holder as CastViewHolder).setItem(itemModel)
                 }
             }
+            VIEW_TYPE_DETAIL_TITLE -> {
+                if(itemModel is Title){
+                    (holder as TitleViewHolder).setItem(itemModel)
+                }
+            }
         }
     }
 
@@ -65,16 +76,13 @@ class DetailAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     fun updateTopModel(item: DetailTopModel) {
-//        items[0] = topModel
         items[0] = item
         notifyItemChanged(0)
-//        notifyItemChanged(0)
     }
 
     fun updateCastWrappingModel(item : WrappingDetailModel) {
-        items[1] = item
-        notifyItemChanged(1)
-
+        items[2] = item
+        notifyItemChanged(2)
     }
 
     class BackImageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -112,7 +120,7 @@ class DetailAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             rvCast = itemView.findViewById(R.id.rvCast)
             vLoading = itemView.findViewById(R.id.vLoading)
             vLoading.setAnimation("loading.json")
-            vLoading.repeatCount
+            vLoading.repeatCount = 10
             vLoading.playAnimation()
             rvCast.adapter = adapter
             rvCast.layoutManager = LinearLayoutManager(itemView.context, LinearLayoutManager.HORIZONTAL, false)
@@ -127,9 +135,23 @@ class DetailAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
 
+    class TitleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+        var tvTitle: TextView
+
+        init {
+            tvTitle = itemView.findViewById(R.id.tvTitle)
+        }
+
+        fun setItem(item: Title) {
+            tvTitle.text = item.titleM
+        }
+    }
+
     companion object {
         const val VIEW_TYPE_DETAIL_BACKGROND = 0
         const val VIEW_TYPE_DETAIL_CASTING = 1
+        const val VIEW_TYPE_DETAIL_TITLE = 2
     }
 }
 

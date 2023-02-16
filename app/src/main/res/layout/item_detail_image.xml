@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <ImageView
@@ -28,27 +28,29 @@
         android:id="@+id/tvTitle_detail"
         android:layout_width="285dp"
         android:layout_height="wrap_content"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        android:textSize="23sp"
         android:layout_margin="5dp"
-        android:maxLines="2"
         android:ellipsize="end"
+        android:maxLines="2"
         android:text="제목"
+        android:textColor="@color/white"
+        android:textSize="23sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/img_poster"
         app:layout_constraintTop_toBottomOf="@id/img_background" />
 
     <TextView
         android:id="@+id/tvOverview"
-        android:layout_width="285dp"
-        android:layout_height="wrap_content"
-        android:textColor="#A8A5A5"
+        android:layout_width="289dp"
+        android:layout_height="129dp"
         android:layout_margin="5dp"
-        android:textSize="13sp"
         android:text="급격한 기후변화로 지구는 폐허가 되고 인류는 우주에 새로운 터전 쉘터를 만들어 이주한다 .
 급격한 기후변화로 지구는 폐허가 되고 인류는 우주에 새로운 터전 쉘터를 만들어 이주한다 .
 급격한 기후변화로 지구는 폐허가 되고 인류는 우주에 새로운 터전 쉘터를 만들어 이주한다 .
 급격한 기후변화로 지구는 폐허가 되고 인류는 우주에 새로운 터전 쉘터를 만들어 이주한다 ."
+        android:textColor="#A8A5A5"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/img_poster"
         app:layout_constraintTop_toBottomOf="@+id/tvTitle_detail" />
 </androidx.constraintlayout.widget.ConstraintLayout>

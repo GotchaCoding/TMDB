@@ -33,6 +33,7 @@ class PopularDetailActivity : AppCompatActivity() {
 
         val items = listOf(
             DetailTopModel("", "", "", "", DetailAdapter.VIEW_TYPE_DETAIL_BACKGROND),
+            Title("캐스팅" , DetailAdapter.VIEW_TYPE_DETAIL_TITLE),
             WrappingDetailModel(true, null, null, DetailAdapter.VIEW_TYPE_DETAIL_CASTING)
         )
         adapter.addItem(items)
@@ -71,7 +72,8 @@ class PopularDetailActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<DetailPage_3>, t: Throwable) {
-                Log.d("kmh", "fetch onFailure")
+                Log.d("kmh", t.toString())
+
             }
 
 
@@ -99,8 +101,8 @@ class PopularDetailActivity : AppCompatActivity() {
                      HorizontalCastModel에서 list를 MUTABLELIST로 봐꾸고
                      null값인 포지션을 변수 num_forReove 에 저장
                      */
-                    var num_forRemove = arrayListOf<Int>()
-                    mutableCastList = list.toMutableList()
+                    var num_forRemove = arrayListOf<Int>()   // 사진이 널값인 position 저장.
+                    mutableCastList = list.toMutableList()  // list 를 mutable 로 변경
                     for (i: Int in 0..mutableCastList.size - 1) {
                         if (mutableCastList[i].imgActor == null) {
                             num_forRemove.add(i)
@@ -113,7 +115,6 @@ class PopularDetailActivity : AppCompatActivity() {
                         mutableCastList.removeAt(num_forRemove[i])
                     }
 
-
                     val castModel =
                         HorizontalCastModel(mutableCastList, DetailAdapter.VIEW_TYPE_DETAIL_CASTING)
                     adapter.updateCastWrappingModel(
@@ -124,12 +125,11 @@ class PopularDetailActivity : AppCompatActivity() {
                             viewType = DetailAdapter.VIEW_TYPE_DETAIL_CASTING
                         )
                     )
-
                 }
             }
 
             override fun onFailure(call: Call<CastResult>, t: Throwable) {
-                Log.d("kmh", "fetchCast onFailure")
+                Log.d("kmh", t.toString())
             }
 
         })
