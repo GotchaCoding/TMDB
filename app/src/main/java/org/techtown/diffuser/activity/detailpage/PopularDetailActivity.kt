@@ -4,14 +4,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
-import org.techtown.diffuser.R
 import org.techtown.diffuser.databinding.ActivityPopualrDetailBinding
-import org.techtown.diffuser.fragment.home.HomeAdapter
-import org.techtown.diffuser.model.DetailTopModel
-import org.techtown.diffuser.model.ItemModel
-import org.techtown.diffuser.model.Movie
-import org.techtown.diffuser.response.DetailPage_3
-import org.techtown.diffuser.response.PopularMoviesResponse
+import org.techtown.diffuser.model.*
+import org.techtown.diffuser.response.detail.cast.CastResult
+import org.techtown.diffuser.response.detail.detailmovie.DetailPage_3
 import org.techtown.diffuser.retrofit.RetrofitClient
 import org.techtown.diffuser.retrofit.RetrofitInterface
 import retrofit2.Call
@@ -23,8 +19,9 @@ class PopularDetailActivity : AppCompatActivity() {
     private lateinit var adapter: DetailAdapter
 
     private var service = RetrofitClient.retrofit.create(RetrofitInterface::class.java)
-    lateinit var movie: Movie
     var movieId: Int = 0
+
+    lateinit var mutableCastList: MutableList<CastRv>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +31,13 @@ class PopularDetailActivity : AppCompatActivity() {
         Log.e("kyh!!!", "movieId : $movieId")
         initView()
 
+        val items = listOf(
+            DetailTopModel("", "", "", "", DetailAdapter.VIEW_TYPE_DETAIL_BACKGROND),
+            WrappingDetailModel(true, null, null, DetailAdapter.VIEW_TYPE_DETAIL_CASTING)
+        )
+        adapter.addItem(items)
         fetch()
+        fetchCast()
 
     }
 
@@ -55,9 +58,9 @@ class PopularDetailActivity : AppCompatActivity() {
             override fun onResponse(call: Call<DetailPage_3>, response: Response<DetailPage_3>) {
                 val result = response.body()
                 if (result != null) {
-                    adapter.setTopModel(
+                    adapter.updateTopModel(
                         DetailTopModel(
-                            title= result.title,
+                            title = result.title,
                             overview = result.overview,
                             postUrl = result.posterPath,
                             backDropUrl = result.backdropPath,
@@ -68,9 +71,66 @@ class PopularDetailActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<DetailPage_3>, t: Throwable) {
-                TODO("Not yet implemented")
+                Log.d("kmh", "fetch onFailure")
             }
 
+
+        })
+    }
+
+    private fun fetchCast() {
+        service.getCast(
+            movieId,
+            "ko"
+        ).enqueue(object : Callback<CastResult> {
+            override fun onResponse(call: Call<CastResult>, response: Response<CastResult>) {
+                val result = response.body()
+                if (result != null) {
+                    val list = result!!.cast.map {
+                        CastRv(
+                            imgActor = it.profilePath,
+                            castChracter = it.character,
+                            castName = it.name
+                        )
+                    }
+
+                    /**  사진삭제
+                    Cast api 에서 사진 null 일경우 리스트 삭제를 위해
+                     HorizontalCastModel에서 list를 MUTABLELIST로 봐꾸고
+                     null값인 포지션을 변수 num_forReove 에 저장
+                     */
+                    var num_forRemove = arrayListOf<Int>()
+                    mutableCastList = list.toMutableList()
+                    for (i: Int in 0..mutableCastList.size - 1) {
+                        if (mutableCastList[i].imgActor == null) {
+                            num_forRemove.add(i)
+                        }
+                    }
+
+                    num_forRemove.reverse()  // 역순으로 봐꺼주지 않으면 앞에서부터 제거하기 때문에 인덱스 오류 발생.
+
+                    for (i: Int in 0..num_forRemove.size - 1) {
+                        mutableCastList.removeAt(num_forRemove[i])
+                    }
+
+
+                    val castModel =
+                        HorizontalCastModel(mutableCastList, DetailAdapter.VIEW_TYPE_DETAIL_CASTING)
+                    adapter.updateCastWrappingModel(
+                        WrappingDetailModel(
+                            isLoading = false,
+                            castModel = castModel,
+                            detailTopModel = null,
+                            viewType = DetailAdapter.VIEW_TYPE_DETAIL_CASTING
+                        )
+                    )
+
+                }
+            }
+
+            override fun onFailure(call: Call<CastResult>, t: Throwable) {
+                Log.d("kmh", "fetchCast onFailure")
+            }
 
         })
     }

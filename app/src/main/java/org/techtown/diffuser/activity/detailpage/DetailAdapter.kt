@@ -5,11 +5,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isVisible
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
 import org.techtown.diffuser.R
-import org.techtown.diffuser.model.DetailTopModel
-import org.techtown.diffuser.model.ItemModel
+import org.techtown.diffuser.model.*
 
 class DetailAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var items: ArrayList<ItemModel> = arrayListOf()
@@ -20,6 +22,11 @@ class DetailAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 val inflater = LayoutInflater.from(parent.context)
                 val itemView = inflater.inflate(R.layout.item_detail_image, parent, false)
                 return BackImageViewHolder(itemView)
+            }
+            VIEW_TYPE_DETAIL_CASTING -> {
+                val inflater = LayoutInflater.from(parent.context)
+                val itemView = inflater.inflate(R.layout.viewholder_cast, parent, false)
+                return CastViewHolder(itemView)
             }
             else -> {
                 throw Exception()
@@ -33,6 +40,11 @@ class DetailAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             VIEW_TYPE_DETAIL_BACKGROND -> {
                 if (itemModel is DetailTopModel) {
                     (holder as BackImageViewHolder).setItem(itemModel)
+                }
+            }
+            VIEW_TYPE_DETAIL_CASTING -> {
+                if (itemModel is WrappingDetailModel) {
+                    (holder as CastViewHolder).setItem(itemModel)
                 }
             }
         }
@@ -52,11 +64,17 @@ class DetailAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         notifyItemRangeInserted(positionStart, items.size)
     }
 
-    fun setTopModel(topModel: DetailTopModel) {
+    fun updateTopModel(item: DetailTopModel) {
 //        items[0] = topModel
-        items.add(topModel)
-        notifyDataSetChanged()
+        items[0] = item
+        notifyItemChanged(0)
 //        notifyItemChanged(0)
+    }
+
+    fun updateCastWrappingModel(item : WrappingDetailModel) {
+        items[1] = item
+        notifyItemChanged(1)
+
     }
 
     class BackImageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -73,11 +91,39 @@ class DetailAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
 
         fun setItem(item: DetailTopModel) {
-            Glide.with(itemView).load("https://image.tmdb.org/t/p/w500" + item.backDropUrl)
-                .into(imgBackgrond)
-            title.text = item.title
-            overview.text = item.overview
-            Glide.with(itemView).load("https://image.tmdb.org/t/p/w500" + item.postUrl).into(imgPoster)
+            if(item.title != null){
+                Glide.with(itemView).load("https://image.tmdb.org/t/p/w500" + item.backDropUrl)
+                    .into(imgBackgrond)
+                title.text = item.title
+                overview.text = item.overview
+                Glide.with(itemView).load("https://image.tmdb.org/t/p/w500" + item.postUrl)
+                    .into(imgPoster)
+            }
+        }
+    }
+
+    class CastViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+        var rvCast : RecyclerView
+        var vLoading : LottieAnimationView
+        var adapter = CastAdapter()
+
+        init{
+            rvCast = itemView.findViewById(R.id.rvCast)
+            vLoading = itemView.findViewById(R.id.vLoading)
+            vLoading.setAnimation("loading.json")
+            vLoading.repeatCount
+            vLoading.playAnimation()
+            rvCast.adapter = adapter
+            rvCast.layoutManager = LinearLayoutManager(itemView.context, LinearLayoutManager.HORIZONTAL, false)
+        }
+
+        fun setItem(item : WrappingDetailModel) {
+            vLoading.isVisible = item.isLoading
+
+            if(item.castModel != null) {
+                adapter.setCast(item.castModel.castlist)
+            }
         }
     }
 

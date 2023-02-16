@@ -1,8 +1,9 @@
 package org.techtown.diffuser.retrofit
 
-import org.techtown.diffuser.response.DetailPage_3
-import org.techtown.diffuser.response.NowPlayingResponse
+import org.techtown.diffuser.response.detail.detailmovie.DetailPage_3
+import org.techtown.diffuser.response.nowplaying.NowPlayingResponse
 import org.techtown.diffuser.response.PopularMoviesResponse
+import org.techtown.diffuser.response.detail.cast.CastResult
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -29,4 +30,9 @@ interface RetrofitInterface {
         @Query("language") language : String
     ) : Call<DetailPage_3>
 
+    @GET("/3/movie/{movie_id}/credits")
+    fun getCast(
+        @Path("movie_id") movie_id : Int,
+        @Query("language") language : String
+    ) : Call<CastResult>
 }

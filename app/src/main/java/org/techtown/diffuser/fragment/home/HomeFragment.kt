@@ -13,11 +13,11 @@ import org.techtown.diffuser.databinding.ActivityHomeFragmentBinding
 import org.techtown.diffuser.fragment.home.HomeAdapter.Companion.VIEW_TYPE_NOW_MOVIE
 import org.techtown.diffuser.fragment.home.HomeAdapter.Companion.VIEW_TYPE_POPULAR_MOVIE
 import org.techtown.diffuser.listener.PopularClickListener
-import org.techtown.diffuser.model.HorizontalMoviesModel
+import org.techtown.diffuser.model.HorizontalMovieModel
 import org.techtown.diffuser.model.Movie
 import org.techtown.diffuser.model.Title
 import org.techtown.diffuser.model.WrappingModel
-import org.techtown.diffuser.response.NowPlayingResponse
+import org.techtown.diffuser.response.nowplaying.NowPlayingResponse
 import org.techtown.diffuser.response.PopularMoviesResponse
 import org.techtown.diffuser.retrofit.RetrofitClient.Companion.retrofit
 import org.techtown.diffuser.retrofit.RetrofitInterface
@@ -95,7 +95,7 @@ class HomeFragment : Fragment() {
                     )
                 }
                 val horizontalPopularModel =
-                    HorizontalMoviesModel(list, HomeAdapter.VIEW_TYPE_POPULAR_MOVIE)
+                    HorizontalMovieModel(list, HomeAdapter.VIEW_TYPE_POPULAR_MOVIE)
                 adapter.updatePopularWrappingModel(
                     WrappingModel(
                         isLoading = false,
@@ -133,7 +133,7 @@ class HomeFragment : Fragment() {
                     )
                 }
 
-                val nowPlaying = HorizontalMoviesModel(list, HomeAdapter.VIEW_TYPE_NOW_MOVIE)
+                val nowPlaying = HorizontalMovieModel(list, HomeAdapter.VIEW_TYPE_NOW_MOVIE)
                 adapter.updateNowPlayingWrappingModel(
                     WrappingModel(
                         isLoading = false,

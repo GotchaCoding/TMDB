@@ -1,4 +1,4 @@
-package org.techtown.diffuser.response
+package org.techtown.diffuser.response.nowplaying
 
 
 import com.google.gson.annotations.SerializedName
