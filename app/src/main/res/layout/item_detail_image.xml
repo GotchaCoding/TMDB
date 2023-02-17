@@ -5,12 +5,20 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/vLoading"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
         android:id="@+id/img_background"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
-        android:background="@mipmap/ic_launcher_round"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -19,8 +27,8 @@
         android:id="@+id/img_poster"
         android:layout_width="100dp"
         android:layout_height="170dp"
-        android:adjustViewBounds="true"
         android:layout_marginStart="7dp"
+        android:adjustViewBounds="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/img_background" />
 
@@ -31,7 +39,6 @@
         android:layout_margin="5dp"
         android:ellipsize="end"
         android:maxLines="2"
-        android:text="제목"
         android:textColor="@color/white"
         android:textSize="23sp"
         android:textStyle="bold"
@@ -42,15 +49,24 @@
     <TextView
         android:id="@+id/tvOverview"
         android:layout_width="289dp"
-        android:layout_height="129dp"
+        android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:text="급격한 기후변화로 지구는 폐허가 되고 인류는 우주에 새로운 터전 쉘터를 만들어 이주한다 .
-급격한 기후변화로 지구는 폐허가 되고 인류는 우주에 새로운 터전 쉘터를 만들어 이주한다 .
-급격한 기후변화로 지구는 폐허가 되고 인류는 우주에 새로운 터전 쉘터를 만들어 이주한다 .
-급격한 기후변화로 지구는 폐허가 되고 인류는 우주에 새로운 터전 쉘터를 만들어 이주한다 ."
-        android:textColor="#A8A5A5"
+        android:text="@string/description"
+        android:textColor="@color/background"
         android:textSize="13sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/img_poster"
         app:layout_constraintTop_toBottomOf="@+id/tvTitle_detail" />
+
+    <TextView
+        android:id="@+id/onFailure"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:background="?attr/selectableItemBackground"
+        android:text="@string/error"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

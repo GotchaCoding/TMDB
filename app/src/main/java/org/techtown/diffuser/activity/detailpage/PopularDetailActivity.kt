@@ -74,6 +74,8 @@ class PopularDetailActivity : AppCompatActivity() {
             override fun onFailure(call: Call<DetailPage_3>, t: Throwable) {
                 Log.d("kmh", t.toString())
 
+
+
             }
 
 

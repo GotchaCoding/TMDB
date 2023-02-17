@@ -107,7 +107,16 @@ class HomeFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<PopularMoviesResponse>, t: Throwable) {
-                TODO("Not yet implemented")
+                Log.d("kmh", t.toString())
+
+                adapter.updatePopularWrappingModel(
+                    WrappingModel(
+                        isLoading = false,
+                        model = null,
+                        viewType = VIEW_TYPE_POPULAR_MOVIE,
+                    isFailure = false
+                    )
+                )
             }
 
         })
@@ -144,7 +153,7 @@ class HomeFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<NowPlayingResponse>, t: Throwable) {
-                TODO("Not yet implemented")
+                Log.d("kmh", t.toString())
             }
 
         })

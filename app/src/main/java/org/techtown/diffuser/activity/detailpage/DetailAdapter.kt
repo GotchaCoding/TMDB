@@ -54,7 +54,7 @@ class DetailAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 }
             }
             VIEW_TYPE_DETAIL_TITLE -> {
-                if(itemModel is Title){
+                if (itemModel is Title) {
                     (holder as TitleViewHolder).setItem(itemModel)
                 }
             }
@@ -80,9 +80,15 @@ class DetailAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         notifyItemChanged(0)
     }
 
-    fun updateCastWrappingModel(item : WrappingDetailModel) {
+    fun updateCastWrappingModel(item: WrappingDetailModel) {
         items[2] = item
         notifyItemChanged(2)
+    }
+
+    fun onFailureDetail(item: DetailTopModel) {
+        items[0] = item
+        notifyItemChanged(0)
+
     }
 
     class BackImageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -90,46 +96,58 @@ class DetailAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         var imgPoster: ImageView
         var title: TextView
         var overview: TextView
+        var vLoading: LottieAnimationView
+        var onFailure: TextView
 
         init {
             imgBackgrond = itemView.findViewById(R.id.img_background)
             imgPoster = itemView.findViewById(R.id.img_poster)
             title = itemView.findViewById(R.id.tvTitle_detail)
             overview = itemView.findViewById(R.id.tvOverview)
+            vLoading = itemView.findViewById(R.id.vLoading)
+            vLoading.setAnimation("loading.json")
+            vLoading.repeatCount = 10
+            vLoading.playAnimation()
+            onFailure = itemView.findViewById(R.id.onFailure)
         }
 
         fun setItem(item: DetailTopModel) {
-            if(item.title != null){
+            vLoading.isVisible = true
+            if (item.title != "") {
+                vLoading.isVisible = false
                 Glide.with(itemView).load("https://image.tmdb.org/t/p/w500" + item.backDropUrl)
                     .into(imgBackgrond)
                 title.text = item.title
                 overview.text = item.overview
                 Glide.with(itemView).load("https://image.tmdb.org/t/p/w500" + item.postUrl)
                     .into(imgPoster)
+
             }
+
         }
     }
 
     class CastViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        var rvCast : RecyclerView
-        var vLoading : LottieAnimationView
+        var rvCast: RecyclerView
+        var vLoading: LottieAnimationView
         var adapter = CastAdapter()
 
-        init{
+        init {
             rvCast = itemView.findViewById(R.id.rvCast)
             vLoading = itemView.findViewById(R.id.vLoading)
             vLoading.setAnimation("loading.json")
             vLoading.repeatCount = 10
             vLoading.playAnimation()
             rvCast.adapter = adapter
-            rvCast.layoutManager = LinearLayoutManager(itemView.context, LinearLayoutManager.HORIZONTAL, false)
+            rvCast.layoutManager =
+                LinearLayoutManager(itemView.context, LinearLayoutManager.HORIZONTAL, false)
         }
 
-        fun setItem(item : WrappingDetailModel) {
+        fun setItem(item: WrappingDetailModel) {
             vLoading.isVisible = item.isLoading
 
-            if(item.castModel != null) {
+            if (item.castModel != null) {
                 adapter.setCast(item.castModel.castlist)
             }
         }

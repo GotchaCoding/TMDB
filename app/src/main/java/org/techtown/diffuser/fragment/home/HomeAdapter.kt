@@ -96,7 +96,6 @@ class HomeAdapter(private val ItemClickListener: PopularClickListener) :
         var rvMain: RecyclerView
         var vLoading: LottieAnimationView
         var adapter = HorizontalPopularMoviesRecyclerAdapter(popularItemClick)
-
         init {
             rvMain = itemView.findViewById(R.id.rvMain)
             vLoading = itemView.findViewById(R.id.vLoading)
@@ -106,6 +105,8 @@ class HomeAdapter(private val ItemClickListener: PopularClickListener) :
             rvMain.adapter = adapter
             rvMain.layoutManager =
                 LinearLayoutManager(itemView.context, LinearLayoutManager.HORIZONTAL, false)
+
+
         }
 
         fun setItem(item: WrappingModel) {
