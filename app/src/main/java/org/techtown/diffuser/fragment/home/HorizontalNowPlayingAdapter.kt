@@ -17,6 +17,7 @@ class HorizontalNowPlayingAdapter(private val ItemClickListener: PopularClickLis
 
     var items: List<Movie> = listOf()
 
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NowMovieViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val itemView = inflater.inflate(R.layout.item_nowplaying, parent, false)

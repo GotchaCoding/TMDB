@@ -9,12 +9,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
 import org.techtown.diffuser.R
+import org.techtown.diffuser.listener.OnFailureClickListener
 import org.techtown.diffuser.listener.PopularClickListener
 import org.techtown.diffuser.model.ItemModel
 import org.techtown.diffuser.model.Title
 import org.techtown.diffuser.model.WrappingModel
 
-class HomeAdapter(private val ItemClickListener: PopularClickListener) :
+class HomeAdapter(private val ItemClickListener: PopularClickListener, private val failureClick : OnFailureClickListener) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var items: ArrayList<ItemModel> = arrayListOf()
 
@@ -28,12 +29,12 @@ class HomeAdapter(private val ItemClickListener: PopularClickListener) :
             VIEW_TYPE_POPULAR_MOVIE -> {
                 val inflater = LayoutInflater.from(parent.context)
                 val itemView = inflater.inflate(R.layout.viewholder_popularmovies, parent, false)
-                return HorizontalPopularMoviesViewHolder(itemView, ItemClickListener)
+                return HorizontalPopularMoviesViewHolder(itemView, ItemClickListener, failureClick)
             }
             VIEW_TYPE_NOW_MOVIE -> {
                 val inflater = LayoutInflater.from(parent.context)
                 val itemView = inflater.inflate(R.layout.viewholder_popularmovies, parent, false)
-                return NowMovieViewHolder(itemView, ItemClickListener)
+                return NowMovieViewHolder(itemView, ItemClickListener , failureClick)
             }
             else -> {
                 throw Exception()
@@ -90,12 +91,15 @@ class HomeAdapter(private val ItemClickListener: PopularClickListener) :
 
     class HorizontalPopularMoviesViewHolder(
         itemView: View,
-        private val popularItemClick: PopularClickListener
+        private val popularItemClick: PopularClickListener,
+        private val failureClick: OnFailureClickListener
     ) : RecyclerView.ViewHolder(itemView) {
 
         var rvMain: RecyclerView
         var vLoading: LottieAnimationView
         var adapter = HorizontalPopularMoviesRecyclerAdapter(popularItemClick)
+        var view_failure: TextView
+
         init {
             rvMain = itemView.findViewById(R.id.rvMain)
             vLoading = itemView.findViewById(R.id.vLoading)
@@ -105,16 +109,27 @@ class HomeAdapter(private val ItemClickListener: PopularClickListener) :
             rvMain.adapter = adapter
             rvMain.layoutManager =
                 LinearLayoutManager(itemView.context, LinearLayoutManager.HORIZONTAL, false)
-
+            view_failure = itemView.findViewById(R.id.onFailure)
 
         }
 
         fun setItem(item: WrappingModel) {
-            vLoading.isVisible = item.isLoading
+            if (item.isFailure) {
+                view_failure.isVisible = true
+                vLoading.isVisible = item.isLoading
+            } else {
+                view_failure.isVisible = false
+                vLoading.isVisible = item.isLoading
 
-            if (item.model != null) {
-                adapter.setMovies(item.model.movies)
+                if (item.model != null) {
+                    adapter.setMovies(item.model.movies)
+                }
             }
+            view_failure.setOnClickListener(View.OnClickListener {
+                failureClick.onClick(it)
+            })
+
+
         }
 
     }
@@ -134,12 +149,14 @@ class HomeAdapter(private val ItemClickListener: PopularClickListener) :
 
     class NowMovieViewHolder(
         itemView: View,
-        private val popularItemClick: PopularClickListener
+        private val popularItemClick: PopularClickListener,
+        private val failureClick: OnFailureClickListener
     ) : RecyclerView.ViewHolder(itemView) {
 
         var rvMain: RecyclerView
         var vLoading: LottieAnimationView
         var adapter = HorizontalNowPlayingAdapter(popularItemClick)
+        var view_failure: TextView
 
         init {
             rvMain = itemView.findViewById(R.id.rvMain)
@@ -150,20 +167,26 @@ class HomeAdapter(private val ItemClickListener: PopularClickListener) :
             rvMain.adapter = adapter
             rvMain.layoutManager =
                 LinearLayoutManager(itemView.context, LinearLayoutManager.HORIZONTAL, false)
+            view_failure = itemView.findViewById(R.id.onFailure)
         }
 
         fun setItem(item: WrappingModel) {
-            vLoading.isVisible = item.isLoading
+            if (item.isFailure) {
+                view_failure.isVisible = true
+            } else {
+                view_failure.isVisible = false
+                vLoading.isVisible = item.isLoading
+                vLoading.isVisible = item.isLoading
 
-            if (item.model != null) {
-                adapter.setMovies(item.model.movies)
+                if (item.model != null) {
+                    adapter.setMovies(item.model.movies)
+                }
             }
         }
     }
-
-    companion object {
-        const val VIEW_TYPE_TITLE = 0
-        const val VIEW_TYPE_POPULAR_MOVIE = 1
-        const val VIEW_TYPE_NOW_MOVIE = 2
+        companion object {
+            const val VIEW_TYPE_TITLE = 0
+            const val VIEW_TYPE_POPULAR_MOVIE = 1
+            const val VIEW_TYPE_NOW_MOVIE = 2
+        }
     }
-}

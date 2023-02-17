@@ -12,6 +12,7 @@ import org.techtown.diffuser.activity.detailpage.PopularDetailActivity
 import org.techtown.diffuser.databinding.ActivityHomeFragmentBinding
 import org.techtown.diffuser.fragment.home.HomeAdapter.Companion.VIEW_TYPE_NOW_MOVIE
 import org.techtown.diffuser.fragment.home.HomeAdapter.Companion.VIEW_TYPE_POPULAR_MOVIE
+import org.techtown.diffuser.listener.OnFailureClickListener
 import org.techtown.diffuser.listener.PopularClickListener
 import org.techtown.diffuser.model.HorizontalMovieModel
 import org.techtown.diffuser.model.Movie
@@ -69,6 +70,11 @@ class HomeFragment : Fragment() {
                         startActivity(intent)
                 }
 
+            } , object:OnFailureClickListener{
+                override fun onClick(view: View) {
+                   fetch()
+                }
+
             })
             recyclerview.adapter = adapter
             recyclerview.layoutManager = layoutManager
@@ -114,7 +120,7 @@ class HomeFragment : Fragment() {
                         isLoading = false,
                         model = null,
                         viewType = VIEW_TYPE_POPULAR_MOVIE,
-                    isFailure = false
+                    isFailure = true
                     )
                 )
             }
