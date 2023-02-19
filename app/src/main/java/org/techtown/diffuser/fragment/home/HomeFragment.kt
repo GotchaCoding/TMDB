@@ -34,7 +34,6 @@ class HomeFragment : Fragment() {
     private var service = retrofit.create(RetrofitInterface::class.java)
 
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -66,13 +65,21 @@ class HomeFragment : Fragment() {
                 override fun onClick(movie: Movie) {
                     Log.e("log", "initView() clicklistener 인터페이스 온클릭")
                     val intent = Intent(context, PopularDetailActivity::class.java)
-                    intent.putExtra("movie_id" , movie.id)
-                        startActivity(intent)
+                    intent.putExtra("movie_id", movie.id)
+                    startActivity(intent)
                 }
 
-            } , object:OnFailureClickListener{
-                override fun onClick(view: View) {
-                   fetch()
+            }, object : OnFailureClickListener {
+                override fun onClick(view: View, viewType: Int) {
+                    Log.d("id", viewType.toString())
+                    when (viewType) {
+                        VIEW_TYPE_POPULAR_MOVIE -> {
+                            fetch()
+                        }
+                        VIEW_TYPE_NOW_MOVIE -> {
+                            fetch2()
+                        }
+                    }
                 }
 
             })
@@ -120,7 +127,7 @@ class HomeFragment : Fragment() {
                         isLoading = false,
                         model = null,
                         viewType = VIEW_TYPE_POPULAR_MOVIE,
-                    isFailure = true
+                        isFailure = true
                     )
                 )
             }
@@ -160,6 +167,14 @@ class HomeFragment : Fragment() {
 
             override fun onFailure(call: Call<NowPlayingResponse>, t: Throwable) {
                 Log.d("kmh", t.toString())
+                adapter.updateNowPlayingWrappingModel(
+                    WrappingModel(
+                        isLoading = false,
+                        model = null,
+                        viewType = VIEW_TYPE_NOW_MOVIE,
+                        isFailure = true
+                    )
+                )
             }
 
         })

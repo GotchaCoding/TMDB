@@ -126,7 +126,7 @@ class HomeAdapter(private val ItemClickListener: PopularClickListener, private v
                 }
             }
             view_failure.setOnClickListener(View.OnClickListener {
-                failureClick.onClick(it)
+                failureClick.onClick(it, VIEW_TYPE_POPULAR_MOVIE)
             })
 
 
@@ -173,14 +173,17 @@ class HomeAdapter(private val ItemClickListener: PopularClickListener, private v
         fun setItem(item: WrappingModel) {
             if (item.isFailure) {
                 view_failure.isVisible = true
+                vLoading.isVisible = item.isLoading
             } else {
                 view_failure.isVisible = false
-                vLoading.isVisible = item.isLoading
                 vLoading.isVisible = item.isLoading
 
                 if (item.model != null) {
                     adapter.setMovies(item.model.movies)
                 }
+            }
+            view_failure.setOnClickListener{
+                failureClick.onClick(it, VIEW_TYPE_NOW_MOVIE)
             }
         }
     }

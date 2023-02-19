@@ -3,8 +3,10 @@ package org.techtown.diffuser.activity.detailpage
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.techtown.diffuser.databinding.ActivityPopualrDetailBinding
+import org.techtown.diffuser.listener.OnFailureClickListener
 import org.techtown.diffuser.model.*
 import org.techtown.diffuser.response.detail.cast.CastResult
 import org.techtown.diffuser.response.detail.detailmovie.DetailPage_3
@@ -33,8 +35,8 @@ class PopularDetailActivity : AppCompatActivity() {
 
         val items = listOf(
             DetailTopModel("", "", "", "", DetailAdapter.VIEW_TYPE_DETAIL_BACKGROND),
-            Title("캐스팅" , DetailAdapter.VIEW_TYPE_DETAIL_TITLE),
-            WrappingDetailModel(true, null, null, DetailAdapter.VIEW_TYPE_DETAIL_CASTING)
+            Title("캐스팅", DetailAdapter.VIEW_TYPE_DETAIL_TITLE),
+            WrappingDetailModel(true, null, null, DetailAdapter.VIEW_TYPE_DETAIL_CASTING, false)
         )
         adapter.addItem(items)
         fetch()
@@ -45,7 +47,19 @@ class PopularDetailActivity : AppCompatActivity() {
     private fun initView() {
         val layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
-        adapter = DetailAdapter()
+        adapter = DetailAdapter(object : OnFailureClickListener {
+            override fun onClick(view: View, viewType: Int) {
+                when (viewType) {
+                    DetailAdapter.VIEW_TYPE_DETAIL_BACKGROND -> {
+                        fetch()
+                    }
+                    DetailAdapter.VIEW_TYPE_DETAIL_CASTING -> {
+                        fetchCast()
+                    }
+                }
+            }
+
+        })
         binding.recyclerviewDetail.adapter = adapter
         binding.recyclerviewDetail.layoutManager = layoutManager
 
@@ -73,7 +87,17 @@ class PopularDetailActivity : AppCompatActivity() {
 
             override fun onFailure(call: Call<DetailPage_3>, t: Throwable) {
                 Log.d("kmh", t.toString())
+                adapter.updateTopModel(
+                    DetailTopModel(
+                        title = null,
+                        overview = "",
+                        postUrl = "",
+                        backDropUrl = "",
+                        viewType = DetailAdapter.VIEW_TYPE_DETAIL_BACKGROND,
+                        isfailure = true
 
+                    )
+                )
 
 
             }
@@ -100,8 +124,8 @@ class PopularDetailActivity : AppCompatActivity() {
 
                     /**  사진삭제
                     Cast api 에서 사진 null 일경우 리스트 삭제를 위해
-                     HorizontalCastModel에서 list를 MUTABLELIST로 봐꾸고
-                     null값인 포지션을 변수 num_forReove 에 저장
+                    HorizontalCastModel에서 list를 MUTABLELIST로 봐꾸고
+                    null값인 포지션을 변수 num_forReove 에 저장
                      */
                     var num_forRemove = arrayListOf<Int>()   // 사진이 널값인 position 저장.
                     mutableCastList = list.toMutableList()  // list 를 mutable 로 변경
@@ -124,7 +148,8 @@ class PopularDetailActivity : AppCompatActivity() {
                             isLoading = false,
                             castModel = castModel,
                             detailTopModel = null,
-                            viewType = DetailAdapter.VIEW_TYPE_DETAIL_CASTING
+                            viewType = DetailAdapter.VIEW_TYPE_DETAIL_CASTING,
+                            isFailure = false
                         )
                     )
                 }
@@ -132,6 +157,16 @@ class PopularDetailActivity : AppCompatActivity() {
 
             override fun onFailure(call: Call<CastResult>, t: Throwable) {
                 Log.d("kmh", t.toString())
+                adapter.updateCastWrappingModel(
+                    WrappingDetailModel(
+                        isLoading = false,
+                        castModel = null,
+                        detailTopModel = null,
+                        viewType = DetailAdapter.VIEW_TYPE_DETAIL_CASTING,
+                        isFailure = true
+
+                    )
+                )
             }
 
         })

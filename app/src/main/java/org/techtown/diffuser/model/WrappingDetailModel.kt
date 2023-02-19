@@ -4,5 +4,6 @@ class WrappingDetailModel(
     val isLoading: Boolean,
     val castModel: HorizontalCastModel?,
     val detailTopModel: DetailTopModel?,
-    override val viewType: Int
+    override val viewType: Int,
+    val isFailure : Boolean
 ) : ItemModel(viewType)
