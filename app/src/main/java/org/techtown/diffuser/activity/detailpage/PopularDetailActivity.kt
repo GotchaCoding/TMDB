@@ -120,29 +120,31 @@ class PopularDetailActivity : AppCompatActivity() {
                             castChracter = it.character,
                             castName = it.name
                         )
+                    }.filter {
+                        it.imgActor !=null
                     }
 
-                    /**  사진삭제
-                    Cast api 에서 사진 null 일경우 리스트 삭제를 위해
-                    HorizontalCastModel에서 list를 MUTABLELIST로 봐꾸고
-                    null값인 포지션을 변수 num_forReove 에 저장
-                     */
-                    var num_forRemove = arrayListOf<Int>()   // 사진이 널값인 position 저장.
-                    mutableCastList = list.toMutableList()  // list 를 mutable 로 변경
-                    for (i: Int in 0..mutableCastList.size - 1) {
-                        if (mutableCastList[i].imgActor == null) {
-                            num_forRemove.add(i)
-                        }
-                    }
-
-                    num_forRemove.reverse()  // 역순으로 봐꺼주지 않으면 앞에서부터 제거하기 때문에 인덱스 오류 발생.
-
-                    for (i: Int in 0..num_forRemove.size - 1) {
-                        mutableCastList.removeAt(num_forRemove[i])
-                    }
+//                    /**  사진삭제
+//                    Cast api 에서 사진 null 일경우 리스트 삭제를 위해
+//                    HorizontalCastModel에서 list를 MUTABLELIST로 봐꾸고
+//                    null값인 포지션을 변수 num_forReove 에 저장
+//                     */
+//                    var num_forRemove = arrayListOf<Int>()   // 사진이 널값인 position 저장.
+//                    mutableCastList = list.toMutableList()  // list 를 mutable 로 변경
+//                    for (i: Int in 0..mutableCastList.size - 1) {
+//                        if (mutableCastList[i].imgActor == null) {
+//                            num_forRemove.add(i)
+//                        }
+//                    }
+//
+//                    num_forRemove.reverse()  // 역순으로 봐꺼주지 않으면 앞에서부터 제거하기 때문에 인덱스 오류 발생.
+//
+//                    for (i: Int in 0..num_forRemove.size - 1) {
+//                        mutableCastList.removeAt(num_forRemove[i])
+//                    }
 
                     val castModel =
-                        HorizontalCastModel(mutableCastList, DetailAdapter.VIEW_TYPE_DETAIL_CASTING)
+                        HorizontalCastModel(list, DetailAdapter.VIEW_TYPE_DETAIL_CASTING)
                     adapter.updateCastWrappingModel(
                         WrappingDetailModel(
                             isLoading = false,

@@ -115,25 +115,27 @@ class DetailAdapter(val failureClick: OnFailureClickListener) :
         }
 
         fun setItem(item: DetailTopModel) {
-            if (item.isfailure) {
+            if(item.isLoading){ //로딩중
+                vLoading.isVisible = true
+                view_failure.isVisible = false
+            }else if(item.isfailure.not()) { //성공
+                vLoading.isVisible = false
+                view_failure.isVisible = false
+                Glide.with(itemView).load("https://image.tmdb.org/t/p/w500" + item.backDropUrl)
+                    .into(imgBackgrond)
+                title.text = item.title
+                overview.text = item.overview
+                Glide.with(itemView).load("https://image.tmdb.org/t/p/w500" + item.postUrl)
+                    .into(imgPoster)
+            }else{//실패
                 view_failure.isVisible = true
                 vLoading.isVisible = false
-            } else {
-                vLoading.isVisible = true
-                if (item.title != "") {
-                    view_failure.isVisible = false
-                    vLoading.isVisible = false
-                    Glide.with(itemView).load("https://image.tmdb.org/t/p/w500" + item.backDropUrl)
-                        .into(imgBackgrond)
-                    title.text = item.title
-                    overview.text = item.overview
-                    Glide.with(itemView).load("https://image.tmdb.org/t/p/w500" + item.postUrl)
-                        .into(imgPoster)
+                view_failure.setOnClickListener{
+                    failureClick.onClick(it, VIEW_TYPE_DETAIL_BACKGROND)
                 }
             }
-            view_failure.setOnClickListener{
-                failureClick.onClick(it, VIEW_TYPE_DETAIL_BACKGROND)
-            }
+
+
         }
     }
 
@@ -170,7 +172,7 @@ class DetailAdapter(val failureClick: OnFailureClickListener) :
                 }
             }
             view_failure.setOnClickListener {
-                failureClick.onClick(it, VIEW_TYPE_DETAIL_CASTING)
+                failureClick.onClick(it, item.viewType)
             }
         }
     }

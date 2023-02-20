@@ -9,6 +9,7 @@ class DetailTopModel(
     val postUrl: String,
     val backDropUrl: String,
     override val viewType: Int,
-    val isfailure : Boolean = false
+    val isfailure: Boolean = false,
+    val isLoading: Boolean = false
 ) : ItemModel(viewType) {
 }

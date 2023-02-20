@@ -126,7 +126,7 @@ class HomeAdapter(private val ItemClickListener: PopularClickListener, private v
                 }
             }
             view_failure.setOnClickListener(View.OnClickListener {
-                failureClick.onClick(it, VIEW_TYPE_POPULAR_MOVIE)
+                failureClick.onClick(it, item.viewType)
             })
 
 
@@ -183,7 +183,7 @@ class HomeAdapter(private val ItemClickListener: PopularClickListener, private v
                 }
             }
             view_failure.setOnClickListener{
-                failureClick.onClick(it, VIEW_TYPE_NOW_MOVIE)
+                failureClick.onClick(it, item.viewType)
             }
         }
     }
