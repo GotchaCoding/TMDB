@@ -12,14 +12,16 @@ import org.techtown.diffuser.activity.detailpage.PopularDetailActivity
 import org.techtown.diffuser.databinding.ActivityHomeFragmentBinding
 import org.techtown.diffuser.fragment.home.HomeAdapter.Companion.VIEW_TYPE_NOW_MOVIE
 import org.techtown.diffuser.fragment.home.HomeAdapter.Companion.VIEW_TYPE_POPULAR_MOVIE
+import org.techtown.diffuser.fragment.home.HomeAdapter.Companion.VIEW_TYPE_UPCOMMING
 import org.techtown.diffuser.listener.OnFailureClickListener
 import org.techtown.diffuser.listener.PopularClickListener
 import org.techtown.diffuser.model.HorizontalMovieModel
 import org.techtown.diffuser.model.Movie
 import org.techtown.diffuser.model.Title
 import org.techtown.diffuser.model.WrappingModel
+import org.techtown.diffuser.response.Upcomming
 import org.techtown.diffuser.response.nowplaying.NowPlayingResponse
-import org.techtown.diffuser.response.PopularMoviesResponse
+import org.techtown.diffuser.response.pupular.PopularMoviesResponse
 import org.techtown.diffuser.retrofit.RetrofitClient.Companion.retrofit
 import org.techtown.diffuser.retrofit.RetrofitInterface
 import retrofit2.Call
@@ -50,12 +52,14 @@ class HomeFragment : Fragment() {
             Title("인기영화", HomeAdapter.VIEW_TYPE_TITLE),
             WrappingModel(true, null, VIEW_TYPE_POPULAR_MOVIE),
             Title("상영중 영화", HomeAdapter.VIEW_TYPE_TITLE),
-            WrappingModel(true, null, VIEW_TYPE_NOW_MOVIE)
+            WrappingModel(true, null, VIEW_TYPE_NOW_MOVIE),
+            Title("개봉 예정" , HomeAdapter.VIEW_TYPE_TITLE),
+            WrappingModel(true, null, VIEW_TYPE_POPULAR_MOVIE)
         )
         adapter.addItems(items)
         fetch()
         fetch2()
-
+        fetchUpcomming()
     }
 
     private fun initView() {
@@ -78,6 +82,9 @@ class HomeFragment : Fragment() {
                         }
                         VIEW_TYPE_NOW_MOVIE -> {
                             fetch2()
+                        }
+                        VIEW_TYPE_UPCOMMING -> {
+                            fetchUpcomming()
                         }
                     }
                 }
@@ -176,8 +183,48 @@ class HomeFragment : Fragment() {
                     )
                 )
             }
+        })
+    }
+
+    private fun fetchUpcomming(){
+        service.getUpcomming(
+            language = "ko",
+            page = 1,
+            region ="KR"
+        ).enqueue(object : Callback<Upcomming> {
+            override fun onResponse(call: Call<Upcomming>, response: Response<Upcomming>) {
+               val result =response.body()
+                val list =result!!.results.map{
+                    Movie(
+                        title = it.title,
+                        rank = it.releaseDate,
+                        imagePoster = it.posterPath,
+                        id = it.id
+                    )
+                }
+                val horizontalPopularModel =
+                    HorizontalMovieModel(list, HomeAdapter.VIEW_TYPE_UPCOMMING)
+                adapter.updateUpCommingWrappingModel(
+                    WrappingModel(
+                        isLoading = false,
+                        model = horizontalPopularModel,
+                        viewType = VIEW_TYPE_UPCOMMING
+                    )
+                )
+            }
+
+            override fun onFailure(call: Call<Upcomming>, t: Throwable) {
+                adapter.updateUpCommingWrappingModel(
+                    WrappingModel(
+                        isLoading = false,
+                        model = null,
+                        viewType = VIEW_TYPE_UPCOMMING,
+                        isFailure = true
+                    )
+                )
+            }
 
         })
-
     }
+
 }

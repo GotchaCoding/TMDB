@@ -15,7 +15,10 @@ import org.techtown.diffuser.model.ItemModel
 import org.techtown.diffuser.model.Title
 import org.techtown.diffuser.model.WrappingModel
 
-class HomeAdapter(private val ItemClickListener: PopularClickListener, private val failureClick : OnFailureClickListener) :
+class HomeAdapter(
+    private val ItemClickListener: PopularClickListener,
+    private val failureClick: OnFailureClickListener
+) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var items: ArrayList<ItemModel> = arrayListOf()
 
@@ -34,7 +37,12 @@ class HomeAdapter(private val ItemClickListener: PopularClickListener, private v
             VIEW_TYPE_NOW_MOVIE -> {
                 val inflater = LayoutInflater.from(parent.context)
                 val itemView = inflater.inflate(R.layout.viewholder_popularmovies, parent, false)
-                return NowMovieViewHolder(itemView, ItemClickListener , failureClick)
+                return NowMovieViewHolder(itemView, ItemClickListener, failureClick)
+            }
+            VIEW_TYPE_UPCOMMING -> {
+                val inflater = LayoutInflater.from(parent.context)
+                val itemView = inflater.inflate(R.layout.viewholder_popularmovies, parent, false)
+                return HorizontalPopularMoviesViewHolder(itemView, ItemClickListener, failureClick)
             }
             else -> {
                 throw Exception()
@@ -59,6 +67,11 @@ class HomeAdapter(private val ItemClickListener: PopularClickListener, private v
             VIEW_TYPE_NOW_MOVIE -> {
                 if (itemModel is WrappingModel) {
                     (holder as NowMovieViewHolder).setItem(itemModel)
+                }
+            }
+            VIEW_TYPE_UPCOMMING -> {
+                if (itemModel is WrappingModel) {
+                    (holder as HorizontalPopularMoviesViewHolder).setItem(itemModel)
                 }
             }
         }
@@ -87,6 +100,11 @@ class HomeAdapter(private val ItemClickListener: PopularClickListener, private v
     fun updateNowPlayingWrappingModel(item: WrappingModel) {
         items[3] = item
         notifyItemChanged(3)
+    }
+
+    fun updateUpCommingWrappingModel(item: WrappingModel) {
+        items[5] = item
+        notifyItemChanged(5)
     }
 
     class HorizontalPopularMoviesViewHolder(
@@ -182,14 +200,16 @@ class HomeAdapter(private val ItemClickListener: PopularClickListener, private v
                     adapter.setMovies(item.model.movies)
                 }
             }
-            view_failure.setOnClickListener{
+            view_failure.setOnClickListener {
                 failureClick.onClick(it, item.viewType)
             }
         }
     }
-        companion object {
-            const val VIEW_TYPE_TITLE = 0
-            const val VIEW_TYPE_POPULAR_MOVIE = 1
-            const val VIEW_TYPE_NOW_MOVIE = 2
-        }
+
+    companion object {
+        const val VIEW_TYPE_TITLE = 0
+        const val VIEW_TYPE_POPULAR_MOVIE = 1
+        const val VIEW_TYPE_NOW_MOVIE = 2
+        const val VIEW_TYPE_UPCOMMING = 3
     }
+}
