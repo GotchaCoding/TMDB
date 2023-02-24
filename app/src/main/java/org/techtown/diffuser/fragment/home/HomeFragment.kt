@@ -15,10 +15,7 @@ import org.techtown.diffuser.fragment.home.HomeAdapter.Companion.VIEW_TYPE_POPUL
 import org.techtown.diffuser.fragment.home.HomeAdapter.Companion.VIEW_TYPE_UPCOMMING
 import org.techtown.diffuser.listener.OnFailureClickListener
 import org.techtown.diffuser.listener.PopularClickListener
-import org.techtown.diffuser.model.HorizontalMovieModel
-import org.techtown.diffuser.model.Movie
-import org.techtown.diffuser.model.Title
-import org.techtown.diffuser.model.WrappingModel
+import org.techtown.diffuser.model.*
 import org.techtown.diffuser.response.Upcomming
 import org.techtown.diffuser.response.nowplaying.NowPlayingResponse
 import org.techtown.diffuser.response.pupular.PopularMoviesResponse
@@ -34,7 +31,7 @@ class HomeFragment : Fragment() {
     private lateinit var adapter: HomeAdapter
 
     private var service = retrofit.create(RetrofitInterface::class.java)
-
+    private var items: List<ItemModel> = listOf()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,15 +45,17 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
-        val items = listOf(
+        val defaultList = listOf(
             Title("인기영화", HomeAdapter.VIEW_TYPE_TITLE),
             WrappingModel(true, null, VIEW_TYPE_POPULAR_MOVIE),
             Title("상영중 영화", HomeAdapter.VIEW_TYPE_TITLE),
             WrappingModel(true, null, VIEW_TYPE_NOW_MOVIE),
-            Title("개봉 예정" , HomeAdapter.VIEW_TYPE_TITLE),
+            Title("개봉 예정", HomeAdapter.VIEW_TYPE_TITLE),
             WrappingModel(true, null, VIEW_TYPE_POPULAR_MOVIE)
         )
-        adapter.addItems(items)
+        items = defaultList
+        adapter.submitList(items)  //items hashcode 1 -> items[1] = items[1].copy -> submilist -> AsyncListDiffer items hascode 1
+                                    // items hashcode 1 ->
         fetch()
         fetch2()
         fetchUpcomming()
@@ -116,27 +115,36 @@ class HomeFragment : Fragment() {
                 }
                 val horizontalPopularModel =
                     HorizontalMovieModel(list, HomeAdapter.VIEW_TYPE_POPULAR_MOVIE)
-                adapter.updatePopularWrappingModel(
-                    WrappingModel(
-                        isLoading = false,
-                        model = horizontalPopularModel,
-                        viewType = VIEW_TYPE_POPULAR_MOVIE
-                    )
-                )
 
+                items = items.mapIndexed { index, itemModel ->  //1 -> mapIndexed -> 2      // submitlist 1-> 2 ->>> -> DiffUtil -> itemsSame -> contentSame ->
+                    if (index == 1 && itemModel is WrappingModel) {
+                        itemModel.copy(
+                            isLoading = false,
+                            model = horizontalPopularModel,
+                            viewType = VIEW_TYPE_POPULAR_MOVIE
+                        )
+                    } else {
+                        itemModel
+                    }
+                }
+                adapter.submitList(items)
             }
 
             override fun onFailure(call: Call<PopularMoviesResponse>, t: Throwable) {
                 Log.d("kmh", t.toString())
-
-                adapter.updatePopularWrappingModel(
-                    WrappingModel(
-                        isLoading = false,
-                        model = null,
-                        viewType = VIEW_TYPE_POPULAR_MOVIE,
-                        isFailure = true
-                    )
-                )
+                items = items.mapIndexed { index, itemModel ->
+                    if (index == 1 && itemModel is WrappingModel) {
+                        itemModel.copy(
+                            isLoading = false,
+                            model = null,
+                            viewType = VIEW_TYPE_POPULAR_MOVIE,
+                            isFailure = true
+                        )
+                    } else {
+                        itemModel
+                    }
+                }
+                adapter.submitList(items)
             }
 
         })
@@ -163,38 +171,38 @@ class HomeFragment : Fragment() {
                 }
 
                 val nowPlaying = HorizontalMovieModel(list, HomeAdapter.VIEW_TYPE_NOW_MOVIE)
-                adapter.updateNowPlayingWrappingModel(
-                    WrappingModel(
-                        isLoading = false,
-                        model = nowPlaying,
-                        viewType = VIEW_TYPE_NOW_MOVIE
-                    )
-                )
+//                adapter.updateNowPlayingWrappingModel(
+//                    WrappingModel(
+//                        isLoading = false,
+//                        model = nowPlaying,
+//                        viewType = VIEW_TYPE_NOW_MOVIE
+//                    )
+//                )
             }
 
             override fun onFailure(call: Call<NowPlayingResponse>, t: Throwable) {
                 Log.d("kmh", t.toString())
-                adapter.updateNowPlayingWrappingModel(
-                    WrappingModel(
-                        isLoading = false,
-                        model = null,
-                        viewType = VIEW_TYPE_NOW_MOVIE,
-                        isFailure = true
-                    )
-                )
+//                adapter.updateNowPlayingWrappingModel(
+//                    WrappingModel(
+//                        isLoading = false,
+//                        model = null,
+//                        viewType = VIEW_TYPE_NOW_MOVIE,
+//                        isFailure = true
+//                    )
+//                )
             }
         })
     }
 
-    private fun fetchUpcomming(){
+    private fun fetchUpcomming() {
         service.getUpcomming(
             language = "ko",
             page = 1,
-            region ="KR"
+            region = "KR"
         ).enqueue(object : Callback<Upcomming> {
             override fun onResponse(call: Call<Upcomming>, response: Response<Upcomming>) {
-               val result =response.body()
-                val list =result!!.results.map{
+                val result = response.body()
+                val list = result!!.results.map {
                     Movie(
                         title = it.title,
                         rank = it.releaseDate,
@@ -204,24 +212,24 @@ class HomeFragment : Fragment() {
                 }
                 val horizontalPopularModel =
                     HorizontalMovieModel(list, HomeAdapter.VIEW_TYPE_UPCOMMING)
-                adapter.updateUpCommingWrappingModel(
-                    WrappingModel(
-                        isLoading = false,
-                        model = horizontalPopularModel,
-                        viewType = VIEW_TYPE_UPCOMMING
-                    )
-                )
+//                adapter.updateUpCommingWrappingModel(
+//                    WrappingModel(
+//                        isLoading = false,
+//                        model = horizontalPopularModel,
+//                        viewType = VIEW_TYPE_UPCOMMING
+//                    )
+//                )
             }
 
             override fun onFailure(call: Call<Upcomming>, t: Throwable) {
-                adapter.updateUpCommingWrappingModel(
-                    WrappingModel(
-                        isLoading = false,
-                        model = null,
-                        viewType = VIEW_TYPE_UPCOMMING,
-                        isFailure = true
-                    )
-                )
+//                adapter.updateUpCommingWrappingModel(
+//                    WrappingModel(
+//                        isLoading = false,
+//                        model = null,
+//                        viewType = VIEW_TYPE_UPCOMMING,
+//                        isFailure = true
+//                    )
+//                )
             }
 
         })
