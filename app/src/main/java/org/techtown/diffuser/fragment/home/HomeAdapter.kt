@@ -82,20 +82,7 @@ class HomeAdapter(
         return currentList[position].viewType
     }
 
-//    fun updatePopularWrappingModel(item: WrappingModel) {
-//        items[1] = item
-//        notifyItemChanged(1)
-//    }
-//
-//    fun updateNowPlayingWrappingModel(item: WrappingModel) {
-//        items[3] = item
-//        notifyItemChanged(3)
-//    }
-//
-//    fun updateUpCommingWrappingModel(item: WrappingModel) {
-//        items[5] = item
-//        notifyItemChanged(5)
-//    }
+
 
     class HorizontalPopularMoviesViewHolder(
         itemView: View,

@@ -54,8 +54,7 @@ class HomeFragment : Fragment() {
             WrappingModel(true, null, VIEW_TYPE_POPULAR_MOVIE)
         )
         items = defaultList
-        adapter.submitList(items)  //items hashcode 1 -> items[1] = items[1].copy -> submilist -> AsyncListDiffer items hascode 1
-                                    // items hashcode 1 ->
+        adapter.submitList(items)
         fetch()
         fetch2()
         fetchUpcomming()
@@ -116,17 +115,18 @@ class HomeFragment : Fragment() {
                 val horizontalPopularModel =
                     HorizontalMovieModel(list, HomeAdapter.VIEW_TYPE_POPULAR_MOVIE)
 
-                items = items.mapIndexed { index, itemModel ->  //1 -> mapIndexed -> 2      // submitlist 1-> 2 ->>> -> DiffUtil -> itemsSame -> contentSame ->
-                    if (index == 1 && itemModel is WrappingModel) {
-                        itemModel.copy(
-                            isLoading = false,
-                            model = horizontalPopularModel,
-                            viewType = VIEW_TYPE_POPULAR_MOVIE
-                        )
-                    } else {
-                        itemModel
+                items =
+                    items.mapIndexed { index, itemModel ->
+                        if (index == 1 && itemModel is WrappingModel) {
+                            itemModel.copy(
+                                isLoading = false,
+                                model = horizontalPopularModel,
+                                viewType = VIEW_TYPE_POPULAR_MOVIE
+                            )
+                        } else {
+                            itemModel
+                        }
                     }
-                }
                 adapter.submitList(items)
             }
 
@@ -169,27 +169,36 @@ class HomeFragment : Fragment() {
                         id = it.id
                     )
                 }
-
                 val nowPlaying = HorizontalMovieModel(list, HomeAdapter.VIEW_TYPE_NOW_MOVIE)
-//                adapter.updateNowPlayingWrappingModel(
-//                    WrappingModel(
-//                        isLoading = false,
-//                        model = nowPlaying,
-//                        viewType = VIEW_TYPE_NOW_MOVIE
-//                    )
-//                )
+                items = items.mapIndexed { index, itemModel ->
+                    if (index == 3 && itemModel is WrappingModel) {
+                        itemModel.copy(
+                            isLoading = false,
+                            model = nowPlaying,
+                            viewType = VIEW_TYPE_NOW_MOVIE
+                        )
+                    } else {
+                        itemModel
+                    }
+                }
+                adapter.submitList(items)
             }
 
             override fun onFailure(call: Call<NowPlayingResponse>, t: Throwable) {
                 Log.d("kmh", t.toString())
-//                adapter.updateNowPlayingWrappingModel(
-//                    WrappingModel(
-//                        isLoading = false,
-//                        model = null,
-//                        viewType = VIEW_TYPE_NOW_MOVIE,
-//                        isFailure = true
-//                    )
-//                )
+                items = items.mapIndexed { index, itemModel ->
+                    if (index == 3 && itemModel is WrappingModel) {
+                        itemModel.copy(
+                            isLoading = false,
+                            model = null,
+                            viewType = VIEW_TYPE_NOW_MOVIE,
+                            isFailure = true
+                        )
+                    } else {
+                        itemModel
+                    }
+                }
+                adapter.submitList(items)
             }
         })
     }
@@ -212,24 +221,35 @@ class HomeFragment : Fragment() {
                 }
                 val horizontalPopularModel =
                     HorizontalMovieModel(list, HomeAdapter.VIEW_TYPE_UPCOMMING)
-//                adapter.updateUpCommingWrappingModel(
-//                    WrappingModel(
-//                        isLoading = false,
-//                        model = horizontalPopularModel,
-//                        viewType = VIEW_TYPE_UPCOMMING
-//                    )
-//                )
+
+                items = items.mapIndexed { index, itemModel ->
+                    if (index == 5 && itemModel is WrappingModel) {
+                        itemModel.copy(
+                            isLoading = false,
+                            model = horizontalPopularModel,
+                            viewType = VIEW_TYPE_UPCOMMING
+                        )
+                    } else {
+                        itemModel
+                    }
+                }
+                adapter.submitList(items)
             }
 
             override fun onFailure(call: Call<Upcomming>, t: Throwable) {
-//                adapter.updateUpCommingWrappingModel(
-//                    WrappingModel(
-//                        isLoading = false,
-//                        model = null,
-//                        viewType = VIEW_TYPE_UPCOMMING,
-//                        isFailure = true
-//                    )
-//                )
+                items = items.mapIndexed { index, itemModel ->
+                    if(index ==5 && itemModel is WrappingModel) {
+                        itemModel.copy(
+                            isLoading = false,
+                            model = null,
+                            viewType = VIEW_TYPE_UPCOMMING,
+                            isFailure = true
+                        )
+                    }else {
+                        itemModel
+                    }
+                }
+
             }
 
         })
