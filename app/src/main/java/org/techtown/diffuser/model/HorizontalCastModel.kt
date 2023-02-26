@@ -1,4 +1,5 @@
 package org.techtown.diffuser.model
 
-class HorizontalCastModel (val castlist: List<CastRv>, override val viewType: Int) : ItemModel(viewType){
+data class HorizontalCastModel(override val id: Long, val castlist: List<CastRv>, override val viewType: Int) : ItemModel(id, viewType) {  //copy 못씀
+
 }

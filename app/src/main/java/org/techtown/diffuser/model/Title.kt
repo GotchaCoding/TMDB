@@ -1,7 +1,8 @@
 package org.techtown.diffuser.model
 
-class Title(
+data class Title(
     val titleM: String,
-    override val viewType: Int
-) : ItemModel(viewType) {
+    override val viewType: Int,
+    override val id: Long
+) : ItemModel(id, viewType) {
 }

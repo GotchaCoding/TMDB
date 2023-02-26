@@ -23,22 +23,52 @@ class PopularDetailActivity : AppCompatActivity() {
     private var service = RetrofitClient.retrofit.create(RetrofitInterface::class.java)
     var movieId: Int = 0
 
-    lateinit var mutableCastList: MutableList<CastRv>
+    private var items: List<ItemModel> = listOf()
+
+    companion object {
+        const val RECYCLERVIEW_ID_TOP_IN_TOP = -1L
+        const val RECYCLERVIEW_ID_TOP = -2L
+        const val RECYCLERVIEW_ID_TITLE = -3L
+        const val RECYCLERVIEW_ID_CAST = -4L
+
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPopualrDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
         movieId = intent.getIntExtra("movie_id", 0)
-        Log.e("kyh!!!", "movieId : $movieId")
         initView()
 
-        val items = listOf(
-            DetailTopModel("", "", "", "", DetailAdapter.VIEW_TYPE_DETAIL_BACKGROND),
-            Title("캐스팅", DetailAdapter.VIEW_TYPE_DETAIL_TITLE),
-            WrappingDetailModel(true, null, null, DetailAdapter.VIEW_TYPE_DETAIL_CASTING, false)
+        val topModel = DetailTopModel(
+            "",
+            "",
+            "",
+            "",
+            id = RECYCLERVIEW_ID_TOP_IN_TOP
         )
-        adapter.addItem(items)
+        val defaultList = listOf(
+            WrappingDetailModel(
+                true,
+                null,
+                topModel,
+                DetailAdapter.VIEW_TYPE_DETAIL_BACKGROND,
+                isFailure = false,
+                id = RECYCLERVIEW_ID_TOP
+            ),
+            Title("캐스팅", DetailAdapter.VIEW_TYPE_DETAIL_TITLE, RECYCLERVIEW_ID_TITLE),
+            WrappingDetailModel(
+                true,
+                null,
+                null,
+                DetailAdapter.VIEW_TYPE_DETAIL_CASTING,
+                false,
+                RECYCLERVIEW_ID_CAST
+            )
+        )
+        items = defaultList
+        adapter.submitList(items)
         fetch()
         fetchCast()
 
@@ -73,36 +103,64 @@ class PopularDetailActivity : AppCompatActivity() {
             override fun onResponse(call: Call<DetailPage_3>, response: Response<DetailPage_3>) {
                 val result = response.body()
                 if (result != null) {
-                    adapter.updateTopModel(
-                        DetailTopModel(
-                            title = result.title,
-                            overview = result.overview,
-                            postUrl = result.posterPath,
-                            backDropUrl = result.backdropPath,
-                            viewType = DetailAdapter.VIEW_TYPE_DETAIL_BACKGROND
-                        )
-                    )
+                    items = items.mapIndexed { index, itemModel ->
+                        if (index == 0 && itemModel is WrappingDetailModel) {
+                            Log.d("kmh2" , "fetch on response")
+                            itemModel.copy(
+                                isLoading = false,
+                                castModel = null,
+                                detailTopModel = DetailTopModel(
+                                    title = result.title,
+                                    overview = result.overview,
+                                    postUrl = result.posterPath,
+                                    backDropUrl = result.backdropPath,
+                                    id = RECYCLERVIEW_ID_TOP_IN_TOP,
+                                    isfailure = false
+                                ),
+                                viewType = DetailAdapter.VIEW_TYPE_DETAIL_BACKGROND,
+                                isFailure = false,
+                                id = RECYCLERVIEW_ID_TOP
+
+
+                            )
+
+                        } else {
+                            itemModel
+                        }
+                    }
+                    adapter.submitList(items)
+                    Log.d("back" , "success")
                 }
             }
 
             override fun onFailure(call: Call<DetailPage_3>, t: Throwable) {
                 Log.d("kmh", t.toString())
-                adapter.updateTopModel(
-                    DetailTopModel(
-                        title = null,
-                        overview = "",
-                        postUrl = "",
-                        backDropUrl = "",
-                        viewType = DetailAdapter.VIEW_TYPE_DETAIL_BACKGROND,
-                        isfailure = true
+                items = items.mapIndexed { index, itemModel ->
+                    if (index == 0 && itemModel is WrappingDetailModel) {
+                        itemModel.copy(
+                            isLoading = false,
+                            castModel = null,
+                            detailTopModel = DetailTopModel(
+                                title = null,
+                                overview = "",
+                                postUrl = "",
+                                backDropUrl = "",
+                                isfailure = true,
+                                id = RECYCLERVIEW_ID_TOP_IN_TOP,
+                                isLoading = false,
+                            ),
+                            viewType = DetailAdapter.VIEW_TYPE_DETAIL_BACKGROND,
+                            isFailure = true,
+                            id = RECYCLERVIEW_ID_TOP
 
-                    )
-                )
-
-
+                        )
+                    } else {
+                        itemModel
+                    }
+                }
+                adapter.submitList(items)
+                Log.d("back" , "faic")
             }
-
-
         })
     }
 
@@ -121,54 +179,48 @@ class PopularDetailActivity : AppCompatActivity() {
                             castName = it.name
                         )
                     }.filter {
-                        it.imgActor !=null
+                        it.imgActor != null
                     }
 
-//                    /**  사진삭제
-//                    Cast api 에서 사진 null 일경우 리스트 삭제를 위해
-//                    HorizontalCastModel에서 list를 MUTABLELIST로 봐꾸고
-//                    null값인 포지션을 변수 num_forReove 에 저장
-//                     */
-//                    var num_forRemove = arrayListOf<Int>()   // 사진이 널값인 position 저장.
-//                    mutableCastList = list.toMutableList()  // list 를 mutable 로 변경
-//                    for (i: Int in 0..mutableCastList.size - 1) {
-//                        if (mutableCastList[i].imgActor == null) {
-//                            num_forRemove.add(i)
-//                        }
-//                    }
-//
-//                    num_forRemove.reverse()  // 역순으로 봐꺼주지 않으면 앞에서부터 제거하기 때문에 인덱스 오류 발생.
-//
-//                    for (i: Int in 0..num_forRemove.size - 1) {
-//                        mutableCastList.removeAt(num_forRemove[i])
-//                    }
-
                     val castModel =
-                        HorizontalCastModel(list, DetailAdapter.VIEW_TYPE_DETAIL_CASTING)
-                    adapter.updateCastWrappingModel(
-                        WrappingDetailModel(
-                            isLoading = false,
-                            castModel = castModel,
-                            detailTopModel = null,
-                            viewType = DetailAdapter.VIEW_TYPE_DETAIL_CASTING,
-                            isFailure = false
+                        HorizontalCastModel(
+                            id = RECYCLERVIEW_ID_CAST,
+                            list,
+                            DetailAdapter.VIEW_TYPE_DETAIL_CASTING
                         )
-                    )
+                    items = items.mapIndexed { index, itemModel ->
+                        if (index == 2 && itemModel is WrappingDetailModel) {
+                            itemModel.copy(
+                                isLoading = false,
+                                castModel = castModel,
+                                detailTopModel = null,
+                                viewType = DetailAdapter.VIEW_TYPE_DETAIL_CASTING,
+                                isFailure = false
+                            )
+                        } else {
+                            itemModel
+                        }
+                    }
+                    adapter.submitList(items)
                 }
             }
 
             override fun onFailure(call: Call<CastResult>, t: Throwable) {
                 Log.d("kmh", t.toString())
-                adapter.updateCastWrappingModel(
-                    WrappingDetailModel(
-                        isLoading = false,
-                        castModel = null,
-                        detailTopModel = null,
-                        viewType = DetailAdapter.VIEW_TYPE_DETAIL_CASTING,
-                        isFailure = true
-
-                    )
-                )
+                items = items.mapIndexed { index, itemModel ->
+                    if (index == 2 && itemModel is WrappingDetailModel) {
+                        itemModel.copy(
+                            isLoading = false,
+                            castModel = null,
+                            detailTopModel = null,
+                            viewType = DetailAdapter.VIEW_TYPE_DETAIL_CASTING,
+                            isFailure = true
+                        )
+                    } else {
+                        itemModel
+                    }
+                }
+                adapter.submitList(items)
             }
 
         })

@@ -1,5 +1,6 @@
 package org.techtown.diffuser.activity.detailpage
 
+import android.util.Log
 import android.util.Log.v
 import android.view.LayoutInflater
 import android.view.View
@@ -16,14 +17,11 @@ import com.bumptech.glide.Glide
 import org.techtown.diffuser.R
 import org.techtown.diffuser.fragment.home.HomeAdapter
 import org.techtown.diffuser.listener.OnFailureClickListener
-import org.techtown.diffuser.model.DetailTopModel
-import org.techtown.diffuser.model.ItemModel
-import org.techtown.diffuser.model.Title
-import org.techtown.diffuser.model.WrappingDetailModel
+import org.techtown.diffuser.model.*
 
 class DetailAdapter(val failureClick: OnFailureClickListener) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private var items: ArrayList<ItemModel> = arrayListOf()
+    ListAdapter<ItemModel, RecyclerView.ViewHolder>(diffUtil) {
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         when (viewType) {
@@ -49,16 +47,21 @@ class DetailAdapter(val failureClick: OnFailureClickListener) :
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val itemModel = items[position]
+        val itemModel = currentList[position]
         when (itemModel.viewType) {
             VIEW_TYPE_DETAIL_BACKGROND -> {
-                if (itemModel is DetailTopModel) {
+                Log.d("kmh2" , "onBindViewHolder 실행")
+                if (itemModel is WrappingDetailModel) {
                     (holder as BackImageViewHolder).setItem(itemModel)
+                    Log.d("kmh2" , "onBindViewHolder if문 실행")
+                }else {
+                    Log.d("kmh2", "false 값 ")
                 }
             }
             VIEW_TYPE_DETAIL_CASTING -> {
                 if (itemModel is WrappingDetailModel) {
                     (holder as CastViewHolder).setItem(itemModel)
+                    Log.d("kmh2" , "onBindViewHolder 뷰타입 디테일 캐스팅 if문 실행")
                 }
             }
             VIEW_TYPE_DETAIL_TITLE -> {
@@ -69,28 +72,8 @@ class DetailAdapter(val failureClick: OnFailureClickListener) :
         }
     }
 
-    override fun getItemCount(): Int {
-        return items.size
-    }
-
     override fun getItemViewType(position: Int): Int {
-        return items[position].viewType
-    }
-
-    fun addItem(items: List<ItemModel>) {
-        val positionStart: Int = this.items.size
-        this.items.addAll(items)
-        notifyItemRangeInserted(positionStart, items.size)
-    }
-
-    fun updateTopModel(item: DetailTopModel) {
-        items[0] = item
-        notifyItemChanged(0)
-    }
-
-    fun updateCastWrappingModel(item: WrappingDetailModel) {
-        items[2] = item
-        notifyItemChanged(2)
+        return currentList[position].viewType
     }
 
 
@@ -116,18 +99,21 @@ class DetailAdapter(val failureClick: OnFailureClickListener) :
 
         }
 
-        fun setItem(item: DetailTopModel) {
+        fun setItem(item: WrappingDetailModel) {
+
             if(item.isLoading){ //로딩중
+                Log.d("kmh2" , "처음 if 문")
                 vLoading.isVisible = true
                 view_failure.isVisible = false
-            }else if(item.isfailure.not()) { //성공
+            }else if(item.detailTopModel?.isfailure == false ) { //성공
+                Log.d("kmh2" , "setItem  else if 문")
                 vLoading.isVisible = false
                 view_failure.isVisible = false
-                Glide.with(itemView).load("https://image.tmdb.org/t/p/w500" + item.backDropUrl)
+                Glide.with(itemView).load("https://image.tmdb.org/t/p/w500" + item.detailTopModel.backDropUrl)
                     .into(imgBackgrond)
-                title.text = item.title
-                overview.text = item.overview
-                Glide.with(itemView).load("https://image.tmdb.org/t/p/w500" + item.postUrl)
+                title.text = item.detailTopModel.title
+                overview.text = item.detailTopModel.overview
+                Glide.with(itemView).load("https://image.tmdb.org/t/p/w500" + item.detailTopModel.postUrl)
                     .into(imgPoster)
             }else{//실패
                 view_failure.isVisible = true
@@ -170,7 +156,8 @@ class DetailAdapter(val failureClick: OnFailureClickListener) :
                 vLoading.isVisible = item.isLoading
 
                 if (item.castModel != null) {
-                    adapter.setCast(item.castModel.castlist)
+                    adapter.submitList(item.castModel.castlist)
+
                 }
             }
             view_failure.setOnClickListener {
@@ -199,4 +186,13 @@ class DetailAdapter(val failureClick: OnFailureClickListener) :
     }
 }
 
- val diffUtil = object : DiffUtil.ItemCallback<Item
+ val diffUtil = object : DiffUtil.ItemCallback<ItemModel>(){
+     override fun areItemsTheSame(oldItem: ItemModel, newItem: ItemModel): Boolean {
+         return oldItem.id == newItem.id
+     }
+
+     override fun areContentsTheSame(oldItem: ItemModel, newItem: ItemModel): Boolean {
+        return oldItem.equals(newItem)
+     }
+
+ }

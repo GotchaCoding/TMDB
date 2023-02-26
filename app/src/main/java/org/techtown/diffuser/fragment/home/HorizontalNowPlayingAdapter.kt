@@ -1,21 +1,22 @@
 package org.techtown.diffuser.fragment.home
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import org.techtown.diffuser.R
 import org.techtown.diffuser.listener.PopularClickListener
+import org.techtown.diffuser.model.ItemModel
 import org.techtown.diffuser.model.Movie
 
 class HorizontalNowPlayingAdapter(private val ItemClickListener: PopularClickListener) :
-    RecyclerView.Adapter<NowMovieViewHolder>() {
-
-
-    var items: List<Movie> = listOf()
+    ListAdapter<Movie,NowMovieViewHolder>(diffUtil_movie) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NowMovieViewHolder {
@@ -25,16 +26,12 @@ class HorizontalNowPlayingAdapter(private val ItemClickListener: PopularClickLis
     }
 
     override fun onBindViewHolder(holder: NowMovieViewHolder, position: Int) {
-        holder.setItem(items[position])
+        val movie = currentList[position]
+        holder.setItem(movie)
     }
 
     override fun getItemCount(): Int {
-        return items.size
-    }
-
-    fun setMovies(movies: List<Movie>) {
-        items = movies
-        notifyDataSetChanged()
+        return currentList.size
     }
 
 
@@ -63,4 +60,15 @@ class NowMovieViewHolder(itemView: View, private val popularItemClick: PopularCl
             }
         }
 
+}
+val diffUtil_movie = object : DiffUtil.ItemCallback<Movie>() {
+    override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {
+        Log.e("kyh!!!","oldItem === newItem : ${oldItem === newItem}")
+        return oldItem.id == newItem.id   // === hash 비교.       == 안에잇는 내용 컨텐츠 비교
+    }
+
+    override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean {
+        Log.e("kyh!!!","oldItem == newItem : ${oldItem.equals(newItem)}")
+        return oldItem.equals(newItem)
+    }
 }

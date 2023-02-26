@@ -1,17 +1,22 @@
 package org.techtown.diffuser.activity.detailpage
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import org.techtown.diffuser.R
 import org.techtown.diffuser.model.CastRv
+import org.techtown.diffuser.model.HorizontalCastModel
+import org.techtown.diffuser.model.ItemModel
 
-class CastAdapter : RecyclerView.Adapter<CastAdapter.CastingViewHolder>() {
-    var items: List<CastRv> = listOf()
+class CastAdapter : ListAdapter<CastRv, CastAdapter.CastingViewHolder>(diffUtil2) {
+
 
     class CastingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var imgActor: ImageView
@@ -41,16 +46,24 @@ class CastAdapter : RecyclerView.Adapter<CastAdapter.CastingViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: CastingViewHolder, position: Int) {
-        holder.setItem(items[position])
+        val castRvModel = currentList[position]
+        holder.setItem(castRvModel)
     }
 
     override fun getItemCount(): Int {
-        return items.size
+        return currentList.size
     }
 
-    fun setCast(cast: List<CastRv>) {
-        items = cast
-        notifyDataSetChanged()
+}
+
+val diffUtil2 = object : DiffUtil.ItemCallback<CastRv>() {
+    override fun areItemsTheSame(oldItem: CastRv, newItem: CastRv): Boolean {
+        Log.e("kyh!!!","oldItem === newItem : ${oldItem === newItem}")
+        return oldItem.id == newItem.id
     }
 
+    override fun areContentsTheSame(oldItem: CastRv, newItem: CastRv): Boolean {
+        Log.e("kyh!!!","oldItem == newItem : ${oldItem.equals(newItem)}")
+        return oldItem.equals(newItem)
+    }
 }

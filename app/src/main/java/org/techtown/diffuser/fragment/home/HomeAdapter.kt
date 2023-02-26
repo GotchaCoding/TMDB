@@ -16,13 +16,14 @@ import org.techtown.diffuser.activity.detailpage.DetailAdapter
 import org.techtown.diffuser.listener.OnFailureClickListener
 import org.techtown.diffuser.listener.PopularClickListener
 import org.techtown.diffuser.model.ItemModel
+import org.techtown.diffuser.model.Movie
 import org.techtown.diffuser.model.Title
 import org.techtown.diffuser.model.WrappingModel
 
 class HomeAdapter(
     private val ItemClickListener: PopularClickListener,
     private val failureClick: OnFailureClickListener
-) : ListAdapter<ItemModel, RecyclerView.ViewHolder>(diffUtil){
+) : ListAdapter<ItemModel, RecyclerView.ViewHolder>(diffUtil) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         when (viewType) {
             VIEW_TYPE_TITLE -> {
@@ -61,18 +62,18 @@ class HomeAdapter(
                 }
             }
             VIEW_TYPE_POPULAR_MOVIE -> {
-                if (itemModel is WrappingModel) {  //is 는 자료 반환형 체크
-                    (holder as HorizontalPopularMoviesViewHolder).setItem(itemModel)
+                if (holder is HorizontalPopularMoviesViewHolder && itemModel is WrappingModel) {  //is 는 자료 반환형 체크
+                    holder.setItem(itemModel)
                 }
             }
             VIEW_TYPE_NOW_MOVIE -> {
-                if (itemModel is WrappingModel) {
-                    (holder as NowMovieViewHolder).setItem(itemModel)
+                if (holder is NowMovieViewHolder && itemModel is WrappingModel) {
+                    holder.setItem(itemModel)
                 }
             }
             VIEW_TYPE_UPCOMMING -> {
-                if (itemModel is WrappingModel) {
-                    (holder as HorizontalPopularMoviesViewHolder).setItem(itemModel)
+                if (holder is HorizontalPopularMoviesViewHolder && itemModel is WrappingModel) {
+                    holder.setItem(itemModel)
                 }
             }
         }
@@ -81,7 +82,6 @@ class HomeAdapter(
     override fun getItemViewType(position: Int): Int {
         return currentList[position].viewType
     }
-
 
 
     class HorizontalPopularMoviesViewHolder(
@@ -174,7 +174,7 @@ class HomeAdapter(
                 vLoading.isVisible = item.isLoading
 
                 if (item.model != null) {
-                    adapter.setMovies(item.model.movies)
+                    adapter.submitList(item.model.movies)
                 }
             }
             view_failure.setOnClickListener {
@@ -193,12 +193,11 @@ class HomeAdapter(
 
 val diffUtil = object : DiffUtil.ItemCallback<ItemModel>() {
     override fun areItemsTheSame(oldItem: ItemModel, newItem: ItemModel): Boolean {
-        Log.e("kyh!!!","oldItem === newItem : ${oldItem === newItem}")
-        return oldItem === newItem
+        return oldItem.id == newItem.id
     }
 
     override fun areContentsTheSame(oldItem: ItemModel, newItem: ItemModel): Boolean {
-        Log.e("kyh!!!","oldItem == newItem : ${oldItem.equals(newItem)}")
+        Log.e("kyh!!!", "oldItem == newItem : ${oldItem.equals(newItem)}")
         return oldItem.equals(newItem)
     }
 }
