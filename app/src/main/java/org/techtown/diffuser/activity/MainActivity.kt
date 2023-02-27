@@ -8,10 +8,12 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.navigation.NavigationBarView
+import dagger.hilt.android.AndroidEntryPoint
 import org.techtown.diffuser.databinding.ActivityMainBinding
 import org.techtown.diffuser.fragment.home.HomeFragment
 import org.techtown.diffuser.fragment.search.SearchFragment
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity(),
     NavigationBarView.OnItemSelectedListener  {
     lateinit var binding: ActivityMainBinding

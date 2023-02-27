@@ -1,13 +1,13 @@
 package org.techtown.diffuser.application
 
 import android.app.Application
-import org.techtown.diffuser.BuildConfig
-import org.techtown.diffuser.retrofit.RetrofitClient
+import dagger.hilt.android.HiltAndroidApp
 
+@HiltAndroidApp
 class DiffuserApp : Application() {
     override fun onCreate() {
         super.onCreate()
-        RetrofitClient.instance
+//        RetrofitClient.instance
     }
 
     companion object {

@@ -7,7 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.HiltAndroidApp
 import org.techtown.diffuser.activity.detailpage.PopularDetailActivity
 import org.techtown.diffuser.databinding.ActivityHomeFragmentBinding
 import org.techtown.diffuser.fragment.home.HomeAdapter.Companion.VIEW_TYPE_NOW_MOVIE
@@ -19,18 +24,22 @@ import org.techtown.diffuser.model.*
 import org.techtown.diffuser.response.Upcomming
 import org.techtown.diffuser.response.nowplaying.NowPlayingResponse
 import org.techtown.diffuser.response.pupular.PopularMoviesResponse
-import org.techtown.diffuser.retrofit.RetrofitClient.Companion.retrofit
 import org.techtown.diffuser.retrofit.RetrofitInterface
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
     lateinit var binding: ActivityHomeFragmentBinding
     private lateinit var adapter: HomeAdapter
 
-    private var service = retrofit.create(RetrofitInterface::class.java)
+    private val viewModel : HomeViewModel by viewModels()
+
+    @Inject
+  lateinit var service : RetrofitInterface
+//    private var service = retrofit.create(RetrofitInterface::class.java)
     private var items: List<ItemModel> = listOf()
 
     companion object {
@@ -65,6 +74,12 @@ class HomeFragment : Fragment() {
         fetch()
         fetch2()
         fetchUpcomming()
+        viewModel.test()
+        Log.e("test","service infragmetn : $service")
+
+        viewModel.items.observe(viewLifecycleOwner) { items ->
+            adapter.submitList(items)
+        }
     }
 
     private fun initView() {

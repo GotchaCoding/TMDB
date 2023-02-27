@@ -5,22 +5,26 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import org.techtown.diffuser.databinding.ActivityPopualrDetailBinding
 import org.techtown.diffuser.listener.OnFailureClickListener
 import org.techtown.diffuser.model.*
 import org.techtown.diffuser.response.detail.cast.CastResult
 import org.techtown.diffuser.response.detail.detailmovie.DetailPage_3
-import org.techtown.diffuser.retrofit.RetrofitClient
 import org.techtown.diffuser.retrofit.RetrofitInterface
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class PopularDetailActivity : AppCompatActivity() {
     lateinit var binding: ActivityPopualrDetailBinding
+
     private lateinit var adapter: DetailAdapter
 
-    private var service = RetrofitClient.retrofit.create(RetrofitInterface::class.java)
+    @Inject
+    lateinit var service : RetrofitInterface
     var movieId: Int = 0
 
     private var items: List<ItemModel> = listOf()
