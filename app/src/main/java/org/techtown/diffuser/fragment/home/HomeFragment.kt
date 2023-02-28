@@ -40,7 +40,7 @@ class HomeFragment : Fragment() {
     @Inject
   lateinit var service : RetrofitInterface
 //    private var service = retrofit.create(RetrofitInterface::class.java)
-    private var items: List<ItemModel> = listOf()
+//    private var items: List<ItemModel> = listOf()
 
     companion object {
         const val RECYCLERVIEW_ID_POPULAR = -1L
@@ -61,20 +61,9 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
-        val defaultList = listOf(
-            Title("인기영화", HomeAdapter.VIEW_TYPE_TITLE, RECYCLERVIEW_ID_TITME),
-            WrappingModel(true, null, VIEW_TYPE_POPULAR_MOVIE, id = RECYCLERVIEW_ID_POPULAR),
-            Title("상영중 영화", HomeAdapter.VIEW_TYPE_TITLE, RECYCLERVIEW_ID_TITME),
-            WrappingModel(true, null, VIEW_TYPE_NOW_MOVIE, id = RECYCLERVIEW_ID_NOW),
-            Title("개봉 예정", HomeAdapter.VIEW_TYPE_TITLE, RECYCLERVIEW_ID_TITME),
-            WrappingModel(true, null, VIEW_TYPE_POPULAR_MOVIE, id = RECYCLERVIEW_ID_COMMING)
-        )
-        items = defaultList
-        adapter.submitList(items)
-        fetch()
+        viewModel.fetch()
         fetch2()
         fetchUpcomming()
-        viewModel.test()
         Log.e("test","service infragmetn : $service")
 
         viewModel.items.observe(viewLifecycleOwner) { items ->
@@ -98,7 +87,7 @@ class HomeFragment : Fragment() {
                     Log.d("id", viewType.toString())
                     when (viewType) {
                         VIEW_TYPE_POPULAR_MOVIE -> {
-                            fetch()
+                            viewModel.fetch()
                         }
                         VIEW_TYPE_NOW_MOVIE -> {
                             fetch2()
@@ -113,66 +102,6 @@ class HomeFragment : Fragment() {
             recyclerview.adapter = adapter
             recyclerview.layoutManager = layoutManager
         }
-    }
-
-    private fun fetch() {
-        service.getPopularMovie(
-            "ko",
-            1
-        ).enqueue(object : Callback<PopularMoviesResponse> {
-            override fun onResponse(
-                call: Call<PopularMoviesResponse>,
-                response: Response<PopularMoviesResponse>
-            ) {
-                val result = response.body()
-
-                val list = result!!.results.map {
-                    Movie(
-                        title = it.title,
-                        rank = it.releaseDate,
-                        imagePoster = it.posterPath,
-                        id = it.id
-                    )
-                }
-                val horizontalPopularModel =
-                    HorizontalMovieModel(list, HomeAdapter.VIEW_TYPE_POPULAR_MOVIE, id = RECYCLERVIEW_ID_POPULAR)
-
-                items =
-                    items.mapIndexed { index, itemModel ->
-                        if (index == 1 && itemModel is WrappingModel) {
-                            itemModel.copy(
-                                isLoading = false,
-                                model = horizontalPopularModel,
-                                viewType = VIEW_TYPE_POPULAR_MOVIE,
-                                isFailure = false
-                            )
-                        } else {
-                            itemModel
-                        }
-                    }
-                adapter.submitList(items)
-
-            }
-
-            override fun onFailure(call: Call<PopularMoviesResponse>, t: Throwable) {
-                Log.d("kmh", t.toString())
-                items = items.mapIndexed { index, itemModel ->
-                    if (index == 1 && itemModel is WrappingModel) {
-                        itemModel.copy(
-                            isLoading = false,
-                            model = null,
-                            viewType = VIEW_TYPE_POPULAR_MOVIE,
-                            isFailure = true
-                        )
-                    } else {
-                        itemModel
-                    }
-                }
-                adapter.submitList(items)
-
-            }
-
-        })
     }
 
     private fun fetch2() {
@@ -195,7 +124,7 @@ class HomeFragment : Fragment() {
                     )
                 }
                 val nowPlaying = HorizontalMovieModel(list, HomeAdapter.VIEW_TYPE_NOW_MOVIE, id = RECYCLERVIEW_ID_NOW)
-                items = items.mapIndexed { index, itemModel ->
+                viewModel._items.value = viewModel.items.value!!.mapIndexed { index, itemModel ->
                     if (index == 3 && itemModel is WrappingModel) {
                         itemModel.copy(
                             isLoading = false,
@@ -208,12 +137,11 @@ class HomeFragment : Fragment() {
                         itemModel
                     }
                 }
-                adapter.submitList(items)
             }
 
             override fun onFailure(call: Call<NowPlayingResponse>, t: Throwable) {
                 Log.d("kmh", t.toString())
-                items = items.mapIndexed { index, itemModel ->
+                viewModel._items.value = viewModel._items.value!!.mapIndexed { index, itemModel ->
                     if (index == 3 && itemModel is WrappingModel) {
                         itemModel.copy(
                             isLoading = false,
@@ -226,7 +154,6 @@ class HomeFragment : Fragment() {
                         itemModel
                     }
                 }
-                adapter.submitList(items)
             }
         })
     }
@@ -252,7 +179,7 @@ class HomeFragment : Fragment() {
                 Log.d("testtest" , horizontalPopularModel.id.toString())
                 Log.d("testtest2" , (horizontalPopularModel as ItemModel).id.toString())
 
-                items = items.mapIndexed { index, itemModel ->
+                viewModel._items.value = viewModel._items.value!!.mapIndexed { index, itemModel ->
                     if (index == 5 && itemModel is WrappingModel) {
                         itemModel.copy(
                             isLoading = false,
@@ -265,11 +192,10 @@ class HomeFragment : Fragment() {
                         itemModel
                     }
                 }
-                adapter.submitList(items)
             }
 
             override fun onFailure(call: Call<Upcomming>, t: Throwable) {
-                items = items.mapIndexed { index, itemModel ->
+                viewModel._items.value = viewModel._items.value!!.mapIndexed { index, itemModel ->
                     if (index == 5 && itemModel is WrappingModel) {
                         itemModel.copy(
                             isLoading = false,
@@ -282,8 +208,6 @@ class HomeFragment : Fragment() {
                         itemModel
                     }
                 }
-                adapter.submitList(items)
-
             }
 
         })
