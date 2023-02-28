@@ -62,8 +62,8 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initView()
         viewModel.fetch()
-        fetch2()
-        fetchUpcomming()
+        viewModel.fetch2()
+        viewModel.fetchUpcomming()
         Log.e("test","service infragmetn : $service")
 
         viewModel.items.observe(viewLifecycleOwner) { items ->
@@ -90,10 +90,10 @@ class HomeFragment : Fragment() {
                             viewModel.fetch()
                         }
                         VIEW_TYPE_NOW_MOVIE -> {
-                            fetch2()
+                            viewModel.fetch2()
                         }
                         VIEW_TYPE_UPCOMMING -> {
-                            fetchUpcomming()
+                            viewModel.fetchUpcomming()
                         }
                     }
                 }
@@ -104,113 +104,8 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun fetch2() {
-        service.getNowPlayingMovie(
-            "ko",
-            1
-        ).enqueue(object : Callback<NowPlayingResponse> {
-            override fun onResponse(
-                call: Call<NowPlayingResponse>,
-                response: Response<NowPlayingResponse>
-            ) {
-                val result = response.body()
 
-                val list = result!!.results.map {
-                    Movie(
-                        title = it.title,
-                        rank = it.releaseDate,
-                        imageDrop = it.backdropPath,
-                        id = it.id
-                    )
-                }
-                val nowPlaying = HorizontalMovieModel(list, HomeAdapter.VIEW_TYPE_NOW_MOVIE, id = RECYCLERVIEW_ID_NOW)
-                viewModel._items.value = viewModel.items.value!!.mapIndexed { index, itemModel ->
-                    if (index == 3 && itemModel is WrappingModel) {
-                        itemModel.copy(
-                            isLoading = false,
-                            model = nowPlaying,
-                            viewType = VIEW_TYPE_NOW_MOVIE,
-                            isFailure = false,
-                            id = RECYCLERVIEW_ID_NOW
-                        )
-                    } else {
-                        itemModel
-                    }
-                }
-            }
 
-            override fun onFailure(call: Call<NowPlayingResponse>, t: Throwable) {
-                Log.d("kmh", t.toString())
-                viewModel._items.value = viewModel._items.value!!.mapIndexed { index, itemModel ->
-                    if (index == 3 && itemModel is WrappingModel) {
-                        itemModel.copy(
-                            isLoading = false,
-                            model = null,
-                            viewType = VIEW_TYPE_NOW_MOVIE,
-                            isFailure = true,
-                            id = RECYCLERVIEW_ID_NOW
-                        )
-                    } else {
-                        itemModel
-                    }
-                }
-            }
-        })
-    }
 
-    private fun fetchUpcomming() {
-        service.getUpcomming(
-            language = "ko",
-            page = 1,
-            region = "KR"
-        ).enqueue(object : Callback<Upcomming> {
-            override fun onResponse(call: Call<Upcomming>, response: Response<Upcomming>) {
-                val result = response.body()
-                val list = result!!.results.map {
-                    Movie(
-                        title = it.title,
-                        rank = it.releaseDate,
-                        imagePoster = it.posterPath,
-                        id = it.id
-                    )
-                }
-                val horizontalPopularModel =
-                    HorizontalMovieModel(list, HomeAdapter.VIEW_TYPE_UPCOMMING, id= RECYCLERVIEW_ID_COMMING)
-                Log.d("testtest" , horizontalPopularModel.id.toString())
-                Log.d("testtest2" , (horizontalPopularModel as ItemModel).id.toString())
-
-                viewModel._items.value = viewModel._items.value!!.mapIndexed { index, itemModel ->
-                    if (index == 5 && itemModel is WrappingModel) {
-                        itemModel.copy(
-                            isLoading = false,
-                            model = horizontalPopularModel,
-                            viewType = VIEW_TYPE_UPCOMMING,
-                            isFailure = false,
-                            id = RECYCLERVIEW_ID_COMMING
-                        )
-                    } else {
-                        itemModel
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<Upcomming>, t: Throwable) {
-                viewModel._items.value = viewModel._items.value!!.mapIndexed { index, itemModel ->
-                    if (index == 5 && itemModel is WrappingModel) {
-                        itemModel.copy(
-                            isLoading = false,
-                            model = null,
-                            viewType = VIEW_TYPE_UPCOMMING,
-                            isFailure = true,
-                            id = RECYCLERVIEW_ID_COMMING
-                        )
-                    } else {
-                        itemModel
-                    }
-                }
-            }
-
-        })
-    }
 
 }

@@ -6,6 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.techtown.diffuser.model.*
+import org.techtown.diffuser.response.Upcomming
+import org.techtown.diffuser.response.nowplaying.NowPlayingResponse
 import org.techtown.diffuser.response.pupular.PopularMoviesResponse
 import org.techtown.diffuser.retrofit.RetrofitInterface
 import retrofit2.Call
@@ -79,18 +81,138 @@ class HomeViewModel @Inject constructor(
         })
     }
 
+    fun fetch2() {
+        service.getNowPlayingMovie(
+            "ko",
+            1
+        ).enqueue(object : Callback<NowPlayingResponse> {
+            override fun onResponse(
+                call: Call<NowPlayingResponse>,
+                response: Response<NowPlayingResponse>
+            ) {
+                val result = response.body()
+
+                val list = result!!.results.map {
+                    Movie(
+                        title = it.title,
+                        rank = it.releaseDate,
+                        imageDrop = it.backdropPath,
+                        id = it.id
+                    )
+                }
+                val nowPlaying = HorizontalMovieModel(
+                    list,
+                    HomeAdapter.VIEW_TYPE_NOW_MOVIE,
+                    id = HomeFragment.RECYCLERVIEW_ID_NOW
+                )
+                _items.value = items.value!!.mapIndexed { index, itemModel ->
+                    if (index == 3 && itemModel is WrappingModel) {
+                        itemModel.copy(
+                            isLoading = false,
+                            model = nowPlaying,
+                            viewType = HomeAdapter.VIEW_TYPE_NOW_MOVIE,
+                            isFailure = false,
+                            id = HomeFragment.RECYCLERVIEW_ID_NOW
+                        )
+                    } else {
+                        itemModel
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<NowPlayingResponse>, t: Throwable) {
+                Log.d("kmh", t.toString())
+                _items.value = _items.value!!.mapIndexed { index, itemModel ->
+                    if (index == 3 && itemModel is WrappingModel) {
+                        itemModel.copy(
+                            isLoading = false,
+                            model = null,
+                            viewType = HomeAdapter.VIEW_TYPE_NOW_MOVIE,
+                            isFailure = true,
+                            id = HomeFragment.RECYCLERVIEW_ID_NOW
+                        )
+                    } else {
+                        itemModel
+                    }
+                }
+            }
+        })
+    }
+
+    fun fetchUpcomming() {
+        service.getUpcomming(
+            language = "ko",
+            page = 1,
+            region = "KR"
+        ).enqueue(object : Callback<Upcomming> {
+            override fun onResponse(call: Call<Upcomming>, response: Response<Upcomming>) {
+                val result = response.body()
+                val list = result!!.results.map {
+                    Movie(
+                        title = it.title,
+                        rank = it.releaseDate,
+                        imagePoster = it.posterPath,
+                        id = it.id
+                    )
+                }
+                val horizontalPopularModel =
+                    HorizontalMovieModel(
+                        list,
+                        HomeAdapter.VIEW_TYPE_UPCOMMING,
+                        id = HomeFragment.RECYCLERVIEW_ID_COMMING
+                    )
+                Log.d("testtest", horizontalPopularModel.id.toString())
+                Log.d("testtest2", (horizontalPopularModel as ItemModel).id.toString())
+
+                _items.value = _items.value!!.mapIndexed { index, itemModel ->
+                    if (index == 5 && itemModel is WrappingModel) {
+                        itemModel.copy(
+                            isLoading = false,
+                            model = horizontalPopularModel,
+                            viewType = HomeAdapter.VIEW_TYPE_UPCOMMING,
+                            isFailure = false,
+                            id = HomeFragment.RECYCLERVIEW_ID_COMMING
+                        )
+                    } else {
+                        itemModel
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<Upcomming>, t: Throwable) {
+                _items.value = _items.value!!.mapIndexed { index, itemModel ->
+                    if (index == 5 && itemModel is WrappingModel) {
+                        itemModel.copy(
+                            isLoading = false,
+                            model = null,
+                            viewType = HomeAdapter.VIEW_TYPE_UPCOMMING,
+                            isFailure = true,
+                            id = HomeFragment.RECYCLERVIEW_ID_COMMING
+                        )
+                    } else {
+                        itemModel
+                    }
+                }
+            }
+
+        })
+    }
+
     init {
         val defaultList = listOf(
             Title("인기영화", HomeAdapter.VIEW_TYPE_TITLE, HomeFragment.RECYCLERVIEW_ID_TITME),
-            WrappingModel(true, null,
+            WrappingModel(
+                true, null,
                 HomeAdapter.VIEW_TYPE_POPULAR_MOVIE, id = HomeFragment.RECYCLERVIEW_ID_POPULAR
             ),
             Title("상영중 영화", HomeAdapter.VIEW_TYPE_TITLE, HomeFragment.RECYCLERVIEW_ID_TITME),
-            WrappingModel(true, null,
+            WrappingModel(
+                true, null,
                 HomeAdapter.VIEW_TYPE_NOW_MOVIE, id = HomeFragment.RECYCLERVIEW_ID_NOW
             ),
             Title("개봉 예정", HomeAdapter.VIEW_TYPE_TITLE, HomeFragment.RECYCLERVIEW_ID_TITME),
-            WrappingModel(true, null,
+            WrappingModel(
+                true, null,
                 HomeAdapter.VIEW_TYPE_POPULAR_MOVIE, id = HomeFragment.RECYCLERVIEW_ID_COMMING
             )
         )
