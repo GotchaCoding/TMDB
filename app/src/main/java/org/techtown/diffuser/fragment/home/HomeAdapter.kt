@@ -197,7 +197,6 @@ val diffUtil = object : DiffUtil.ItemCallback<ItemModel>() {
     }
 
     override fun areContentsTheSame(oldItem: ItemModel, newItem: ItemModel): Boolean {
-        Log.e("kyh!!!", "oldItem == newItem : ${oldItem.equals(newItem)}")
         return oldItem.equals(newItem)
     }
 }

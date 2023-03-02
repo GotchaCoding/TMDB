@@ -25,7 +25,8 @@ class HomeViewModel @Inject constructor(
     fun fetch() {
         service.getPopularMovie(
             "ko",
-            1
+            1,
+            "KR"
         ).enqueue(object : Callback<PopularMoviesResponse> {
             override fun onResponse(
                 call: Call<PopularMoviesResponse>,
@@ -63,7 +64,6 @@ class HomeViewModel @Inject constructor(
             }
 
             override fun onFailure(call: Call<PopularMoviesResponse>, t: Throwable) {
-                Log.d("kmh", t.toString())
                 _items.value = _items.value!!.mapIndexed { index, itemModel ->
                     if (index == 1 && itemModel is WrappingModel) {
                         itemModel.copy(
@@ -84,7 +84,8 @@ class HomeViewModel @Inject constructor(
     fun fetch2() {
         service.getNowPlayingMovie(
             "ko",
-            1
+            1,
+            "KR"
         ).enqueue(object : Callback<NowPlayingResponse> {
             override fun onResponse(
                 call: Call<NowPlayingResponse>,
@@ -121,7 +122,6 @@ class HomeViewModel @Inject constructor(
             }
 
             override fun onFailure(call: Call<NowPlayingResponse>, t: Throwable) {
-                Log.d("kmh", t.toString())
                 _items.value = _items.value!!.mapIndexed { index, itemModel ->
                     if (index == 3 && itemModel is WrappingModel) {
                         itemModel.copy(

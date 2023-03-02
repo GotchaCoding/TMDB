@@ -50,18 +50,13 @@ class DetailAdapter(val failureClick: OnFailureClickListener) :
         val itemModel = currentList[position]
         when (itemModel.viewType) {
             VIEW_TYPE_DETAIL_BACKGROND -> {
-                Log.d("kmh2" , "onBindViewHolder 실행")
                 if (itemModel is WrappingDetailModel) {
                     (holder as BackImageViewHolder).setItem(itemModel)
-                    Log.d("kmh2" , "onBindViewHolder if문 실행")
-                }else {
-                    Log.d("kmh2", "false 값 ")
                 }
             }
             VIEW_TYPE_DETAIL_CASTING -> {
                 if (itemModel is WrappingDetailModel) {
                     (holder as CastViewHolder).setItem(itemModel)
-                    Log.d("kmh2" , "onBindViewHolder 뷰타입 디테일 캐스팅 if문 실행")
                 }
             }
             VIEW_TYPE_DETAIL_TITLE -> {
@@ -101,24 +96,24 @@ class DetailAdapter(val failureClick: OnFailureClickListener) :
 
         fun setItem(item: WrappingDetailModel) {
 
-            if(item.isLoading){ //로딩중
-                Log.d("kmh2" , "처음 if 문")
+            if (item.isLoading) { //로딩중
                 vLoading.isVisible = true
                 view_failure.isVisible = false
-            }else if(item.detailTopModel?.isfailure == false ) { //성공
-                Log.d("kmh2" , "setItem  else if 문")
+            } else if (item.detailTopModel?.isfailure == false) { //성공
                 vLoading.isVisible = false
                 view_failure.isVisible = false
-                Glide.with(itemView).load("https://image.tmdb.org/t/p/w500" + item.detailTopModel.backDropUrl)
+                Glide.with(itemView)
+                    .load("https://image.tmdb.org/t/p/w500" + item.detailTopModel.backDropUrl)
                     .into(imgBackgrond)
                 title.text = item.detailTopModel.title
                 overview.text = item.detailTopModel.overview
-                Glide.with(itemView).load("https://image.tmdb.org/t/p/w500" + item.detailTopModel.postUrl)
+                Glide.with(itemView)
+                    .load("https://image.tmdb.org/t/p/w500" + item.detailTopModel.postUrl)
                     .into(imgPoster)
-            }else{//실패
+            } else {//실패
                 view_failure.isVisible = true
                 vLoading.isVisible = false
-                view_failure.setOnClickListener{
+                view_failure.setOnClickListener {
                     failureClick.onClick(it, VIEW_TYPE_DETAIL_BACKGROND)
                 }
             }
@@ -186,13 +181,13 @@ class DetailAdapter(val failureClick: OnFailureClickListener) :
     }
 }
 
- val diffUtil = object : DiffUtil.ItemCallback<ItemModel>(){
-     override fun areItemsTheSame(oldItem: ItemModel, newItem: ItemModel): Boolean {
-         return oldItem.id == newItem.id
-     }
+val diffUtil = object : DiffUtil.ItemCallback<ItemModel>() {
+    override fun areItemsTheSame(oldItem: ItemModel, newItem: ItemModel): Boolean {
+        return oldItem.id == newItem.id
+    }
 
-     override fun areContentsTheSame(oldItem: ItemModel, newItem: ItemModel): Boolean {
+    override fun areContentsTheSame(oldItem: ItemModel, newItem: ItemModel): Boolean {
         return oldItem.equals(newItem)
-     }
+    }
 
- }
+}

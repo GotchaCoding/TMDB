@@ -27,6 +27,7 @@ class DetailViewModel @Inject constructor(
 
 
     companion object {
+        
         const val RECYCLERVIEW_ID_TOP_IN_TOP = -1L
         const val RECYCLERVIEW_ID_TOP = -2L
         const val RECYCLERVIEW_ID_TITLE = -3L
@@ -71,7 +72,7 @@ class DetailViewModel @Inject constructor(
 
     }
 
-     fun fetch() {
+    fun fetch() {
         service.getDetailPage(
             movieId,
             "ko"
@@ -81,7 +82,6 @@ class DetailViewModel @Inject constructor(
                 if (result != null) {
                     _items.value = items.value!!.mapIndexed { index, itemModel ->
                         if (index == 0 && itemModel is WrappingDetailModel) {
-                            Log.d("kmh2", "fetch on response")
                             itemModel.copy(
                                 isLoading = false,
                                 castModel = null,
@@ -106,7 +106,6 @@ class DetailViewModel @Inject constructor(
             }
 
             override fun onFailure(call: Call<DetailPage_3>, t: Throwable) {
-                Log.d("kmh", t.toString())
                 _items.value = items.value!!.mapIndexed { index, itemModel ->
                     if (index == 0 && itemModel is WrappingDetailModel) {
                         itemModel.copy(
@@ -134,7 +133,7 @@ class DetailViewModel @Inject constructor(
         })
     }
 
-     fun fetchCast() {
+    fun fetchCast() {
         service.getCast(
             movieId,
             "ko"
@@ -176,7 +175,6 @@ class DetailViewModel @Inject constructor(
             }
 
             override fun onFailure(call: Call<CastResult>, t: Throwable) {
-                Log.d("kmh", t.toString())
                 _items.value = items.value!!.mapIndexed { index, itemModel ->
                     if (index == 2 && itemModel is WrappingDetailModel) {
                         itemModel.copy(

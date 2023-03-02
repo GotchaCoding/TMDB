@@ -58,12 +58,10 @@ class CastAdapter : ListAdapter<CastRv, CastAdapter.CastingViewHolder>(diffUtil2
 
 val diffUtil2 = object : DiffUtil.ItemCallback<CastRv>() {
     override fun areItemsTheSame(oldItem: CastRv, newItem: CastRv): Boolean {
-        Log.e("kyh!!!","oldItem === newItem : ${oldItem === newItem}")
         return oldItem.id == newItem.id
     }
 
     override fun areContentsTheSame(oldItem: CastRv, newItem: CastRv): Boolean {
-        Log.e("kyh!!!","oldItem == newItem : ${oldItem.equals(newItem)}")
         return oldItem.equals(newItem)
     }
 }

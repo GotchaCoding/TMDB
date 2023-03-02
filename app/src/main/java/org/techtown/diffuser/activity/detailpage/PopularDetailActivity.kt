@@ -27,6 +27,7 @@ class PopularDetailActivity : AppCompatActivity() {
 
     private lateinit var adapter: DetailAdapter
 
+
     private val viewModel: DetailViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {

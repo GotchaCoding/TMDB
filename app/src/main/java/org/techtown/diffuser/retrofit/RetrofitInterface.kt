@@ -15,13 +15,15 @@ interface RetrofitInterface {
     @GET("/3/movie/popular")
     fun getPopularMovie(
         @Query("language") lnaguage : String,
-        @Query("page") page : Int
+        @Query("page") page : Int,
+        @Query("region") region : String
     ) : Call<PopularMoviesResponse>
 
     @GET("/3/movie/now_playing")
     fun getNowPlayingMovie(
         @Query("language") language : String,
-        @Query("page") page : Int
+        @Query("page") page : Int,
+        @Query("region") region : String
     ) : Call<NowPlayingResponse>
 
 
