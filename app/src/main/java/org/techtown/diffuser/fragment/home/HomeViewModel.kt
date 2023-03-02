@@ -19,7 +19,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val service: RetrofitInterface
 ) : ViewModel() {
-    val _items: MutableLiveData<List<ItemModel>> = MutableLiveData()
+   private val _items: MutableLiveData<List<ItemModel>> = MutableLiveData()
     val items: LiveData<List<ItemModel>> = _items
 
     fun fetch() {
@@ -48,7 +48,7 @@ class HomeViewModel @Inject constructor(
                         id = HomeFragment.RECYCLERVIEW_ID_POPULAR
                     )
 
-                _items.value = items.value!!.mapIndexed { index, itemModel ->
+                _items.value = _items.value!!.mapIndexed { index, itemModel ->
                     if (index == 1 && itemModel is WrappingModel) {
                         itemModel.copy(
                             isLoading = false,
@@ -64,7 +64,7 @@ class HomeViewModel @Inject constructor(
 
             override fun onFailure(call: Call<PopularMoviesResponse>, t: Throwable) {
                 Log.d("kmh", t.toString())
-                _items.value = items.value!!.mapIndexed { index, itemModel ->
+                _items.value = _items.value!!.mapIndexed { index, itemModel ->
                     if (index == 1 && itemModel is WrappingModel) {
                         itemModel.copy(
                             isLoading = false,
