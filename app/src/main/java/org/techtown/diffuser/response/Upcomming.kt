@@ -2,6 +2,7 @@ package org.techtown.diffuser.response
 
 
 import com.google.gson.annotations.SerializedName
+import org.techtown.diffuser.BaseResponse
 
 data class Upcomming(
     @SerializedName("dates")
@@ -14,4 +15,4 @@ data class Upcomming(
     val totalPages: Int = 0,
     @SerializedName("total_results")
     val totalResults: Int = 0
-)
+): BaseResponse()

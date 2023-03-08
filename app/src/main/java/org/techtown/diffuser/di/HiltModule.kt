@@ -6,22 +6,28 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.techtown.diffuser.Repository
+import org.techtown.diffuser.RepositoryImpl
 import org.techtown.diffuser.intercepter.ApiKeyIntercepter
-import org.techtown.diffuser.retrofit.RetrofitInterface
+import org.techtown.diffuser.retrofit.RetrofitService
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Qualifier
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 class HiltModule {
 
+    @Singleton
+    @Provides
+    fun provideRepository(service : RetrofitService) : Repository {
+        return RepositoryImpl(service)
+    }
 
     @Singleton
     @Provides
-    fun retrofitInterface(retrofit : Retrofit) : RetrofitInterface {
-        return  retrofit.create(RetrofitInterface::class.java)
+    fun provideService(retrofit : Retrofit) : RetrofitService {
+        return  retrofit.create(RetrofitService::class.java)
     }
 
     @Singleton

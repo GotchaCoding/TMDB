@@ -5,44 +5,43 @@ import org.techtown.diffuser.response.detail.detailmovie.DetailPage_3
 import org.techtown.diffuser.response.nowplaying.NowPlayingResponse
 import org.techtown.diffuser.response.pupular.PopularMoviesResponse
 import org.techtown.diffuser.response.detail.cast.CastResult
-import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface RetrofitInterface {
+interface RetrofitService {
 
     @GET("/3/movie/popular")
-    fun getPopularMovie(
+    suspend fun getPopularMovie(
         @Query("language") lnaguage : String,
         @Query("page") page : Int,
         @Query("region") region : String
-    ) : Call<PopularMoviesResponse>
+    ) : PopularMoviesResponse
 
     @GET("/3/movie/now_playing")
-    fun getNowPlayingMovie(
+    suspend fun getNowPlayingMovie(
         @Query("language") language : String,
         @Query("page") page : Int,
         @Query("region") region : String
-    ) : Call<NowPlayingResponse>
+    ) : NowPlayingResponse
 
 
     @GET("/3/movie/{movie_id}")
-    fun getDetailPage(
-        @Path("movie_id") movie_id : Int,
+    suspend fun getDetailPage(
+        @Path("movie_id") movieId : Int,
         @Query("language") language : String
-    ) : Call<DetailPage_3>
+    ) : DetailPage_3
 
     @GET("/3/movie/{movie_id}/credits")
-    fun getCast(
-        @Path("movie_id") movie_id : Int,
+    suspend fun getCast(
+        @Path("movie_id") movieId : Int,
         @Query("language") language : String
-    ) : Call<CastResult>
+    ) : CastResult
 
     @GET("/3/movie/upcoming")
-    fun getUpcomming(
+    suspend fun getUpcomming(
         @Query("language") language : String,
         @Query("page") page : Int,
         @Query("region") region : String
-    ) : Call<Upcomming>
+    ) : Upcomming
 }

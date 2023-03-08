@@ -4,198 +4,195 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import org.techtown.diffuser.Repository
+import org.techtown.diffuser.Resource
 import org.techtown.diffuser.model.*
-import org.techtown.diffuser.response.Upcomming
-import org.techtown.diffuser.response.nowplaying.NowPlayingResponse
-import org.techtown.diffuser.response.pupular.PopularMoviesResponse
-import org.techtown.diffuser.retrofit.RetrofitInterface
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val service: RetrofitInterface
+    private val repository: Repository
 ) : ViewModel() {
-   private val _items: MutableLiveData<List<ItemModel>> = MutableLiveData()
+    private val _items: MutableLiveData<List<ItemModel>> = MutableLiveData()
     val items: LiveData<List<ItemModel>> = _items
 
     fun fetch() {
-        service.getPopularMovie(
-            "ko",
-            1,
-            "KR"
-        ).enqueue(object : Callback<PopularMoviesResponse> {
-            override fun onResponse(
-                call: Call<PopularMoviesResponse>,
-                response: Response<PopularMoviesResponse>
-            ) {
-                val result = response.body()
+        repository
+            .getPopular()
+            .onEach { result ->
+                when (result) {
+                    is Resource.Loading -> {
 
-                val list = result!!.results.map {
-                    Movie(
-                        title = it.title,
-                        rank = it.releaseDate,
-                        imagePoster = it.posterPath,
-                        id = it.id
-                    )
-                }
-                val horizontalPopularModel =
-                    HorizontalMovieModel(
-                        list,
-                        HomeAdapter.VIEW_TYPE_POPULAR_MOVIE,
-                        id = HomeFragment.RECYCLERVIEW_ID_POPULAR
-                    )
+                    }
+                    is Resource.Success -> {
+                        val response = result.model
+                        val list = response.results.map {
+                            Movie(
+                                title = it.title,
+                                rank = it.releaseDate,
+                                imagePoster = it.posterPath,
+                                id = it.id
+                            )
+                        }
+                        val horizontalPopularModel =
+                            HorizontalMovieModel(
+                                list,
+                                HomeAdapter.VIEW_TYPE_POPULAR_MOVIE,
+                                id = HomeFragment.RECYCLERVIEW_ID_POPULAR
+                            )
 
-                _items.value = _items.value!!.mapIndexed { index, itemModel ->
-                    if (index == 1 && itemModel is WrappingModel) {
-                        itemModel.copy(
-                            isLoading = false,
-                            model = horizontalPopularModel,
-                            viewType = HomeAdapter.VIEW_TYPE_POPULAR_MOVIE,
-                            isFailure = false
-                        )
-                    } else {
-                        itemModel
+                        _items.value = _items.value!!.mapIndexed { index, itemModel ->
+                            if (index == 1 && itemModel is WrappingModel) {
+                                itemModel.copy(
+                                    isLoading = false,
+                                    model = horizontalPopularModel,
+                                    viewType = HomeAdapter.VIEW_TYPE_POPULAR_MOVIE,
+                                    isFailure = false
+                                )
+                            } else {
+                                itemModel
+                            }
+                        }
+                    }
+                    is Resource.Fail -> {
+                        _items.value = _items.value!!.mapIndexed { index, itemModel ->
+                            if (index == 1 && itemModel is WrappingModel) {
+                                itemModel.copy(
+                                    isLoading = false,
+                                    model = null,
+                                    viewType = HomeAdapter.VIEW_TYPE_POPULAR_MOVIE,
+                                    isFailure = true
+                                )
+                            } else {
+                                itemModel
+                            }
+                        }
                     }
                 }
-            }
-
-            override fun onFailure(call: Call<PopularMoviesResponse>, t: Throwable) {
-                _items.value = _items.value!!.mapIndexed { index, itemModel ->
-                    if (index == 1 && itemModel is WrappingModel) {
-                        itemModel.copy(
-                            isLoading = false,
-                            model = null,
-                            viewType = HomeAdapter.VIEW_TYPE_POPULAR_MOVIE,
-                            isFailure = true
-                        )
-                    } else {
-                        itemModel
-                    }
-                }
-            }
-
-        })
+            }.launchIn(viewModelScope)
     }
 
     fun fetch2() {
-        service.getNowPlayingMovie(
-            "ko",
-            1,
-            "KR"
-        ).enqueue(object : Callback<NowPlayingResponse> {
-            override fun onResponse(
-                call: Call<NowPlayingResponse>,
-                response: Response<NowPlayingResponse>
-            ) {
-                val result = response.body()
+        repository
+            .getNowPlay()
+            .onEach { result ->
+                when (result) {
+                    is Resource.Loading -> {
+                        Log.d("test", "로딩")
+                    }
+                    is Resource.Success -> {
+                        Log.d("test", "성공")
+                        val response = result.model
 
-                val list = result!!.results.map {
-                    Movie(
-                        title = it.title,
-                        rank = it.releaseDate,
-                        imageDrop = it.backdropPath,
-                        id = it.id
-                    )
-                }
-                val nowPlaying = HorizontalMovieModel(
-                    list,
-                    HomeAdapter.VIEW_TYPE_NOW_MOVIE,
-                    id = HomeFragment.RECYCLERVIEW_ID_NOW
-                )
-                _items.value = items.value!!.mapIndexed { index, itemModel ->
-                    if (index == 3 && itemModel is WrappingModel) {
-                        itemModel.copy(
-                            isLoading = false,
-                            model = nowPlaying,
-                            viewType = HomeAdapter.VIEW_TYPE_NOW_MOVIE,
-                            isFailure = false,
+                        val list = response.results.map {
+                            Movie(
+                                title = it.title,
+                                rank = it.releaseDate,
+                                imageDrop = it.backdropPath,
+                                id = it.id
+                            )
+                        }
+                        val nowPlaying = HorizontalMovieModel(
+                            list,
+                            HomeAdapter.VIEW_TYPE_NOW_MOVIE,
                             id = HomeFragment.RECYCLERVIEW_ID_NOW
                         )
-                    } else {
-                        itemModel
+                        _items.value = items.value!!.mapIndexed { index, itemModel ->
+                            if (index == 3 && itemModel is WrappingModel) {
+                                itemModel.copy(
+                                    isLoading = false,
+                                    model = nowPlaying,
+                                    viewType = HomeAdapter.VIEW_TYPE_NOW_MOVIE,
+                                    isFailure = false,
+                                    id = HomeFragment.RECYCLERVIEW_ID_NOW
+                                )
+                            } else {
+                                itemModel
+                            }
+                        }
                     }
-                }
-            }
+                    is Resource.Fail -> {
+                        Log.d("test", "실패")
+                        _items.value = _items.value!!.mapIndexed { index, itemModel ->
+                            if (index == 3 && itemModel is WrappingModel) {
+                                itemModel.copy(
+                                    isLoading = false,
+                                    model = null,
+                                    viewType = HomeAdapter.VIEW_TYPE_NOW_MOVIE,
+                                    isFailure = true,
+                                    id = HomeFragment.RECYCLERVIEW_ID_NOW
+                                )
+                            } else {
+                                itemModel
+                            }
+                        }
 
-            override fun onFailure(call: Call<NowPlayingResponse>, t: Throwable) {
-                _items.value = _items.value!!.mapIndexed { index, itemModel ->
-                    if (index == 3 && itemModel is WrappingModel) {
-                        itemModel.copy(
-                            isLoading = false,
-                            model = null,
-                            viewType = HomeAdapter.VIEW_TYPE_NOW_MOVIE,
-                            isFailure = true,
-                            id = HomeFragment.RECYCLERVIEW_ID_NOW
-                        )
-                    } else {
-                        itemModel
                     }
                 }
-            }
-        })
+            }.launchIn(viewModelScope)
     }
 
     fun fetchUpcomming() {
-        service.getUpcomming(
-            language = "ko",
-            page = 1,
-            region = "KR"
-        ).enqueue(object : Callback<Upcomming> {
-            override fun onResponse(call: Call<Upcomming>, response: Response<Upcomming>) {
-                val result = response.body()
-                val list = result!!.results.map {
-                    Movie(
-                        title = it.title,
-                        rank = it.releaseDate,
-                        imagePoster = it.posterPath,
-                        id = it.id
-                    )
-                }
-                val horizontalPopularModel =
-                    HorizontalMovieModel(
-                        list,
-                        HomeAdapter.VIEW_TYPE_UPCOMMING,
-                        id = HomeFragment.RECYCLERVIEW_ID_COMMING
-                    )
-                Log.d("testtest", horizontalPopularModel.id.toString())
-                Log.d("testtest2", (horizontalPopularModel as ItemModel).id.toString())
+        repository
+            .getUpComming()
+            .onEach { result ->
+                when (result) {
+                    is Resource.Loading -> {
+                    }
+                    is Resource.Success -> {
+                        val model = result.model
+                        val list = model.results.map {
+                            Movie(
+                                title = it.title,
+                                rank = it.releaseDate,
+                                imagePoster = it.posterPath,
+                                id = it.id
+                            )
+                        }
+                        val horizontalPopularModel =
+                            HorizontalMovieModel(
+                                list,
+                                HomeAdapter.VIEW_TYPE_UPCOMMING,
+                                id = HomeFragment.RECYCLERVIEW_ID_COMMING
+                            )
+                        Log.d("testtest", horizontalPopularModel.id.toString())
+                        Log.d("testtest2", (horizontalPopularModel as ItemModel).id.toString())
 
-                _items.value = _items.value!!.mapIndexed { index, itemModel ->
-                    if (index == 5 && itemModel is WrappingModel) {
-                        itemModel.copy(
-                            isLoading = false,
-                            model = horizontalPopularModel,
-                            viewType = HomeAdapter.VIEW_TYPE_UPCOMMING,
-                            isFailure = false,
-                            id = HomeFragment.RECYCLERVIEW_ID_COMMING
-                        )
-                    } else {
-                        itemModel
+                        _items.value = _items.value!!.mapIndexed { index, itemModel ->
+                            if (index == 5 && itemModel is WrappingModel) {
+                                itemModel.copy(
+                                    isLoading = false,
+                                    model = horizontalPopularModel,
+                                    viewType = HomeAdapter.VIEW_TYPE_UPCOMMING,
+                                    isFailure = false,
+                                    id = HomeFragment.RECYCLERVIEW_ID_COMMING
+                                )
+                            } else {
+                                itemModel
+                            }
+                        }
+                    }
+                    is Resource.Fail -> {
+                        _items.value = _items.value!!.mapIndexed { index, itemModel ->
+                            if (index == 5 && itemModel is WrappingModel) {
+                                itemModel.copy(
+                                    isLoading = false,
+                                    model = null,
+                                    viewType = HomeAdapter.VIEW_TYPE_UPCOMMING,
+                                    isFailure = true,
+                                    id = HomeFragment.RECYCLERVIEW_ID_COMMING
+                                )
+                            } else {
+                                itemModel
+                            }
+                        }
                     }
                 }
-            }
-
-            override fun onFailure(call: Call<Upcomming>, t: Throwable) {
-                _items.value = _items.value!!.mapIndexed { index, itemModel ->
-                    if (index == 5 && itemModel is WrappingModel) {
-                        itemModel.copy(
-                            isLoading = false,
-                            model = null,
-                            viewType = HomeAdapter.VIEW_TYPE_UPCOMMING,
-                            isFailure = true,
-                            id = HomeFragment.RECYCLERVIEW_ID_COMMING
-                        )
-                    } else {
-                        itemModel
-                    }
-                }
-            }
-
-        })
+            }.launchIn(viewModelScope)
     }
 
     init {

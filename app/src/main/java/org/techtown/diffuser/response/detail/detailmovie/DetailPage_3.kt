@@ -2,6 +2,7 @@ package org.techtown.diffuser.response.detail.detailmovie
 
 
 import com.google.gson.annotations.SerializedName
+import org.techtown.diffuser.BaseResponse
 
 data class DetailPage_3(
     @SerializedName("adult")
@@ -54,4 +55,4 @@ data class DetailPage_3(
     val voteAverage: Double = 0.0,
     @SerializedName("vote_count")
     val voteCount: Int = 0
-)
+): BaseResponse()

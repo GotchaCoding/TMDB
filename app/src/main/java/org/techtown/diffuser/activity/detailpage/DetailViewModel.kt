@@ -1,15 +1,13 @@
 package org.techtown.diffuser.activity.detailpage
 
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import org.techtown.diffuser.Repository
+import org.techtown.diffuser.Resource
 import org.techtown.diffuser.model.*
 import org.techtown.diffuser.response.detail.cast.CastResult
-import org.techtown.diffuser.response.detail.detailmovie.DetailPage_3
-import org.techtown.diffuser.retrofit.RetrofitInterface
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -18,7 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val service: RetrofitInterface
+    private val repository: Repository
 ) : ViewModel() {
     val movieId = savedStateHandle.get<Int>("movie_id") ?: 0
 
@@ -27,13 +25,12 @@ class DetailViewModel @Inject constructor(
 
 
     companion object {
-        
+
         const val RECYCLERVIEW_ID_TOP_IN_TOP = -1L
         const val RECYCLERVIEW_ID_TOP = -2L
         const val RECYCLERVIEW_ID_TITLE = -3L
         const val RECYCLERVIEW_ID_CAST = -4L
     }
-
 
     init {
 
@@ -73,23 +70,25 @@ class DetailViewModel @Inject constructor(
     }
 
     fun fetch() {
-        service.getDetailPage(
-            movieId,
-            "ko"
-        ).enqueue(object : Callback<DetailPage_3> {
-            override fun onResponse(call: Call<DetailPage_3>, response: Response<DetailPage_3>) {
-                val result = response.body()
-                if (result != null) {
+        repository.getDetail(
+            movieId
+        ).onEach { result ->
+            when (result) {
+                is Resource.Loading -> {
+
+                }
+                is Resource.Success -> {
+                    val model = result.model
                     _items.value = items.value!!.mapIndexed { index, itemModel ->
                         if (index == 0 && itemModel is WrappingDetailModel) {
                             itemModel.copy(
                                 isLoading = false,
                                 castModel = null,
                                 detailTopModel = DetailTopModel(
-                                    title = result.title,
-                                    overview = result.overview,
-                                    postUrl = result.posterPath,
-                                    backDropUrl = result.backdropPath,
+                                    title = model.title,
+                                    overview = model.overview,
+                                    postUrl = model.posterPath,
+                                    backDropUrl = model.backdropPath,
                                     id = RECYCLERVIEW_ID_TOP_IN_TOP,
                                     isfailure = false
                                 ),
@@ -103,45 +102,46 @@ class DetailViewModel @Inject constructor(
                         }
                     }
                 }
-            }
-
-            override fun onFailure(call: Call<DetailPage_3>, t: Throwable) {
-                _items.value = items.value!!.mapIndexed { index, itemModel ->
-                    if (index == 0 && itemModel is WrappingDetailModel) {
-                        itemModel.copy(
-                            isLoading = false,
-                            castModel = null,
-                            detailTopModel = DetailTopModel(
-                                title = null,
-                                overview = "",
-                                postUrl = "",
-                                backDropUrl = "",
-                                isfailure = true,
-                                id = RECYCLERVIEW_ID_TOP_IN_TOP,
+                is Resource.Fail -> {
+                    _items.value = items.value!!.mapIndexed { index, itemModel ->
+                        if (index == 0 && itemModel is WrappingDetailModel) {
+                            itemModel.copy(
                                 isLoading = false,
-                            ),
-                            viewType = DetailAdapter.VIEW_TYPE_DETAIL_BACKGROND,
-                            isFailure = true,
-                            id = RECYCLERVIEW_ID_TOP
+                                castModel = null,
+                                detailTopModel = DetailTopModel(
+                                    title = null,
+                                    overview = "",
+                                    postUrl = "",
+                                    backDropUrl = "",
+                                    isfailure = true,
+                                    id = RECYCLERVIEW_ID_TOP_IN_TOP,
+                                    isLoading = false,
+                                ),
+                                viewType = DetailAdapter.VIEW_TYPE_DETAIL_BACKGROND,
+                                isFailure = true,
+                                id = RECYCLERVIEW_ID_TOP
 
-                        )
-                    } else {
-                        itemModel
+                            )
+                        } else {
+                            itemModel
+                        }
                     }
                 }
             }
-        })
+        }.launchIn(viewModelScope)
     }
 
     fun fetchCast() {
-        service.getCast(
-            movieId,
-            "ko"
-        ).enqueue(object : Callback<CastResult> {
-            override fun onResponse(call: Call<CastResult>, response: Response<CastResult>) {
-                val result = response.body()
-                if (result != null) {
-                    val list = result!!.cast.map {
+        repository.getCast(
+            movieId
+        ).onEach { result ->
+            when (result) {
+                is Resource.Loading -> {
+
+                }
+                is Resource.Success -> {
+                    val model = result.model
+                    val list = model.cast.map {
                         CastRv(
                             imgActor = it.profilePath,
                             castChracter = it.character,
@@ -170,26 +170,23 @@ class DetailViewModel @Inject constructor(
                             itemModel
                         }
                     }
-
                 }
-            }
-
-            override fun onFailure(call: Call<CastResult>, t: Throwable) {
-                _items.value = items.value!!.mapIndexed { index, itemModel ->
-                    if (index == 2 && itemModel is WrappingDetailModel) {
-                        itemModel.copy(
-                            isLoading = false,
-                            castModel = null,
-                            detailTopModel = null,
-                            viewType = DetailAdapter.VIEW_TYPE_DETAIL_CASTING,
-                            isFailure = true
-                        )
-                    } else {
-                        itemModel
+                is Resource.Fail -> {
+                    _items.value = items.value!!.mapIndexed { index, itemModel ->
+                        if (index == 2 && itemModel is WrappingDetailModel) {
+                            itemModel.copy(
+                                isLoading = false,
+                                castModel = null,
+                                detailTopModel = null,
+                                viewType = DetailAdapter.VIEW_TYPE_DETAIL_CASTING,
+                                isFailure = true
+                            )
+                        } else {
+                            itemModel
+                        }
                     }
                 }
             }
-
-        })
+        }.launchIn(viewModelScope)
     }
 }

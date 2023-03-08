@@ -2,6 +2,7 @@ package org.techtown.diffuser.response.pupular
 
 
 import com.google.gson.annotations.SerializedName
+import org.techtown.diffuser.BaseResponse
 
 data class PopularMoviesResponse(
     @SerializedName("page")
@@ -12,4 +13,4 @@ data class PopularMoviesResponse(
     val totalPages: Int = 0,
     @SerializedName("total_results")
     val totalResults: Int = 0
-)
+) : BaseResponse()

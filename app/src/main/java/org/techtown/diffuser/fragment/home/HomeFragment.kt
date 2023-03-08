@@ -8,11 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.HiltAndroidApp
 import org.techtown.diffuser.activity.detailpage.PopularDetailActivity
 import org.techtown.diffuser.databinding.ActivityHomeFragmentBinding
 import org.techtown.diffuser.fragment.home.HomeAdapter.Companion.VIEW_TYPE_NOW_MOVIE
@@ -21,13 +18,7 @@ import org.techtown.diffuser.fragment.home.HomeAdapter.Companion.VIEW_TYPE_UPCOM
 import org.techtown.diffuser.listener.OnFailureClickListener
 import org.techtown.diffuser.listener.PopularClickListener
 import org.techtown.diffuser.model.*
-import org.techtown.diffuser.response.Upcomming
-import org.techtown.diffuser.response.nowplaying.NowPlayingResponse
-import org.techtown.diffuser.response.pupular.PopularMoviesResponse
-import org.techtown.diffuser.retrofit.RetrofitInterface
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import org.techtown.diffuser.retrofit.RetrofitService
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -38,7 +29,7 @@ class HomeFragment : Fragment() {
     private val viewModel : HomeViewModel by viewModels()
 
     @Inject
-  lateinit var service : RetrofitInterface
+  lateinit var service : RetrofitService
 //    private var service = retrofit.create(RetrofitInterface::class.java)
 //    private var items: List<ItemModel> = listOf()
 
