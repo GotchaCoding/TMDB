@@ -35,7 +35,9 @@ class HomeViewModel @Inject constructor(
                                 title = it.title,
                                 rank = it.releaseDate,
                                 imagePoster = it.posterPath,
-                                id = it.id
+                                idNum = it.id,
+                                viewType =  HomeAdapter.VIEW_TYPE_POPULAR_MOVIE,
+                                id = HomeFragment.RECYCLERVIEW_ID_POPULAR
                             )
                         }
                         val horizontalPopularModel =
@@ -93,7 +95,9 @@ class HomeViewModel @Inject constructor(
                                 title = it.title,
                                 rank = it.releaseDate,
                                 imageDrop = it.backdropPath,
-                                id = it.id
+                                idNum = it.id,
+                                viewType =  HomeAdapter.VIEW_TYPE_NOW_MOVIE,
+                                id = HomeFragment.RECYCLERVIEW_ID_NOW
                             )
                         }
                         val nowPlaying = HorizontalMovieModel(
@@ -150,7 +154,9 @@ class HomeViewModel @Inject constructor(
                                 title = it.title,
                                 rank = it.releaseDate,
                                 imagePoster = it.posterPath,
-                                id = it.id
+                                idNum = it.id,
+                                id = HomeFragment.RECYCLERVIEW_ID_COMMING,
+                                viewType = HomeAdapter.VIEW_TYPE_UPCOMMING
                             )
                         }
                         val horizontalPopularModel =

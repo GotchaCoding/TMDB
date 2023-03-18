@@ -15,9 +15,7 @@ import org.techtown.diffuser.databinding.ActivityHomeFragmentBinding
 import org.techtown.diffuser.fragment.home.HomeAdapter.Companion.VIEW_TYPE_NOW_MOVIE
 import org.techtown.diffuser.fragment.home.HomeAdapter.Companion.VIEW_TYPE_POPULAR_MOVIE
 import org.techtown.diffuser.fragment.home.HomeAdapter.Companion.VIEW_TYPE_UPCOMMING
-import org.techtown.diffuser.listener.OnFailureClickListener
-import org.techtown.diffuser.listener.PopularClickListener
-import org.techtown.diffuser.model.*
+import org.techtown.diffuser.listener.MovieClickListener
 import org.techtown.diffuser.retrofit.RetrofitService
 import javax.inject.Inject
 
@@ -26,10 +24,10 @@ class HomeFragment : Fragment() {
     lateinit var binding: ActivityHomeFragmentBinding
     private lateinit var adapter: HomeAdapter
 
-    private val viewModel : HomeViewModel by viewModels()
+    private val viewModel: HomeViewModel by viewModels()
 
     @Inject
-  lateinit var service : RetrofitService
+    lateinit var service: RetrofitService
 //    private var service = retrofit.create(RetrofitInterface::class.java)
 //    private var items: List<ItemModel> = listOf()
 
@@ -55,7 +53,7 @@ class HomeFragment : Fragment() {
         viewModel.fetch()
         viewModel.fetch2()
         viewModel.fetchUpcomming()
-        Log.e("test","service infragmetn : $service")
+        Log.e("test", "service infragmetn : $service")
 
         viewModel.items.observe(viewLifecycleOwner) { items ->
             adapter.submitList(items)
@@ -65,38 +63,30 @@ class HomeFragment : Fragment() {
     private fun initView() {
         with(binding) {
             val layoutManager = LinearLayoutManager(context)
-            adapter = HomeAdapter(object : PopularClickListener {
-                override fun onClick(movie: Movie) {
-                    Log.e("log", "initView() clicklistener 인터페이스 온클릭")
+
+            adapter = HomeAdapter { view, viewType, movie ->
+                if (movie != null) {
                     val intent = Intent(context, PopularDetailActivity::class.java)
-                    intent.putExtra("movie_id", movie.id)
+                    intent.putExtra("movie_id", movie?.idNum)
                     startActivity(intent)
                 }
 
-            }, object : OnFailureClickListener {
-                override fun onClick(view: View, viewType: Int) {
-                    Log.d("id", viewType.toString())
-                    when (viewType) {
-                        VIEW_TYPE_POPULAR_MOVIE -> {
-                            viewModel.fetch()
-                        }
-                        VIEW_TYPE_NOW_MOVIE -> {
-                            viewModel.fetch2()
-                        }
-                        VIEW_TYPE_UPCOMMING -> {
-                            viewModel.fetchUpcomming()
-                        }
+                when (viewType) {
+                    VIEW_TYPE_POPULAR_MOVIE -> {
+                        viewModel.fetch()
+                    }
+                    VIEW_TYPE_NOW_MOVIE -> {
+                        viewModel.fetch2()
+                    }
+                    VIEW_TYPE_UPCOMMING -> {
+                        viewModel.fetchUpcomming()
                     }
                 }
-
-            })
+            }
             recyclerview.adapter = adapter
             recyclerview.layoutManager = layoutManager
         }
+
+
     }
-
-
-
-
-
 }

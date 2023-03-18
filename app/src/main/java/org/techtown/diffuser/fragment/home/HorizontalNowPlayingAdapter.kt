@@ -1,6 +1,5 @@
 package org.techtown.diffuser.fragment.home
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,11 +10,10 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import org.techtown.diffuser.R
-import org.techtown.diffuser.listener.PopularClickListener
-import org.techtown.diffuser.model.ItemModel
+import org.techtown.diffuser.listener.MovieClickListener
 import org.techtown.diffuser.model.Movie
 
-class HorizontalNowPlayingAdapter(private val ItemClickListener: PopularClickListener) :
+class HorizontalNowPlayingAdapter(private val ItemClickListener: MovieClickListener) :
     ListAdapter<Movie,NowMovieViewHolder>(diffUtil_movie) {
 
 
@@ -36,7 +34,7 @@ class HorizontalNowPlayingAdapter(private val ItemClickListener: PopularClickLis
 
 
 }
-class NowMovieViewHolder(itemView: View, private val popularItemClick: PopularClickListener) :
+class NowMovieViewHolder(itemView: View, private val popularItemClick: MovieClickListener) :
     RecyclerView.ViewHolder(itemView) {
 
         var title: TextView
@@ -56,14 +54,14 @@ class NowMovieViewHolder(itemView: View, private val popularItemClick: PopularCl
             Glide.with(itemView).load("https://image.tmdb.org/t/p/w500" + item.imageDrop).into(image)
 
             itemView.setOnClickListener {
-                popularItemClick.onClick(item)
+                popularItemClick.onClick(it, item.viewType,item)
             }
         }
 
 }
 val diffUtil_movie = object : DiffUtil.ItemCallback<Movie>() {
     override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {
-        return oldItem.id == newItem.id   // === hash 비교.       == 안에잇는 내용 컨텐츠 비교
+        return oldItem.idNum == newItem.idNum   // === hash 비교.       == 안에잇는 내용 컨텐츠 비교
     }
 
     override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean {

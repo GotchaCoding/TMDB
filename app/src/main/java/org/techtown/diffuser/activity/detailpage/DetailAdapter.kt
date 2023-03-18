@@ -1,7 +1,5 @@
 package org.techtown.diffuser.activity.detailpage
 
-import android.util.Log
-import android.util.Log.v
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,10 +14,10 @@ import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
 import org.techtown.diffuser.R
 import org.techtown.diffuser.fragment.home.HomeAdapter
-import org.techtown.diffuser.listener.OnFailureClickListener
+import org.techtown.diffuser.listener.MovieClickListener
 import org.techtown.diffuser.model.*
 
-class DetailAdapter(val failureClick: OnFailureClickListener) :
+class DetailAdapter(val failureClick: MovieClickListener) :
     ListAdapter<ItemModel, RecyclerView.ViewHolder>(diffUtil) {
 
 
@@ -72,7 +70,7 @@ class DetailAdapter(val failureClick: OnFailureClickListener) :
     }
 
 
-    class BackImageViewHolder(itemView: View, val failureClick: OnFailureClickListener) :
+    class BackImageViewHolder(itemView: View, val movieClick: MovieClickListener) :
         RecyclerView.ViewHolder(itemView) {
         var imgBackgrond: ImageView
         var imgPoster: ImageView
@@ -114,7 +112,7 @@ class DetailAdapter(val failureClick: OnFailureClickListener) :
                 view_failure.isVisible = true
                 vLoading.isVisible = false
                 view_failure.setOnClickListener {
-                    failureClick.onClick(it, VIEW_TYPE_DETAIL_BACKGROND)
+                    movieClick.onClick(it, VIEW_TYPE_DETAIL_BACKGROND, null)
                 }
             }
 
@@ -122,7 +120,7 @@ class DetailAdapter(val failureClick: OnFailureClickListener) :
         }
     }
 
-    class CastViewHolder(itemView: View, val failureClick: OnFailureClickListener) :
+    class CastViewHolder(itemView: View, val failureClick: MovieClickListener) :
         RecyclerView.ViewHolder(itemView) {
 
         var rvCast: RecyclerView
@@ -156,7 +154,7 @@ class DetailAdapter(val failureClick: OnFailureClickListener) :
                 }
             }
             view_failure.setOnClickListener {
-                failureClick.onClick(it, item.viewType)
+                failureClick.onClick(it, item.viewType, null)
             }
         }
     }

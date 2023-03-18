@@ -7,7 +7,7 @@ import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import org.techtown.diffuser.databinding.ActivityPopualrDetailBinding
-import org.techtown.diffuser.listener.OnFailureClickListener
+import org.techtown.diffuser.listener.MovieClickListener
 
 @AndroidEntryPoint
 class PopularDetailActivity : AppCompatActivity() {
@@ -34,17 +34,16 @@ class PopularDetailActivity : AppCompatActivity() {
     private fun initView() {
         val layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
-        adapter = DetailAdapter(object : OnFailureClickListener {
-            override fun onClick(view: View, viewType: Int) {
-                when (viewType) {
-                    DetailAdapter.VIEW_TYPE_DETAIL_BACKGROND -> {
-                        viewModel.fetch()
-                    }
-                    DetailAdapter.VIEW_TYPE_DETAIL_CASTING -> {
-                        viewModel.fetchCast()
-                    }
+        adapter = DetailAdapter(MovieClickListener() { view, viewType, movie ->
+            when (viewType) {
+                DetailAdapter.VIEW_TYPE_DETAIL_BACKGROND -> {
+                    viewModel.fetch()
+                }
+                DetailAdapter.VIEW_TYPE_DETAIL_CASTING -> {
+                    viewModel.fetchCast()
                 }
             }
+
         })
         binding.recyclerviewDetail.adapter = adapter
         binding.recyclerviewDetail.layoutManager = layoutManager

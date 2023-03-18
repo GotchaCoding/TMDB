@@ -1,6 +1,5 @@
 package org.techtown.diffuser.fragment.home
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,16 +12,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
 import org.techtown.diffuser.R
 import org.techtown.diffuser.activity.detailpage.DetailAdapter
-import org.techtown.diffuser.listener.OnFailureClickListener
-import org.techtown.diffuser.listener.PopularClickListener
+import org.techtown.diffuser.listener.MovieClickListener
 import org.techtown.diffuser.model.ItemModel
-import org.techtown.diffuser.model.Movie
 import org.techtown.diffuser.model.Title
 import org.techtown.diffuser.model.WrappingModel
 
 class HomeAdapter(
-    private val ItemClickListener: PopularClickListener,
-    private val failureClick: OnFailureClickListener
+    private val ItemClickListener: MovieClickListener,
 ) : ListAdapter<ItemModel, RecyclerView.ViewHolder>(diffUtil) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         when (viewType) {
@@ -34,17 +30,17 @@ class HomeAdapter(
             VIEW_TYPE_POPULAR_MOVIE -> {
                 val inflater = LayoutInflater.from(parent.context)
                 val itemView = inflater.inflate(R.layout.viewholder_popularmovies, parent, false)
-                return HorizontalPopularMoviesViewHolder(itemView, ItemClickListener, failureClick)
+                return HorizontalPopularMoviesViewHolder(itemView, ItemClickListener)
             }
             VIEW_TYPE_NOW_MOVIE -> {
                 val inflater = LayoutInflater.from(parent.context)
                 val itemView = inflater.inflate(R.layout.viewholder_popularmovies, parent, false)
-                return NowMovieViewHolder(itemView, ItemClickListener, failureClick)
+                return NowMovieViewHolder(itemView, ItemClickListener)
             }
             VIEW_TYPE_UPCOMMING -> {
                 val inflater = LayoutInflater.from(parent.context)
                 val itemView = inflater.inflate(R.layout.viewholder_popularmovies, parent, false)
-                return HorizontalPopularMoviesViewHolder(itemView, ItemClickListener, failureClick)
+                return HorizontalPopularMoviesViewHolder(itemView, ItemClickListener)
             }
             else -> {
                 throw Exception()
@@ -86,8 +82,7 @@ class HomeAdapter(
 
     class HorizontalPopularMoviesViewHolder(
         itemView: View,
-        private val popularItemClick: PopularClickListener,
-        private val failureClick: OnFailureClickListener
+        private val popularItemClick: MovieClickListener
     ) : RecyclerView.ViewHolder(itemView) {
 
         var rvMain: RecyclerView
@@ -121,7 +116,7 @@ class HomeAdapter(
                 }
             }
             view_failure.setOnClickListener(View.OnClickListener {
-                failureClick.onClick(it, item.viewType)
+                popularItemClick.onClick(it, item.viewType, null)
             })
 
 
@@ -144,13 +139,12 @@ class HomeAdapter(
 
     class NowMovieViewHolder(
         itemView: View,
-        private val popularItemClick: PopularClickListener,
-        private val failureClick: OnFailureClickListener
+        private val movieClickListener: MovieClickListener
     ) : RecyclerView.ViewHolder(itemView) {
 
         var rvMain: RecyclerView
         var vLoading: LottieAnimationView
-        var adapter = HorizontalNowPlayingAdapter(popularItemClick)
+        var adapter = HorizontalNowPlayingAdapter(movieClickListener)
         var view_failure: TextView
 
         init {
@@ -178,7 +172,7 @@ class HomeAdapter(
                 }
             }
             view_failure.setOnClickListener {
-                failureClick.onClick(it, item.viewType)
+                movieClickListener.onClick(it, item.viewType, null )
             }
         }
     }
