@@ -10,10 +10,9 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import org.techtown.diffuser.R
-import org.techtown.diffuser.listener.MovieClickListener
 import org.techtown.diffuser.model.Movie
 
-class HorizontalNowPlayingAdapter(private val ItemClickListener: MovieClickListener) :
+class HorizontalNowPlayingAdapter(private val ItemClickListener :  (View, Int, Movie?) -> Unit ) :
     ListAdapter<Movie,NowMovieViewHolder>(diffUtil_movie) {
 
 
@@ -34,7 +33,7 @@ class HorizontalNowPlayingAdapter(private val ItemClickListener: MovieClickListe
 
 
 }
-class NowMovieViewHolder(itemView: View, private val popularItemClick: MovieClickListener) :
+class NowMovieViewHolder(itemView: View, private val ItemClickListener :  (View, Int, Movie?) -> Unit) :
     RecyclerView.ViewHolder(itemView) {
 
         var title: TextView
@@ -54,7 +53,7 @@ class NowMovieViewHolder(itemView: View, private val popularItemClick: MovieClic
             Glide.with(itemView).load("https://image.tmdb.org/t/p/w500" + item.imageDrop).into(image)
 
             itemView.setOnClickListener {
-                popularItemClick.onClick(it, item.viewType,item)
+                ItemClickListener(it, item.viewType,item)
             }
         }
 

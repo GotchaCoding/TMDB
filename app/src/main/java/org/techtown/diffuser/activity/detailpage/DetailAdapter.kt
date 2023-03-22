@@ -14,10 +14,9 @@ import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
 import org.techtown.diffuser.R
 import org.techtown.diffuser.fragment.home.HomeAdapter
-import org.techtown.diffuser.listener.MovieClickListener
 import org.techtown.diffuser.model.*
 
-class DetailAdapter(val failureClick: MovieClickListener) :
+class DetailAdapter(val ItemClickListener :  (View, Int, Movie?) -> Unit) :
     ListAdapter<ItemModel, RecyclerView.ViewHolder>(diffUtil) {
 
 
@@ -26,12 +25,12 @@ class DetailAdapter(val failureClick: MovieClickListener) :
             VIEW_TYPE_DETAIL_BACKGROND -> {
                 val inflater = LayoutInflater.from(parent.context)
                 val itemView = inflater.inflate(R.layout.item_detail_image, parent, false)
-                return BackImageViewHolder(itemView, failureClick)
+                return BackImageViewHolder(itemView, ItemClickListener)
             }
             VIEW_TYPE_DETAIL_CASTING -> {
                 val inflater = LayoutInflater.from(parent.context)
                 val itemView = inflater.inflate(R.layout.viewholder_cast, parent, false)
-                return CastViewHolder(itemView, failureClick)
+                return CastViewHolder(itemView, ItemClickListener)
             }
             VIEW_TYPE_DETAIL_TITLE -> {
                 val inflater = LayoutInflater.from(parent.context)
@@ -70,7 +69,7 @@ class DetailAdapter(val failureClick: MovieClickListener) :
     }
 
 
-    class BackImageViewHolder(itemView: View, val movieClick: MovieClickListener) :
+    class BackImageViewHolder(itemView: View, val ItemClickListener :  (View, Int, Movie?) -> Unit ) :
         RecyclerView.ViewHolder(itemView) {
         var imgBackgrond: ImageView
         var imgPoster: ImageView
@@ -112,7 +111,7 @@ class DetailAdapter(val failureClick: MovieClickListener) :
                 view_failure.isVisible = true
                 vLoading.isVisible = false
                 view_failure.setOnClickListener {
-                    movieClick.onClick(it, VIEW_TYPE_DETAIL_BACKGROND, null)
+                    ItemClickListener(it, VIEW_TYPE_DETAIL_BACKGROND, null)
                 }
             }
 
@@ -120,7 +119,7 @@ class DetailAdapter(val failureClick: MovieClickListener) :
         }
     }
 
-    class CastViewHolder(itemView: View, val failureClick: MovieClickListener) :
+    class CastViewHolder(itemView: View, val ItemClickListener :  (View, Int, Movie?) -> Unit ) :
         RecyclerView.ViewHolder(itemView) {
 
         var rvCast: RecyclerView
@@ -154,7 +153,7 @@ class DetailAdapter(val failureClick: MovieClickListener) :
                 }
             }
             view_failure.setOnClickListener {
-                failureClick.onClick(it, item.viewType, null)
+                ItemClickListener(it, item.viewType, null)
             }
         }
     }

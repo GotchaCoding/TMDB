@@ -2,12 +2,10 @@ package org.techtown.diffuser.activity.detailpage
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import org.techtown.diffuser.databinding.ActivityPopualrDetailBinding
-import org.techtown.diffuser.listener.MovieClickListener
 
 @AndroidEntryPoint
 class PopularDetailActivity : AppCompatActivity() {
@@ -34,7 +32,7 @@ class PopularDetailActivity : AppCompatActivity() {
     private fun initView() {
         val layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
-        adapter = DetailAdapter(MovieClickListener() { view, viewType, movie ->
+        adapter = DetailAdapter { view, viewType, movie ->
             when (viewType) {
                 DetailAdapter.VIEW_TYPE_DETAIL_BACKGROND -> {
                     viewModel.fetch()
@@ -44,7 +42,7 @@ class PopularDetailActivity : AppCompatActivity() {
                 }
             }
 
-        })
+        }
         binding.recyclerviewDetail.adapter = adapter
         binding.recyclerviewDetail.layoutManager = layoutManager
 

@@ -15,7 +15,6 @@ import org.techtown.diffuser.databinding.ActivityHomeFragmentBinding
 import org.techtown.diffuser.fragment.home.HomeAdapter.Companion.VIEW_TYPE_NOW_MOVIE
 import org.techtown.diffuser.fragment.home.HomeAdapter.Companion.VIEW_TYPE_POPULAR_MOVIE
 import org.techtown.diffuser.fragment.home.HomeAdapter.Companion.VIEW_TYPE_UPCOMMING
-import org.techtown.diffuser.listener.MovieClickListener
 import org.techtown.diffuser.retrofit.RetrofitService
 import javax.inject.Inject
 
@@ -60,9 +59,17 @@ class HomeFragment : Fragment() {
         }
     }
 
+
+    /**
+     **  클릭리스너 --> 람다
+     */
+
+
+
     private fun initView() {
         with(binding) {
             val layoutManager = LinearLayoutManager(context)
+
 
             adapter = HomeAdapter { view, viewType, movie ->
                 if (movie != null) {

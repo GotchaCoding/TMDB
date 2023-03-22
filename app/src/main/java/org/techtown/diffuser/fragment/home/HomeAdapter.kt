@@ -12,13 +12,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
 import org.techtown.diffuser.R
 import org.techtown.diffuser.activity.detailpage.DetailAdapter
-import org.techtown.diffuser.listener.MovieClickListener
 import org.techtown.diffuser.model.ItemModel
+import org.techtown.diffuser.model.Movie
 import org.techtown.diffuser.model.Title
 import org.techtown.diffuser.model.WrappingModel
 
 class HomeAdapter(
-    private val ItemClickListener: MovieClickListener,
+    val ItemClickListener :  (View, Int, Movie?) -> Unit ,
 ) : ListAdapter<ItemModel, RecyclerView.ViewHolder>(diffUtil) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         when (viewType) {
@@ -82,12 +82,12 @@ class HomeAdapter(
 
     class HorizontalPopularMoviesViewHolder(
         itemView: View,
-        private val popularItemClick: MovieClickListener
+        val ItemClickListener: (View, Int, Movie?) -> Unit
     ) : RecyclerView.ViewHolder(itemView) {
 
         var rvMain: RecyclerView
         var vLoading: LottieAnimationView
-        var adapter = HorizontalPopularMoviesRecyclerAdapter(popularItemClick)
+        var adapter = HorizontalPopularMoviesRecyclerAdapter(ItemClickListener)
         var view_failure: TextView
 
         init {
@@ -103,6 +103,7 @@ class HomeAdapter(
 
         }
 
+
         fun setItem(item: WrappingModel) {
             if (item.isFailure) {
                 view_failure.isVisible = true
@@ -115,9 +116,9 @@ class HomeAdapter(
                     adapter.setMovies(item.model.movies)
                 }
             }
-            view_failure.setOnClickListener(View.OnClickListener {
-                popularItemClick.onClick(it, item.viewType, null)
-            })
+            view_failure.setOnClickListener {
+                ItemClickListener(it, item.viewType, null)
+            }
 
 
         }
@@ -139,12 +140,12 @@ class HomeAdapter(
 
     class NowMovieViewHolder(
         itemView: View,
-        private val movieClickListener: MovieClickListener
+        val ItemClickListener: (View, Int, Movie?) -> Unit
     ) : RecyclerView.ViewHolder(itemView) {
 
         var rvMain: RecyclerView
         var vLoading: LottieAnimationView
-        var adapter = HorizontalNowPlayingAdapter(movieClickListener)
+        var adapter = HorizontalNowPlayingAdapter(ItemClickListener)
         var view_failure: TextView
 
         init {
@@ -172,7 +173,7 @@ class HomeAdapter(
                 }
             }
             view_failure.setOnClickListener {
-                movieClickListener.onClick(it, item.viewType, null )
+                ItemClickListener(it, item.viewType, null)
             }
         }
     }

@@ -8,10 +8,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import org.techtown.diffuser.R
-import org.techtown.diffuser.listener.MovieClickListener
 import org.techtown.diffuser.model.Movie
 
-class HorizontalPopularMoviesRecyclerAdapter(private val ItemClickListener: MovieClickListener) :
+class HorizontalPopularMoviesRecyclerAdapter(val ItemClickListener :  (View, Int, Movie?) -> Unit ) :
     RecyclerView.Adapter<HorizontalPopularMoviesRecyclerAdapter.MovieViewHolder>() {
 
     var items: List<Movie> = listOf()
@@ -35,7 +34,7 @@ class HorizontalPopularMoviesRecyclerAdapter(private val ItemClickListener: Movi
         notifyDataSetChanged()
     }
 
-    class MovieViewHolder(itemView: View, private val popularItemClick: MovieClickListener) :
+    class MovieViewHolder(itemView: View,val ItemClickListener :  (View, Int, Movie?) -> Unit ) :
         RecyclerView.ViewHolder(itemView) {
 
         var title: TextView
@@ -55,7 +54,7 @@ class HorizontalPopularMoviesRecyclerAdapter(private val ItemClickListener: Movi
             Glide.with(itemView).load("https://image.tmdb.org/t/p/w500" + item.imagePoster).into(image)
 
             itemView.setOnClickListener {
-                popularItemClick.onClick(it,item.viewType, item )
+                ItemClickListener(it,item.viewType, item )
             }
         }
 
