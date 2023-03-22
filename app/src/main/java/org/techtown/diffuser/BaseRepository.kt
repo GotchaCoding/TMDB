@@ -41,51 +41,6 @@ open class BaseRepository {
 }
 
 
-interface Repository {
-    fun getPopular(): Flow<Resource<PopularMoviesResponse>>
-    fun getNowPlay(): Flow<Resource<NowPlayingResponse>>
-    fun getDetail(movieId : Int): Flow<Resource<DetailPage_3>>
-    fun getCast(movieId : Int): Flow<Resource<CastResult>>
-    fun getUpComming(): Flow<Resource<Upcomming>>
-}
-
-class RepositoryImpl @Inject constructor(
-    private val service: RetrofitService
-) : BaseRepository(), Repository {
-    override fun getPopular(): Flow<Resource<PopularMoviesResponse>> = callApi {
-        service.getPopularMovie("ko", 1, "KR")
-    }
-
-    override fun getNowPlay(): Flow<Resource<NowPlayingResponse>> = callApi {
-        service.getNowPlayingMovie("ko", 1, "KR")
-    }
-
-    override fun getDetail(
-        movieId : Int
-    ): Flow<Resource<DetailPage_3>> = callApi {
-        service.getDetailPage(movieId, "ko")
-    }
-
-    override fun getCast(
-        movieId : Int
-    ): Flow<Resource<CastResult>> = callApi {
-        service.getCast(movieId, "ko")
-    }
-
-    override fun getUpComming(): Flow<Resource<Upcomming>> = callApi {
-        service.getUpcomming("ko", 1, "KR")
-    }
-
-
-}
-
-open class BaseResponse(
-    @SerializedName("status_code")
-    val statusCode: Int? = null,
-    @SerializedName("status_message")
-    val statusMessage: String? = null,
-)
-
 sealed class Resource<out T> {
     class Success<T>(val model: T) : Resource<T>()
     class Fail<T>(val exception: ApiException) : Resource<T>()
