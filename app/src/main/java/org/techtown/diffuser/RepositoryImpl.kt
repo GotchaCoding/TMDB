@@ -27,7 +27,7 @@ class RepositoryImpl @Inject constructor(
     override fun getDetail(
         movieId: Int
     ): Flow<Resource<DetailPage_3>> = callApi {
-        service.getDetailPage(movieId, "ko")
+        service.getDetailPage(movieId, "ko")   //Datailpage_3 는 BaseResponse를 상속함
     }
 
     override fun getCast(

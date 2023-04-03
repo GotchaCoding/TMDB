@@ -5,6 +5,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.techtown.diffuser.Repository
+import org.techtown.diffuser.RepositoryImpl
 import org.techtown.diffuser.Resource
 import org.techtown.diffuser.model.*
 import org.techtown.diffuser.response.detail.cast.CastResult

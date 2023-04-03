@@ -1,5 +1,7 @@
 package org.techtown.diffuser.di
 
+import com.google.gson.Gson
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,40 +18,64 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class HiltModule {
+ class HiltModule {
+
+
 
     @Singleton
     @Provides
-    fun provideRepository(service : RetrofitService) : Repository {
-        return RepositoryImpl(service)
+    fun provideService(retrofit: Retrofit): RetrofitService {
+        return retrofit.create(RetrofitService::class.java)
     }
 
     @Singleton
     @Provides
-    fun provideService(retrofit : Retrofit) : RetrofitService {
-        return  retrofit.create(RetrofitService::class.java)
-    }
-
-    @Singleton
-    @Provides
-    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
+    fun provideRetrofit(
+        okHttpClient: OkHttpClient,
+        gsonConverterFactory: GsonConverterFactory
+    ): Retrofit {
         return Retrofit.Builder()
             .client(okHttpClient)
             .baseUrl("https://api.themoviedb.org/")
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(gsonConverterFactory)
             .build()
+    }
+
+    //bind 쓸만한거 잇나 확인
+    @Singleton
+    @Provides
+    fun provideOkttp(
+        apiKeyIntercepter: ApiKeyIntercepter,
+        httpLoggingInterceptor: HttpLoggingInterceptor
+    ): OkHttpClient {
+        return OkHttpClient.Builder()
+            .addInterceptor(apiKeyIntercepter)
+            .addInterceptor(httpLoggingInterceptor)   
+            .build()
+
+    }
+
+
+    @Singleton
+    @Provides
+    fun provideGsonConverter(): GsonConverterFactory {
+        return GsonConverterFactory.create(Gson())
     }
 
     @Singleton
     @Provides
-    fun provideOkttp(): OkHttpClient {
-        return OkHttpClient.Builder()
-            .addInterceptor(ApiKeyIntercepter())
-            .addInterceptor(HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BODY})
-            .build()
-
+    fun provideApikeyIntercepter(): ApiKeyIntercepter {
+        return ApiKeyIntercepter()
     }
+
+    @Singleton
+    @Provides
+    fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
+        return HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+    }
+
 
 }
 

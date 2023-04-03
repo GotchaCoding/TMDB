@@ -1,26 +1,16 @@
 package org.techtown.diffuser
 
-import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import org.techtown.diffuser.response.Upcomming
-import org.techtown.diffuser.response.detail.cast.CastResult
-import org.techtown.diffuser.response.detail.detailmovie.DetailPage_3
-import org.techtown.diffuser.response.nowplaying.NowPlayingResponse
-import org.techtown.diffuser.response.pupular.PopularMoviesResponse
-import org.techtown.diffuser.retrofit.RetrofitService
 import retrofit2.HttpException
 import java.io.IOException
-import javax.inject.Inject
 
 open class BaseRepository {
     fun <Response : BaseResponse> callApi(responseFunction: suspend () -> Response): Flow<Resource<Response>> {
         return flow {
             emit(Resource.Loading())
             emit(
-                safeResult {
-                    responseFunction.invoke()
-                }
+                safeResult(responseFunction)  //detailpage_3
             )
         }
     }
@@ -29,7 +19,7 @@ open class BaseRepository {
         responseFunction: suspend () -> Response,
     ): Resource<Response> {
         return try {
-            Resource.Success(responseFunction.invoke())
+            Resource.Success(responseFunction.invoke())  //detailpage_3
         } catch (e: HttpException) {
             Resource.Fail(ApiException.HttpException(code = e.code()))
         } catch (e: IOException) {
@@ -42,7 +32,7 @@ open class BaseRepository {
 
 
 sealed class Resource<out T> {
-    class Success<T>(val model: T) : Resource<T>()
+    class Success<T>(val model: T) : Resource<T>()   //model을 매개변수로받는.(detailpage_3)를 매개변수로받는.
     class Fail<T>(val exception: ApiException) : Resource<T>()
     class Loading<T> : Resource<T>()
 }
