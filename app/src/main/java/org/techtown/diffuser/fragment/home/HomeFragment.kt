@@ -11,6 +11,10 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import org.techtown.diffuser.activity.detailpage.PopularDetailActivity
+import org.techtown.diffuser.activity.moreview.comming.CommingMoreActivity
+import org.techtown.diffuser.activity.moreview.nowplay.NowplayMoreActivity
+import org.techtown.diffuser.activity.moreview.popular.PopularMoreActivity
+import org.techtown.diffuser.clickInterface.MoreviewClick
 import org.techtown.diffuser.databinding.ActivityHomeFragmentBinding
 import org.techtown.diffuser.fragment.home.HomeAdapter.Companion.VIEW_TYPE_NOW_MOVIE
 import org.techtown.diffuser.fragment.home.HomeAdapter.Companion.VIEW_TYPE_POPULAR_MOVIE
@@ -71,10 +75,10 @@ class HomeFragment : Fragment() {
             val layoutManager = LinearLayoutManager(context)
 
 
-            adapter = HomeAdapter { view, viewType, movie ->
+            adapter = HomeAdapter ({ view, viewType, movie ->
                 if (movie != null) {
                     val intent = Intent(context, PopularDetailActivity::class.java)
-                    intent.putExtra("movie_id", movie?.idNum)
+                    intent.putExtra("movie_id", movie.id)
                     startActivity(intent)
                 }
 
@@ -89,11 +93,37 @@ class HomeFragment : Fragment() {
                         viewModel.fetchUpcomming()
                     }
                 }
-            }
+            } , object : MoreviewClick {
+                override fun onClick(theMore: TheMore) {
+                    when(theMore) {
+                        TheMore.THEMORE_POPULAR -> {
+                            val intent = Intent(context, PopularMoreActivity::class.java)
+                            startActivity(intent)
+                        }
+                        TheMore.THEMORE_NOW -> {
+                            val intent = Intent(context, NowplayMoreActivity::class.java)
+                            startActivity(intent)
+                        }
+                        TheMore.THEMORE_COMMING -> {
+                            val intent = Intent(context, CommingMoreActivity::class.java)
+                            startActivity(intent)
+
+                        }
+
+                    }
+
+                }
+            } )
             recyclerview.adapter = adapter
             recyclerview.layoutManager = layoutManager
         }
 
 
     }
+}
+
+enum class TheMore() {
+    THEMORE_POPULAR,
+    THEMORE_NOW,
+    THEMORE_COMMING
 }

@@ -60,7 +60,7 @@ class NowMovieViewHolder(itemView: View, private val ItemClickListener :  (View,
 }
 val diffUtil_movie = object : DiffUtil.ItemCallback<Movie>() {
     override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {
-        return oldItem.idNum == newItem.idNum   // === hash 비교.       == 안에잇는 내용 컨텐츠 비교
+        return oldItem.id == newItem.id   // === hash 비교.       == 안에잇는 내용 컨텐츠 비교
     }
 
     override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean {

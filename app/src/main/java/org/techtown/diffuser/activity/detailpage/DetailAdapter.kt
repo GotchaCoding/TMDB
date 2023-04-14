@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
 import org.techtown.diffuser.R
-import org.techtown.diffuser.fragment.home.HomeAdapter
 import org.techtown.diffuser.model.*
 
 class DetailAdapter(val ItemClickListener :  (View, Int, Movie?) -> Unit) :
@@ -35,7 +34,7 @@ class DetailAdapter(val ItemClickListener :  (View, Int, Movie?) -> Unit) :
             VIEW_TYPE_DETAIL_TITLE -> {
                 val inflater = LayoutInflater.from(parent.context)
                 val itemView = inflater.inflate(R.layout.item_titlepopualr, parent, false)
-                return HomeAdapter.TitleViewHolder(itemView)
+                return TitleViewHolder(itemView)
             }
             else -> {
                 throw Exception()
@@ -57,8 +56,8 @@ class DetailAdapter(val ItemClickListener :  (View, Int, Movie?) -> Unit) :
                 }
             }
             VIEW_TYPE_DETAIL_TITLE -> {
-                if (itemModel is Title) {
-                    (holder as HomeAdapter.TitleViewHolder).setItem(itemModel)
+                if (itemModel is TitleModel) {
+                    (holder as TitleViewHolder).setItem(itemModel)
                 }
             }
         }
@@ -166,8 +165,8 @@ class DetailAdapter(val ItemClickListener :  (View, Int, Movie?) -> Unit) :
             tvTitle = itemView.findViewById(R.id.tvTitle)
         }
 
-        fun setItem(item: Title) {
-            tvTitle.text = item.titleM
+        fun setItem(item: TitleModel) {
+            tvTitle.text = item.title
         }
     }
 

@@ -35,9 +35,8 @@ class HomeViewModel @Inject constructor(
                                 title = it.title,
                                 rank = it.releaseDate,
                                 imagePoster = it.posterPath,
-                                idNum = it.id,
                                 viewType =  HomeAdapter.VIEW_TYPE_POPULAR_MOVIE,
-                                id = HomeFragment.RECYCLERVIEW_ID_POPULAR
+                                id = it.id
                             )
                         }
                         val horizontalPopularModel =
@@ -95,9 +94,8 @@ class HomeViewModel @Inject constructor(
                                 title = it.title,
                                 rank = it.releaseDate,
                                 imageDrop = it.backdropPath,
-                                idNum = it.id,
                                 viewType =  HomeAdapter.VIEW_TYPE_NOW_MOVIE,
-                                id = HomeFragment.RECYCLERVIEW_ID_NOW
+                                id = it.id
                             )
                         }
                         val nowPlaying = HorizontalMovieModel(
@@ -154,9 +152,8 @@ class HomeViewModel @Inject constructor(
                                 title = it.title,
                                 rank = it.releaseDate,
                                 imagePoster = it.posterPath,
-                                idNum = it.id,
-                                id = HomeFragment.RECYCLERVIEW_ID_COMMING,
-                                viewType = HomeAdapter.VIEW_TYPE_UPCOMMING
+                                viewType = HomeAdapter.VIEW_TYPE_UPCOMMING,
+                                id = it.id
                             )
                         }
                         val horizontalPopularModel =
@@ -203,17 +200,17 @@ class HomeViewModel @Inject constructor(
 
     init {
         val defaultList = listOf(
-            Title("인기영화", HomeAdapter.VIEW_TYPE_TITLE, HomeFragment.RECYCLERVIEW_ID_TITME),
+            TitleModel("인기영화", TheMore.THEMORE_POPULAR, HomeAdapter.VIEW_TYPE_TITLE, HomeFragment.RECYCLERVIEW_ID_TITME),
             WrappingModel(
                 true, null,
                 HomeAdapter.VIEW_TYPE_POPULAR_MOVIE, id = HomeFragment.RECYCLERVIEW_ID_POPULAR
             ),
-            Title("상영중 영화", HomeAdapter.VIEW_TYPE_TITLE, HomeFragment.RECYCLERVIEW_ID_TITME),
+            TitleModel("상영중 영화", TheMore.THEMORE_NOW, HomeAdapter.VIEW_TYPE_TITLE, HomeFragment.RECYCLERVIEW_ID_TITME),
             WrappingModel(
                 true, null,
                 HomeAdapter.VIEW_TYPE_NOW_MOVIE, id = HomeFragment.RECYCLERVIEW_ID_NOW
             ),
-            Title("개봉 예정", HomeAdapter.VIEW_TYPE_TITLE, HomeFragment.RECYCLERVIEW_ID_TITME),
+            TitleModel("개봉 예정", TheMore.THEMORE_COMMING , HomeAdapter.VIEW_TYPE_TITLE, HomeFragment.RECYCLERVIEW_ID_TITME),
             WrappingModel(
                 true, null,
                 HomeAdapter.VIEW_TYPE_POPULAR_MOVIE, id = HomeFragment.RECYCLERVIEW_ID_COMMING

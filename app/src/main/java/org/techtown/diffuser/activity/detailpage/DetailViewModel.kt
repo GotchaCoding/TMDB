@@ -5,17 +5,13 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.techtown.diffuser.Repository
-import org.techtown.diffuser.RepositoryImpl
 import org.techtown.diffuser.Resource
 import org.techtown.diffuser.model.*
-import org.techtown.diffuser.response.detail.cast.CastResult
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import javax.inject.Inject
 
 @HiltViewModel
 class DetailViewModel @Inject constructor(
+
     savedStateHandle: SavedStateHandle,
     private val repository: Repository
 ) : ViewModel() {
@@ -52,8 +48,9 @@ class DetailViewModel @Inject constructor(
                 isFailure = false,
                 id = RECYCLERVIEW_ID_TOP
             ),
-            Title(
+            TitleModel(
                 "캐스팅",
+                null,
                 DetailAdapter.VIEW_TYPE_DETAIL_TITLE,
                 RECYCLERVIEW_ID_TITLE
             ),

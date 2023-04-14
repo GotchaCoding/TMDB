@@ -11,21 +11,22 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
 import org.techtown.diffuser.R
-import org.techtown.diffuser.activity.detailpage.DetailAdapter
+import org.techtown.diffuser.clickInterface.MoreviewClick
 import org.techtown.diffuser.model.ItemModel
 import org.techtown.diffuser.model.Movie
-import org.techtown.diffuser.model.Title
+import org.techtown.diffuser.model.TitleModel
 import org.techtown.diffuser.model.WrappingModel
 
 class HomeAdapter(
-    val ItemClickListener :  (View, Int, Movie?) -> Unit ,
+    val ItemClickListener: (View, Int, Movie?) -> Unit,
+    private val moreviewClick: MoreviewClick
 ) : ListAdapter<ItemModel, RecyclerView.ViewHolder>(diffUtil) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         when (viewType) {
             VIEW_TYPE_TITLE -> {
                 val inflater = LayoutInflater.from(parent.context)
                 val itemView = inflater.inflate(R.layout.item_titlepopualr, parent, false)
-                return DetailAdapter.TitleViewHolder(itemView)
+                return TitleViewHolder(itemView, moreviewClick)
             }
             VIEW_TYPE_POPULAR_MOVIE -> {
                 val inflater = LayoutInflater.from(parent.context)
@@ -52,8 +53,8 @@ class HomeAdapter(
         val itemModel = currentList[position]
         when (itemModel.viewType) {
             VIEW_TYPE_TITLE -> {
-                if (itemModel is Title) {
-                    (holder as DetailAdapter.TitleViewHolder).setItem(itemModel)
+                if (itemModel is TitleModel) {
+                    (holder as TitleViewHolder).setItem(itemModel)
 
                 }
             }
@@ -125,16 +126,24 @@ class HomeAdapter(
 
     }
 
-    class TitleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class TitleViewHolder(itemView: View, private val moreviewClick: MoreviewClick) :
+        RecyclerView.ViewHolder(itemView) {
 
         var tvTitle: TextView
+        var tvMore: TextView
 
         init {
             tvTitle = itemView.findViewById(R.id.tvTitle)
+            tvMore = itemView.findViewById(R.id.tvMoreview)
         }
 
-        fun setItem(item: Title) {
-            tvTitle.text = item.titleM
+        fun setItem(titleModel: TitleModel) {
+            tvTitle.text = titleModel.title
+            tvMore.setOnClickListener { _ ->
+                titleModel.theMore?.let {
+                    moreviewClick.onClick(it)
+                }
+            }
         }
     }
 
