@@ -19,10 +19,11 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
     private val _items: MutableLiveData<List<ItemModel>> = MutableLiveData()
     val items: LiveData<List<ItemModel>> = _items
+    var page : Int = 1
 
     fun fetch() {
         repository
-            .getPopular()
+            .getPopular(page)
             .onEach { result ->
                 when (result) {
                     is Resource.Loading -> {

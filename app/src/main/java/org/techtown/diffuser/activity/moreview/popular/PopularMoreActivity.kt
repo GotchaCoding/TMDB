@@ -43,7 +43,7 @@ class PopularMoreActivity : AppCompatActivity() {
                 val totalItem = layoutManager.itemCount
                 val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
                 if (lastVisibleItem == totalItem - 3) {
-//                    viewModel.fetch()
+                    viewModel.fetch()
                 }
             }
         })

@@ -21,8 +21,10 @@ class MorePopularViewModel @Inject constructor(
 ) : ViewModel() {
 //    object BottomLoadingModel : ItemModel(id = -2L, viewType = -3)
 
-    private val _items: MutableLiveData<List<ItemModel>> = MutableLiveData(listOf(BottomLoadingModel))
+    private val _items: MutableLiveData<List<ItemModel>> =
+        MutableLiveData(listOf(BottomLoadingModel))
     val items: LiveData<List<ItemModel>> = _items
+    var page: Int = 1
 
     fun pureItems(): List<ItemModel> {
         return _items.value!!.filter {
@@ -31,9 +33,9 @@ class MorePopularViewModel @Inject constructor(
     }
 
     fun fetch() {
-        Log.d("4.14" , "scrolltest")
+        Log.d("4.14", "scrolltest")
         repository
-            .getPopular()
+            .getPopular(page)
             .onEach { result ->
                 when (result) {
                     is Resource.Loading -> {
@@ -50,7 +52,7 @@ class MorePopularViewModel @Inject constructor(
                                 id = it.id
                             )
                         }
-
+                        page++
                         _items.value = pureItems() + list
                     }
                     is Resource.Fail -> {

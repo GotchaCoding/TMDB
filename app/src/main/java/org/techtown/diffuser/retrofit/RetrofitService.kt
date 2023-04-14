@@ -28,13 +28,13 @@ interface RetrofitService {
 
     @GET("/3/movie/{movie_id}")
     suspend fun getDetailPage(
-        @Path("movie_id") movieId : Int,
+        @Path("movie_id") movieId : Long,
         @Query("language") language : String
     ) : DetailPage_3
 
     @GET("/3/movie/{movie_id}/credits")
     suspend fun getCast(
-        @Path("movie_id") movieId : Int,
+        @Path("movie_id") movieId : Long,
         @Query("language") language : String
     ) : CastResult
 

@@ -12,10 +12,10 @@ import javax.inject.Inject
 class RepositoryImpl @Inject constructor(
     private val service: RetrofitService
 ) : BaseRepository(), Repository {
-    override fun getPopular(): Flow<Resource<PopularMoviesResponse>> {
+    override fun getPopular(page : Int): Flow<Resource<PopularMoviesResponse>> {
        return callApi(
             responseFunction = {
-                service.getPopularMovie("ko", 1, "KR")
+                service.getPopularMovie("ko", page, "KR")
             }
         )
     }
@@ -25,13 +25,13 @@ class RepositoryImpl @Inject constructor(
     }
 
     override fun getDetail(
-        movieId: Int
+        movieId: Long
     ): Flow<Resource<DetailPage_3>> = callApi {
         service.getDetailPage(movieId, "ko")   //Datailpage_3 는 BaseResponse를 상속함
     }
 
     override fun getCast(
-        movieId: Int
+        movieId: Long
     ): Flow<Resource<CastResult>> = callApi {
         service.getCast(movieId, "ko")
     }

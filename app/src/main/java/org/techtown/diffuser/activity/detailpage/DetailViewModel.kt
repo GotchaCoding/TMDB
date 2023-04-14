@@ -15,7 +15,7 @@ class DetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val repository: Repository
 ) : ViewModel() {
-    val movieId = savedStateHandle.get<Int>("movie_id") ?: 0
+    val movieId = savedStateHandle.get<Long>("movie_id") ?: 0
 
     private val _items: MutableLiveData<List<ItemModel>> = MutableLiveData()
     val items: LiveData<List<ItemModel>> = _items
