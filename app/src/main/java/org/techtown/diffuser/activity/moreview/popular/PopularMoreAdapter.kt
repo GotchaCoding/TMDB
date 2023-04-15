@@ -13,11 +13,8 @@ import com.bumptech.glide.Glide
 import org.techtown.diffuser.R
 import org.techtown.diffuser.activity.moreview.BottomLoadingViewHolder
 import org.techtown.diffuser.fragment.home.HomeAdapter
-import org.techtown.diffuser.fragment.home.HorizontalPopularMoviesRecyclerAdapter
 import org.techtown.diffuser.model.ItemModel
 import org.techtown.diffuser.model.Movie
-import org.techtown.diffuser.response.pupular.ResultPopular
-import org.w3c.dom.Text
 
 class PopularMoreAdapter : ListAdapter<ItemModel, RecyclerView.ViewHolder>(diffUtil3) {
 
@@ -25,18 +22,24 @@ class PopularMoreAdapter : ListAdapter<ItemModel, RecyclerView.ViewHolder>(diffU
     class MoreViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         var image: ImageView
-        var text: TextView
+        var title: TextView
+        var date: TextView
+        var contents : TextView
 
         init {
             image = itemView.findViewById(R.id.imgMore)
-            text = itemView.findViewById(R.id.tvMore)
+            title = itemView.findViewById(R.id.tvMoreTitle)
+            date = itemView.findViewById(R.id.tvMoreDate)
+            contents = itemView.findViewById(R.id.tvMoreContent)
         }
 
         fun setItem(item: Movie) {
             Log.d("4.14", "setItem 메서드")
-            text.text = item.title
+            title.text = item.title
             Glide.with(itemView).load("https://image.tmdb.org/t/p/w500" + item.imagePoster)
                 .into(image)
+            date.text = item.rank
+            contents.text = item.overView
 
         }
     }

@@ -7,6 +7,8 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.techtown.diffuser.Repository
 import org.techtown.diffuser.Resource
+import org.techtown.diffuser.activity.moreview.popular.BottomLoadingModel.id
+import org.techtown.diffuser.activity.moreview.popular.BottomLoadingModel.viewType
 import org.techtown.diffuser.fragment.home.HomeAdapter
 import org.techtown.diffuser.fragment.home.HomeFragment
 import org.techtown.diffuser.fragment.home.TheMore
@@ -54,6 +56,7 @@ class MorePopularViewModel @Inject constructor(
                                 title = it.title,
                                 rank = it.releaseDate,
                                 imagePoster = it.posterPath,
+                                overView = it.overview,
                                 viewType = HomeAdapter.VIEW_TYPE_POPULAR_MOVIE,
                                 id = it.id
                             )
