@@ -83,7 +83,7 @@ class DetailAdapter(val ItemClickListener :  (View, Int, Movie?) -> Unit) :
             title = itemView.findViewById(R.id.tvTitle_detail)
             overview = itemView.findViewById(R.id.tvOverview)
             vLoading = itemView.findViewById(R.id.vLoading_topmodel)
-            vLoading.setAnimation("loading.json")
+            vLoading.setAnimation(R.raw.loading)
             vLoading.repeatCount = 10
             vLoading.playAnimation()
             view_failure = itemView.findViewById(R.id.onFailure_detail)
@@ -129,7 +129,7 @@ class DetailAdapter(val ItemClickListener :  (View, Int, Movie?) -> Unit) :
         init {
             rvCast = itemView.findViewById(R.id.rvCast)
             vLoading = itemView.findViewById(R.id.vLoading)
-            vLoading.setAnimation("loading.json")
+            vLoading.setAnimation(R.raw.loading)
             vLoading.repeatCount = 10
             vLoading.playAnimation()
             rvCast.adapter = adapter

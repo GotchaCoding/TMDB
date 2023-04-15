@@ -94,7 +94,7 @@ class HomeAdapter(
         init {
             rvMain = itemView.findViewById(R.id.rvMain)
             vLoading = itemView.findViewById(R.id.vLoading)
-            vLoading.setAnimation("loading.json")
+            vLoading.setAnimation(R.raw.loading)
             vLoading.repeatCount = 10
             vLoading.playAnimation()
             rvMain.adapter = adapter
@@ -160,7 +160,7 @@ class HomeAdapter(
         init {
             rvMain = itemView.findViewById(R.id.rvMain)
             vLoading = itemView.findViewById(R.id.vLoading)
-            vLoading.setAnimation("loading.json")
+            vLoading.setAnimation(R.raw.loading)
             vLoading.repeatCount = 10
             vLoading.playAnimation()
             rvMain.adapter = adapter

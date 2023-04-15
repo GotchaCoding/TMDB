@@ -22,7 +22,7 @@ class MorePopularViewModel @Inject constructor(
 //    object BottomLoadingModel : ItemModel(id = -2L, viewType = -3)
 
     private val _items: MutableLiveData<List<ItemModel>> =
-        MutableLiveData(listOf(BottomLoadingModel))
+        MutableLiveData(listOf())
     val items: LiveData<List<ItemModel>> = _items
     var page: Int = 1
 
@@ -32,7 +32,13 @@ class MorePopularViewModel @Inject constructor(
         }
     }
 
+    fun isLoading() : Boolean {
+        return _items.value!!.filterIsInstance<BottomLoadingModel>().isNotEmpty()
+    }
+
     fun fetch() {
+        if(isLoading()) return
+
         Log.d("4.14", "scrolltest")
         repository
             .getPopular(page)
