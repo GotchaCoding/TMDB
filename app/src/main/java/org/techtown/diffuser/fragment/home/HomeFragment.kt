@@ -9,7 +9,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import dagger.hilt.android.AndroidEntryPoint
+import org.techtown.diffuser.R
 import org.techtown.diffuser.activity.detailpage.PopularDetailActivity
 import org.techtown.diffuser.activity.moreview.comming.CommingMoreActivity
 import org.techtown.diffuser.activity.moreview.nowplay.NowplayMoreActivity
@@ -23,9 +25,12 @@ import org.techtown.diffuser.retrofit.RetrofitService
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     lateinit var binding: ActivityHomeFragmentBinding
     private lateinit var adapter: HomeAdapter
+
+    lateinit var swipe: SwipeRefreshLayout
+
 
     private val viewModel: HomeViewModel by viewModels()
 
@@ -47,11 +52,19 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = ActivityHomeFragmentBinding.inflate(inflater, container, false)
+
+        swipe = binding.swipe
+        swipe.setOnRefreshListener {
+            swipe.isRefreshing = false
+            onRefresh()
+        }
         return binding.root
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         initView()
         viewModel.fetch()
         viewModel.fetch2()
@@ -60,6 +73,8 @@ class HomeFragment : Fragment() {
 
         viewModel.items.observe(viewLifecycleOwner) { items ->
             adapter.submitList(items)
+
+
         }
     }
 
@@ -69,13 +84,12 @@ class HomeFragment : Fragment() {
      */
 
 
-
     private fun initView() {
         with(binding) {
             val layoutManager = LinearLayoutManager(context)
 
 
-            adapter = HomeAdapter ({ view, viewType, movie ->
+            adapter = HomeAdapter({ view, viewType, movie ->
                 if (movie != null) {
                     val intent = Intent(context, PopularDetailActivity::class.java)
                     intent.putExtra("movie_id", movie.id)
@@ -93,9 +107,9 @@ class HomeFragment : Fragment() {
                         viewModel.fetchUpcomming()
                     }
                 }
-            } , object : MoreviewClick {
+            }, object : MoreviewClick {
                 override fun onClick(theMore: TheMore) {
-                    when(theMore) {
+                    when (theMore) {
                         TheMore.THEMORE_POPULAR -> {
                             val intent = Intent(context, PopularMoreActivity::class.java)
                             startActivity(intent)
@@ -113,14 +127,26 @@ class HomeFragment : Fragment() {
                     }
 
                 }
-            } )
+            })
             recyclerview.adapter = adapter
             recyclerview.layoutManager = layoutManager
         }
 
 
     }
+
+    fun fetchAll() {
+        viewModel.fetch()
+        viewModel.fetch2()
+        viewModel.fetchUpcomming()
+    }
+
+    override fun onRefresh() {
+        fetchAll()
+    }
+
 }
+
 
 enum class TheMore() {
     THEMORE_POPULAR,
