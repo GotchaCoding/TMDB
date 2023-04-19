@@ -55,8 +55,8 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
         swipe = binding.swipe
         swipe.setOnRefreshListener {
-            swipe.isRefreshing = false
             onRefresh()
+            swipe.isRefreshing = false
         }
         return binding.root
 

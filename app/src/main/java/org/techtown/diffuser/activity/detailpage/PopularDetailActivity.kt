@@ -4,14 +4,17 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import dagger.hilt.android.AndroidEntryPoint
 import org.techtown.diffuser.databinding.ActivityPopualrDetailBinding
 
 @AndroidEntryPoint
-class PopularDetailActivity : AppCompatActivity() {
+class PopularDetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
     lateinit var binding: ActivityPopualrDetailBinding
 
     private lateinit var adapter: DetailAdapter
+
+    lateinit var swipe: SwipeRefreshLayout
 
 
     private val viewModel: DetailViewModel by viewModels()
@@ -26,6 +29,7 @@ class PopularDetailActivity : AppCompatActivity() {
 //        viewModel.items.observe(this, Observer<List<ItemModel>> {test:List<ItemModel> -> adapter.submitList(test) })
         viewModel.items.observe(this@PopularDetailActivity) { items ->
             adapter.submitList(items)
+
         }
     }
 
@@ -46,6 +50,20 @@ class PopularDetailActivity : AppCompatActivity() {
         binding.recyclerviewDetail.adapter = adapter
         binding.recyclerviewDetail.layoutManager = layoutManager
 
+        swipe = binding.swipe
+        swipe.setOnRefreshListener {
+            onRefresh()
+            swipe.isRefreshing = false
+        }
+    }
+
+    fun fetchAll() {
+        viewModel.fetch()
+        viewModel.fetchCast()
+    }
+
+    override fun onRefresh() {
+        fetchAll()
     }
 
 }
