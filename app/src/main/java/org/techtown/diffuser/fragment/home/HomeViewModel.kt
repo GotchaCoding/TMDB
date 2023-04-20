@@ -80,7 +80,7 @@ class HomeViewModel @Inject constructor(
 
     fun fetch2() {
         repository
-            .getNowPlay()
+            .getNowPlay(page)
             .onEach { result ->
                 when (result) {
                     is Resource.Loading -> {
@@ -141,7 +141,7 @@ class HomeViewModel @Inject constructor(
 
     fun fetchUpcomming() {
         repository
-            .getUpComming()
+            .getUpComming(page)
             .onEach { result ->
                 when (result) {
                     is Resource.Loading -> {

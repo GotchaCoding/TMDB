@@ -1,30 +1,27 @@
-package org.techtown.diffuser.activity.moreview.popular
+package org.techtown.diffuser.activity.moreview.comming
 
 import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.techtown.diffuser.Repository
 import org.techtown.diffuser.Resource
-import org.techtown.diffuser.activity.moreview.popular.BottomLoadingModel.id
-import org.techtown.diffuser.activity.moreview.popular.BottomLoadingModel.viewType
+import org.techtown.diffuser.activity.moreview.popular.BottomLoadingModel
 import org.techtown.diffuser.fragment.home.HomeAdapter
-import org.techtown.diffuser.fragment.home.HomeFragment
-import org.techtown.diffuser.fragment.home.TheMore
 import org.techtown.diffuser.model.ItemModel
 import org.techtown.diffuser.model.Movie
 import javax.inject.Inject
 
 @HiltViewModel
-class MorePopularViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
+class MoreComViewModel @Inject constructor(
     private val repository: Repository
 ) : ViewModel() {
-//    object BottomLoadingModel : ItemModel(id = -2L, viewType = -3)
 
-    private val _items: MutableLiveData<List<ItemModel>> =
-        MutableLiveData(listOf())
+    private val _items: MutableLiveData<List<ItemModel>> = MutableLiveData(listOf())
     val items: LiveData<List<ItemModel>> = _items
     var page: Int = 1
 
@@ -33,18 +30,15 @@ class MorePopularViewModel @Inject constructor(
             it is Movie
         }
     }
-
     fun isLoading() : Boolean {
         return _items.value!!.filterIsInstance<BottomLoadingModel>().isNotEmpty()
-        Log.d("4.20" , "isLoading : ${isLoading().toString()}")
     }
 
     fun fetch() {
         if(isLoading()) return
 
-        Log.d("4.14", "scrolltest")
         repository
-            .getPopular(page)
+            .getUpComming(page)
             .onEach { result ->
                 when (result) {
                     is Resource.Loading -> {
@@ -58,7 +52,7 @@ class MorePopularViewModel @Inject constructor(
                                 rank = it.releaseDate,
                                 imagePoster = it.posterPath,
                                 overView = it.overview,
-                                viewType = HomeAdapter.VIEW_TYPE_POPULAR_MOVIE,
+                                viewType = HomeAdapter.VIEW_TYPE_UPCOMMING,
                                 id = it.id
                             )
                         }
@@ -67,7 +61,6 @@ class MorePopularViewModel @Inject constructor(
                     }
                     is Resource.Fail -> {
 
-//
                     }
                 }
             }.launchIn(viewModelScope)

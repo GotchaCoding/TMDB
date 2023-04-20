@@ -20,8 +20,8 @@ class RepositoryImpl @Inject constructor(
         )
     }
 
-    override fun getNowPlay(): Flow<Resource<NowPlayingResponse>> = callApi {
-        service.getNowPlayingMovie("ko", 1, "KR")
+    override fun getNowPlay(page : Int): Flow<Resource<NowPlayingResponse>> = callApi {
+        service.getNowPlayingMovie("ko", page, "KR")
     }
 
     override fun getDetail(
@@ -36,8 +36,8 @@ class RepositoryImpl @Inject constructor(
         service.getCast(movieId, "ko")
     }
 
-    override fun getUpComming(): Flow<Resource<Upcomming>> = callApi {
-        service.getUpcomming("ko", 1, "KR")
+    override fun getUpComming(page : Int): Flow<Resource<Upcomming>> = callApi {
+        service.getUpcomming("ko", page, "KR")
     }
 
 }

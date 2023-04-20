@@ -9,8 +9,8 @@ import org.techtown.diffuser.response.pupular.PopularMoviesResponse
 
 interface Repository {
     fun getPopular(page : Int): Flow<Resource<PopularMoviesResponse>>
-    fun getNowPlay(): Flow<Resource<NowPlayingResponse>>
+    fun getNowPlay(page : Int): Flow<Resource<NowPlayingResponse>>
     fun getDetail(movieId : Long): Flow<Resource<DetailPage_3>>
     fun getCast(movieId : Long): Flow<Resource<CastResult>>
-    fun getUpComming(): Flow<Resource<Upcomming>>
+    fun getUpComming(page : Int): Flow<Resource<Upcomming>>
 }
