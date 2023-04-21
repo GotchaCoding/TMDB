@@ -12,19 +12,19 @@ TMDB APP은 TMDB API 로 Retrofit2 통신 라이브러리를 이용하여 영화
 ### [적용기술] 
 MVVM, Hilt, Corutine 에러핸들, Retrofit2, 환경변수 세팅, Logging Intercepter, Recyclerview Multiview, ListAdapter, DiffUtil, Glide
 
-##목차
+## 목차
 <ol> 1.프로젝트 소개<ul> 1.1 적용기술</ul></ol>
 <ol>2.소개영상</ol>
 <ol>3.플로우차트</ol>
 <ol>4.마무리</ol>
 
-##소개영상
+## 소개영상
 <img src="https://user-images.githubusercontent.com/108649744/232327467-9e624951-da10-453a-8bea-0bc2af740baa.gif">
 
-##플로우 차트
+## 플로우 차트
 <img src="https://user-images.githubusercontent.com/108649744/232856411-fb7a8781-8b3b-46b3-a827-c7835573f496.png">
 
-##마무리
+## 마무리
  이 프로젝트를 진행하며 적용했던 다양한 기술을 적용해보았고 배운점도 많다. <Br>
  적용기술과는 별개로 느낀점 중에 몇가지는 앞으로도 공부하면서 중요하게 체크하고자 하며 그 내용은 다음과 같다. 
 1. 코드 작성시 구조 설계의 중요성 

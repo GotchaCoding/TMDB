@@ -10,6 +10,7 @@ import org.techtown.diffuser.R
 import org.techtown.diffuser.activity.detailpage.DetailAdapter
 import org.techtown.diffuser.databinding.ActivityPopularMoreViewBinding
 
+
 @AndroidEntryPoint
 class PopularMoreActivity : AppCompatActivity() {
     lateinit var binding: ActivityPopularMoreViewBinding

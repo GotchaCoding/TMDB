@@ -1,15 +1,12 @@
 package org.techtown.diffuser.di
 
 import com.google.gson.Gson
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import org.techtown.diffuser.Repository
-import org.techtown.diffuser.RepositoryImpl
 import org.techtown.diffuser.intercepter.ApiKeyIntercepter
 import org.techtown.diffuser.retrofit.RetrofitService
 import retrofit2.Retrofit
@@ -18,9 +15,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
- class HiltModule {
-
-
+class HiltModule {
 
     @Singleton
     @Provides
@@ -41,7 +36,6 @@ import javax.inject.Singleton
             .build()
     }
 
-    //bind 쓸만한거 잇나 확인
     @Singleton
     @Provides
     fun provideOkttp(
@@ -50,11 +44,9 @@ import javax.inject.Singleton
     ): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(apiKeyIntercepter)
-            .addInterceptor(httpLoggingInterceptor)   
+            .addInterceptor(httpLoggingInterceptor)
             .build()
-
     }
-
 
     @Singleton
     @Provides
@@ -75,7 +67,5 @@ import javax.inject.Singleton
             level = HttpLoggingInterceptor.Level.BODY
         }
     }
-
-
 }
 

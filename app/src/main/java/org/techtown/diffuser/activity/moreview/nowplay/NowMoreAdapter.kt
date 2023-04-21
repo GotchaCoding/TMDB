@@ -64,7 +64,6 @@ class NowMoreAdapter : ListAdapter<ItemModel, RecyclerView.ViewHolder>(diffUtil4
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        Log.d("4.20" , "onBindViewHolder")
        if (holder is NowMoreViewHolder) {
            holder.setItem(currentList[position] as Movie)
        }

@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity(),
         binding.pager.adapter = MyViewPagerAdapter(this)
         binding.pager.isUserInputEnabled = false
 
-        //슬라이드하여 페이지 변경되면 바텀네비게이션의 탭도 그 페이지로 활성화
+        //페이지 변경되면 바텀네비게이션의 탭도 그 페이지로 활성화
         binding.pager.registerOnPageChangeCallback(
             object : ViewPager2.OnPageChangeCallback() {
 
@@ -59,11 +59,7 @@ class MainActivity : AppCompatActivity(),
 }
 
 class MyViewPagerAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
-    val fragments: List<Fragment>
-
-    init {
-        fragments = listOf(HomeFragment(), SearchFragment())
-    }
+    private val fragments: List<Fragment> = listOf(HomeFragment(), SearchFragment())
 
     override fun getItemCount(): Int {
         return fragments.size

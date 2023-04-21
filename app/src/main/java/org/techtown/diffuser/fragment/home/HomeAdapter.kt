@@ -11,37 +11,38 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
 import org.techtown.diffuser.R
-import org.techtown.diffuser.clickInterface.MoreviewClick
+import org.techtown.diffuser.clickInterface.MoreViewClick
 import org.techtown.diffuser.model.ItemModel
 import org.techtown.diffuser.model.Movie
 import org.techtown.diffuser.model.TitleModel
 import org.techtown.diffuser.model.WrappingModel
 
 class HomeAdapter(
-    val ItemClickListener: (View, Int, Movie?) -> Unit,
-    private val moreviewClick: MoreviewClick
+    private val itemClickListener: (View, Int, Movie?) -> Unit,
+    private val moreViewClick: MoreViewClick
 ) : ListAdapter<ItemModel, RecyclerView.ViewHolder>(diffUtil) {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         when (viewType) {
             VIEW_TYPE_TITLE -> {
                 val inflater = LayoutInflater.from(parent.context)
                 val itemView = inflater.inflate(R.layout.item_titlepopualr, parent, false)
-                return TitleViewHolder(itemView, moreviewClick)
+                return TitleViewHolder(itemView, moreViewClick)
             }
             VIEW_TYPE_POPULAR_MOVIE -> {
                 val inflater = LayoutInflater.from(parent.context)
                 val itemView = inflater.inflate(R.layout.viewholder_popularmovies, parent, false)
-                return HorizontalPopularMoviesViewHolder(itemView, ItemClickListener)
+                return HorizontalPopularMoviesViewHolder(itemView, itemClickListener)
             }
             VIEW_TYPE_NOW_MOVIE -> {
                 val inflater = LayoutInflater.from(parent.context)
                 val itemView = inflater.inflate(R.layout.viewholder_popularmovies, parent, false)
-                return NowMovieViewHolder(itemView, ItemClickListener)
+                return NowMovieViewHolder(itemView, itemClickListener)
             }
             VIEW_TYPE_UPCOMMING -> {
                 val inflater = LayoutInflater.from(parent.context)
                 val itemView = inflater.inflate(R.layout.viewholder_popularmovies, parent, false)
-                return HorizontalPopularMoviesViewHolder(itemView, ItemClickListener)
+                return HorizontalPopularMoviesViewHolder(itemView, itemClickListener)
             }
             else -> {
                 throw Exception()
@@ -55,7 +56,6 @@ class HomeAdapter(
             VIEW_TYPE_TITLE -> {
                 if (itemModel is TitleModel) {
                     (holder as TitleViewHolder).setItem(itemModel)
-
                 }
             }
             VIEW_TYPE_POPULAR_MOVIE -> {
@@ -80,68 +80,62 @@ class HomeAdapter(
         return currentList[position].viewType
     }
 
-
     class HorizontalPopularMoviesViewHolder(
         itemView: View,
-        val ItemClickListener: (View, Int, Movie?) -> Unit
+        private val ItemClickListener: (View, Int, Movie?) -> Unit
     ) : RecyclerView.ViewHolder(itemView) {
 
-        var rvMain: RecyclerView
-        var vLoading: LottieAnimationView
+        private var rvMain: RecyclerView = itemView.findViewById(R.id.rvMain)
+        private var vLoading: LottieAnimationView =  itemView.findViewById(R.id.vLoading)
+        private var viewFailure: TextView = itemView.findViewById(R.id.onFailure)
+
         var adapter = HorizontalPopularMoviesRecyclerAdapter(ItemClickListener)
-        var view_failure: TextView
 
         init {
-            rvMain = itemView.findViewById(R.id.rvMain)
-            vLoading = itemView.findViewById(R.id.vLoading)
             vLoading.setAnimation(R.raw.loading)
             vLoading.repeatCount = 10
             vLoading.playAnimation()
             rvMain.adapter = adapter
-            rvMain.layoutManager =
-                LinearLayoutManager(itemView.context, LinearLayoutManager.HORIZONTAL, false)
-            view_failure = itemView.findViewById(R.id.onFailure)
-
+            rvMain.layoutManager = LinearLayoutManager(
+                itemView.context,
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
         }
-
 
         fun setItem(item: WrappingModel) {
             if (item.isFailure) {
-                view_failure.isVisible = true
+                viewFailure.isVisible = true
                 vLoading.isVisible = item.isLoading
             } else {
-                view_failure.isVisible = false
+                viewFailure.isVisible = false
                 vLoading.isVisible = item.isLoading
 
                 if (item.model != null) {
                     adapter.setMovies(item.model.movies)
                 }
             }
-            view_failure.setOnClickListener {
+
+            viewFailure.setOnClickListener {
                 ItemClickListener(it, item.viewType, null)
             }
-
-
         }
 
     }
 
-    class TitleViewHolder(itemView: View, private val moreviewClick: MoreviewClick) :
-        RecyclerView.ViewHolder(itemView) {
+    class TitleViewHolder(
+        itemView: View,
+        private val moreViewClick: MoreViewClick
+    ) : RecyclerView.ViewHolder(itemView) {
 
-        var tvTitle: TextView
-        var tvMore: TextView
-
-        init {
-            tvTitle = itemView.findViewById(R.id.tvTitle)
-            tvMore = itemView.findViewById(R.id.tvMoreview)
-        }
+        private var tvTitle: TextView = itemView.findViewById(R.id.tvTitle)
+        private var tvMore: TextView = itemView.findViewById(R.id.tvMoreview)
 
         fun setItem(titleModel: TitleModel) {
             tvTitle.text = titleModel.title
             tvMore.setOnClickListener { _ ->
                 titleModel.theMore?.let {
-                    moreviewClick.onClick(it)
+                    moreViewClick.onClick(it)
                 }
             }
         }
@@ -149,40 +143,39 @@ class HomeAdapter(
 
     class NowMovieViewHolder(
         itemView: View,
-        val ItemClickListener: (View, Int, Movie?) -> Unit
+        private val itemClickListener: (View, Int, Movie?) -> Unit
     ) : RecyclerView.ViewHolder(itemView) {
 
-        var rvMain: RecyclerView
-        var vLoading: LottieAnimationView
-        var adapter = HorizontalNowPlayingAdapter(ItemClickListener)
-        var view_failure: TextView
+        private var rvMain: RecyclerView = itemView.findViewById(R.id.rvMain)
+        private var vLoading: LottieAnimationView = itemView.findViewById(R.id.vLoading)
+        private var viewFailure: TextView = itemView.findViewById(R.id.onFailure)
+
+        var adapter = HorizontalNowPlayingAdapter(itemClickListener)
 
         init {
-            rvMain = itemView.findViewById(R.id.rvMain)
-            vLoading = itemView.findViewById(R.id.vLoading)
             vLoading.setAnimation(R.raw.loading)
             vLoading.repeatCount = 10
             vLoading.playAnimation()
             rvMain.adapter = adapter
             rvMain.layoutManager =
                 LinearLayoutManager(itemView.context, LinearLayoutManager.HORIZONTAL, false)
-            view_failure = itemView.findViewById(R.id.onFailure)
         }
 
         fun setItem(item: WrappingModel) {
             if (item.isFailure) {
-                view_failure.isVisible = true
+                viewFailure.isVisible = true
                 vLoading.isVisible = item.isLoading
             } else {
-                view_failure.isVisible = false
+                viewFailure.isVisible = false
                 vLoading.isVisible = item.isLoading
 
                 if (item.model != null) {
                     adapter.submitList(item.model.movies)
                 }
             }
-            view_failure.setOnClickListener {
-                ItemClickListener(it, item.viewType, null)
+
+            viewFailure.setOnClickListener {
+                itemClickListener(it, item.viewType, null)
             }
         }
     }

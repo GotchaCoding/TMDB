@@ -6,6 +6,7 @@ import org.techtown.diffuser.response.detail.cast.CastResult
 import org.techtown.diffuser.response.detail.detailmovie.DetailPage_3
 import org.techtown.diffuser.response.nowplaying.NowPlayingResponse
 import org.techtown.diffuser.response.pupular.PopularMoviesResponse
+import org.techtown.diffuser.response.search.SearchResponse
 
 interface Repository {
     fun getPopular(page : Int): Flow<Resource<PopularMoviesResponse>>
@@ -13,4 +14,5 @@ interface Repository {
     fun getDetail(movieId : Long): Flow<Resource<DetailPage_3>>
     fun getCast(movieId : Long): Flow<Resource<CastResult>>
     fun getUpComming(page : Int): Flow<Resource<Upcomming>>
+    fun getSearch(title : String): Flow<Resource<SearchResponse>>
 }

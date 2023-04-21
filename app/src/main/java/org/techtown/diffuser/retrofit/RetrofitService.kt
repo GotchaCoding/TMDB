@@ -5,6 +5,7 @@ import org.techtown.diffuser.response.detail.detailmovie.DetailPage_3
 import org.techtown.diffuser.response.nowplaying.NowPlayingResponse
 import org.techtown.diffuser.response.pupular.PopularMoviesResponse
 import org.techtown.diffuser.response.detail.cast.CastResult
+import org.techtown.diffuser.response.search.SearchResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -44,4 +45,11 @@ interface RetrofitService {
         @Query("page") page : Int,
         @Query("region") region : String
     ) : Upcomming
+
+    @GET("3/search/movie")
+    suspend fun  getSearch(
+        @Query("language") language: String,
+        @Query("page") page : Int,
+        @Query("query") query: String
+    ) : SearchResponse
 }

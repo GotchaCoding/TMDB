@@ -12,9 +12,8 @@ import com.bumptech.glide.Glide
 import org.techtown.diffuser.R
 import org.techtown.diffuser.model.Movie
 
-class HorizontalNowPlayingAdapter(private val ItemClickListener :  (View, Int, Movie?) -> Unit ) :
-    ListAdapter<Movie,NowMovieViewHolder>(diffUtil_movie) {
-
+class HorizontalNowPlayingAdapter(private val ItemClickListener: (View, Int, Movie?) -> Unit) :
+    ListAdapter<Movie, NowMovieViewHolder>(diffUtil_movie) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NowMovieViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -31,33 +30,29 @@ class HorizontalNowPlayingAdapter(private val ItemClickListener :  (View, Int, M
         return currentList.size
     }
 
-
 }
-class NowMovieViewHolder(itemView: View, private val ItemClickListener :  (View, Int, Movie?) -> Unit) :
+
+class NowMovieViewHolder(
+    itemView: View,
+    private val ItemClickListener: (View, Int, Movie?) -> Unit
+) :
     RecyclerView.ViewHolder(itemView) {
 
-        var title: TextView
-        var rank: TextView
-        var image: ImageView
+    var title: TextView = itemView.findViewById(R.id.tvNowTitle)
+    var rank: TextView = itemView.findViewById(R.id.tvNowGenre)
+    var image: ImageView = itemView.findViewById(R.id.imgNow)
 
+    fun setItem(item: Movie) {
+        title.text = item.title
+        rank.text = item.rank
+        Glide.with(itemView).load("https://image.tmdb.org/t/p/w500" + item.imageDrop).into(image)
 
-        init {
-            title = itemView.findViewById(R.id.tvNowTitle)
-            rank = itemView.findViewById(R.id.tvNowGenre)
-            image = itemView.findViewById(R.id.imgNow)
+        itemView.setOnClickListener {
+            ItemClickListener(it, item.viewType, item)
         }
-
-        fun setItem(item: Movie) {
-            title.text = item.title
-            rank.text = item.rank
-            Glide.with(itemView).load("https://image.tmdb.org/t/p/w500" + item.imageDrop).into(image)
-
-            itemView.setOnClickListener {
-                ItemClickListener(it, item.viewType,item)
-            }
-        }
-
+    }
 }
+
 val diffUtil_movie = object : DiffUtil.ItemCallback<Movie>() {
     override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {
         return oldItem.id == newItem.id   // === hash 비교.       == 안에잇는 내용 컨텐츠 비교

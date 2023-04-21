@@ -1,25 +1,22 @@
 package org.techtown.diffuser.fragment.home
 
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.techtown.diffuser.Repository
 import org.techtown.diffuser.Resource
-import org.techtown.diffuser.model.*
+import org.techtown.diffuser.activity.BaseViewModel
+import org.techtown.diffuser.model.HorizontalMovieModel
+import org.techtown.diffuser.model.Movie
+import org.techtown.diffuser.model.TitleModel
+import org.techtown.diffuser.model.WrappingModel
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val repository: Repository
-) : ViewModel() {
-    private val _items: MutableLiveData<List<ItemModel>> = MutableLiveData()
-    val items: LiveData<List<ItemModel>> = _items
-    var page : Int = 1
+) : BaseViewModel() {
 
     fun fetch() {
         repository
@@ -27,7 +24,6 @@ class HomeViewModel @Inject constructor(
             .onEach { result ->
                 when (result) {
                     is Resource.Loading -> {
-
                     }
                     is Resource.Success -> {
                         val response = result.model
@@ -36,7 +32,7 @@ class HomeViewModel @Inject constructor(
                                 title = it.title,
                                 rank = it.releaseDate,
                                 imagePoster = it.posterPath,
-                                viewType =  HomeAdapter.VIEW_TYPE_POPULAR_MOVIE,
+                                viewType = HomeAdapter.VIEW_TYPE_POPULAR_MOVIE,
                                 id = it.id
                             )
                         }
@@ -84,18 +80,15 @@ class HomeViewModel @Inject constructor(
             .onEach { result ->
                 when (result) {
                     is Resource.Loading -> {
-                        Log.d("test", "로딩")
                     }
                     is Resource.Success -> {
-                        Log.d("test", "성공")
                         val response = result.model
-
                         val list = response.results.map {
                             Movie(
                                 title = it.title,
                                 rank = it.releaseDate,
                                 imageDrop = it.backdropPath,
-                                viewType =  HomeAdapter.VIEW_TYPE_NOW_MOVIE,
+                                viewType = HomeAdapter.VIEW_TYPE_NOW_MOVIE,
                                 id = it.id
                             )
                         }
@@ -119,7 +112,6 @@ class HomeViewModel @Inject constructor(
                         }
                     }
                     is Resource.Fail -> {
-                        Log.d("test", "실패")
                         _items.value = _items.value!!.mapIndexed { index, itemModel ->
                             if (index == 3 && itemModel is WrappingModel) {
                                 itemModel.copy(
@@ -133,7 +125,6 @@ class HomeViewModel @Inject constructor(
                                 itemModel
                             }
                         }
-
                     }
                 }
             }.launchIn(viewModelScope)
@@ -157,14 +148,11 @@ class HomeViewModel @Inject constructor(
                                 id = it.id
                             )
                         }
-                        val horizontalPopularModel =
-                            HorizontalMovieModel(
-                                list,
-                                HomeAdapter.VIEW_TYPE_UPCOMMING,
-                                id = HomeFragment.RECYCLERVIEW_ID_COMMING
-                            )
-                        Log.d("testtest", horizontalPopularModel.id.toString())
-                        Log.d("testtest2", (horizontalPopularModel as ItemModel).id.toString())
+                        val horizontalPopularModel = HorizontalMovieModel(
+                            list,
+                            HomeAdapter.VIEW_TYPE_UPCOMMING,
+                            id = HomeFragment.RECYCLERVIEW_ID_COMMING
+                        )
 
                         _items.value = _items.value!!.mapIndexed { index, itemModel ->
                             if (index == 5 && itemModel is WrappingModel) {
@@ -201,17 +189,32 @@ class HomeViewModel @Inject constructor(
 
     init {
         val defaultList = listOf(
-            TitleModel("인기영화", TheMore.THEMORE_POPULAR, HomeAdapter.VIEW_TYPE_TITLE, HomeFragment.RECYCLERVIEW_ID_TITME),
+            TitleModel(
+                "인기영화",
+                TheMore.THEMORE_POPULAR,
+                HomeAdapter.VIEW_TYPE_TITLE,
+                HomeFragment.RECYCLERVIEW_ID_TITME
+            ),
             WrappingModel(
                 true, null,
                 HomeAdapter.VIEW_TYPE_POPULAR_MOVIE, id = HomeFragment.RECYCLERVIEW_ID_POPULAR
             ),
-            TitleModel("상영중 영화", TheMore.THEMORE_NOW, HomeAdapter.VIEW_TYPE_TITLE, HomeFragment.RECYCLERVIEW_ID_TITME),
+            TitleModel(
+                "상영중 영화",
+                TheMore.THEMORE_NOW,
+                HomeAdapter.VIEW_TYPE_TITLE,
+                HomeFragment.RECYCLERVIEW_ID_TITME
+            ),
             WrappingModel(
                 true, null,
                 HomeAdapter.VIEW_TYPE_NOW_MOVIE, id = HomeFragment.RECYCLERVIEW_ID_NOW
             ),
-            TitleModel("개봉 예정", TheMore.THEMORE_COMMING , HomeAdapter.VIEW_TYPE_TITLE, HomeFragment.RECYCLERVIEW_ID_TITME),
+            TitleModel(
+                "개봉 예정",
+                TheMore.THEMORE_COMMING,
+                HomeAdapter.VIEW_TYPE_TITLE,
+                HomeFragment.RECYCLERVIEW_ID_TITME
+            ),
             WrappingModel(
                 true, null,
                 HomeAdapter.VIEW_TYPE_POPULAR_MOVIE, id = HomeFragment.RECYCLERVIEW_ID_COMMING
@@ -219,5 +222,4 @@ class HomeViewModel @Inject constructor(
         )
         _items.value = defaultList
     }
-
 }

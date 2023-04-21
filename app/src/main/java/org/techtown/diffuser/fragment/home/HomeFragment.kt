@@ -2,7 +2,6 @@ package org.techtown.diffuser.fragment.home
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,40 +10,22 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import dagger.hilt.android.AndroidEntryPoint
-import org.techtown.diffuser.R
 import org.techtown.diffuser.activity.detailpage.PopularDetailActivity
 import org.techtown.diffuser.activity.moreview.comming.CommingMoreActivity
 import org.techtown.diffuser.activity.moreview.nowplay.NowplayMoreActivity
 import org.techtown.diffuser.activity.moreview.popular.PopularMoreActivity
-import org.techtown.diffuser.clickInterface.MoreviewClick
+import org.techtown.diffuser.clickInterface.MoreViewClick
 import org.techtown.diffuser.databinding.ActivityHomeFragmentBinding
 import org.techtown.diffuser.fragment.home.HomeAdapter.Companion.VIEW_TYPE_NOW_MOVIE
 import org.techtown.diffuser.fragment.home.HomeAdapter.Companion.VIEW_TYPE_POPULAR_MOVIE
 import org.techtown.diffuser.fragment.home.HomeAdapter.Companion.VIEW_TYPE_UPCOMMING
-import org.techtown.diffuser.retrofit.RetrofitService
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     lateinit var binding: ActivityHomeFragmentBinding
     private lateinit var adapter: HomeAdapter
 
-    lateinit var swipe: SwipeRefreshLayout
-
-
     private val viewModel: HomeViewModel by viewModels()
-
-    @Inject
-    lateinit var service: RetrofitService
-//    private var service = retrofit.create(RetrofitInterface::class.java)
-//    private var items: List<ItemModel> = listOf()
-
-    companion object {
-        const val RECYCLERVIEW_ID_POPULAR = -1L
-        const val RECYCLERVIEW_ID_TITME = -2L
-        const val RECYCLERVIEW_ID_NOW = -3L
-        const val RECYCLERVIEW_ID_COMMING = -4L
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,44 +33,31 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         savedInstanceState: Bundle?
     ): View {
         binding = ActivityHomeFragmentBinding.inflate(inflater, container, false)
-
-        swipe = binding.swipe
-        swipe.setOnRefreshListener {
-            onRefresh()
-            swipe.isRefreshing = false
-        }
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initView()
-        viewModel.fetch()
-        viewModel.fetch2()
-        viewModel.fetchUpcomming()
-        Log.e("test", "service infragmetn : $service")
+        initObserver()
+        fetchAll()
+    }
 
+    private fun initObserver() {
         viewModel.items.observe(viewLifecycleOwner) { items ->
             adapter.submitList(items)
-
-
         }
     }
 
+    private fun initView() = with(binding) {
+        swipe.setOnRefreshListener {
+            onRefresh()
+            swipe.isRefreshing = false
+        }
+        val layoutManager = LinearLayoutManager(context)
 
-    /**
-     **  클릭리스너 --> 람다
-     */
-
-
-    private fun initView() {
-        with(binding) {
-            val layoutManager = LinearLayoutManager(context)
-
-
-            adapter = HomeAdapter({ view, viewType, movie ->
+        adapter = HomeAdapter(
+            itemClickListener = { _, viewType, movie ->
                 if (movie != null) {
                     val intent = Intent(context, PopularDetailActivity::class.java)
                     intent.putExtra("movie_id", movie.id)
@@ -107,7 +75,8 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                         viewModel.fetchUpcomming()
                     }
                 }
-            }, object : MoreviewClick {
+            },
+            moreViewClick = object : MoreViewClick {
                 override fun onClick(theMore: TheMore) {
                     when (theMore) {
                         TheMore.THEMORE_POPULAR -> {
@@ -128,14 +97,11 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
                 }
             })
-            recyclerview.adapter = adapter
-            recyclerview.layoutManager = layoutManager
-        }
-
-
+        recyclerview.adapter = adapter
+        recyclerview.layoutManager = layoutManager
     }
 
-    fun fetchAll() {
+    private fun fetchAll() {
         viewModel.fetch()
         viewModel.fetch2()
         viewModel.fetchUpcomming()
@@ -145,10 +111,16 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         fetchAll()
     }
 
+    companion object {
+        const val RECYCLERVIEW_ID_POPULAR = -1L
+        const val RECYCLERVIEW_ID_TITME = -2L
+        const val RECYCLERVIEW_ID_NOW = -3L
+        const val RECYCLERVIEW_ID_COMMING = -4L
+    }
 }
 
 
-enum class TheMore() {
+enum class TheMore {
     THEMORE_POPULAR,
     THEMORE_NOW,
     THEMORE_COMMING

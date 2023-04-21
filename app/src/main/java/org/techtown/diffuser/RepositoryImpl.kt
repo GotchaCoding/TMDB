@@ -6,6 +6,7 @@ import org.techtown.diffuser.response.detail.cast.CastResult
 import org.techtown.diffuser.response.detail.detailmovie.DetailPage_3
 import org.techtown.diffuser.response.nowplaying.NowPlayingResponse
 import org.techtown.diffuser.response.pupular.PopularMoviesResponse
+import org.techtown.diffuser.response.search.SearchResponse
 import org.techtown.diffuser.retrofit.RetrofitService
 import javax.inject.Inject
 
@@ -38,6 +39,14 @@ class RepositoryImpl @Inject constructor(
 
     override fun getUpComming(page : Int): Flow<Resource<Upcomming>> = callApi {
         service.getUpcomming("ko", page, "KR")
+    }
+
+    override fun getSearch(title: String): Flow<Resource<SearchResponse>> {
+        return callApi(
+            responseFunction = {
+                service.getSearch("ko", 1, title)
+            }
+        )
     }
 
 }

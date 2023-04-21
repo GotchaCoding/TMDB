@@ -160,13 +160,16 @@ class DetailAdapter(val ItemClickListener :  (View, Int, Movie?) -> Unit) :
     class TitleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         var tvTitle: TextView
+        var tvMoreview : TextView
 
         init {
             tvTitle = itemView.findViewById(R.id.tvTitle)
+            tvMoreview = itemView.findViewById(R.id.tvMoreview)
         }
 
         fun setItem(item: TitleModel) {
             tvTitle.text = item.title
+            tvMoreview.text = ""
         }
     }
 
