@@ -221,5 +221,5 @@ class HomeViewModel @Inject constructor(
             )
         )
         _items.value = defaultList
-    }
+}
 }

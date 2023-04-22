@@ -20,17 +20,10 @@ class PopularMoreAdapter : ListAdapter<ItemModel, RecyclerView.ViewHolder>(diffU
 
     class MoreViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        var image: ImageView
-        var title: TextView
-        var date: TextView
-        var contents: TextView
-
-        init {
-            image = itemView.findViewById(R.id.imgMore)
-            title = itemView.findViewById(R.id.tvMoreTitle)
-            date = itemView.findViewById(R.id.tvMoreDate)
-            contents = itemView.findViewById(R.id.tvMoreContent)
-        }
+        var image: ImageView = itemView.findViewById(R.id.imgMore)
+        var title: TextView = itemView.findViewById(R.id.tvMoreTitle)
+        var date: TextView = itemView.findViewById(R.id.tvMoreDate)
+        var contents: TextView = itemView.findViewById(R.id.tvMoreContent)
 
         fun setItem(item: Movie) {
             title.text = item.title
@@ -38,7 +31,6 @@ class PopularMoreAdapter : ListAdapter<ItemModel, RecyclerView.ViewHolder>(diffU
                 .into(image)
             date.text = item.rank
             contents.text = item.overView
-
         }
     }
 
@@ -74,7 +66,6 @@ class PopularMoreAdapter : ListAdapter<ItemModel, RecyclerView.ViewHolder>(diffU
     override fun getItemCount(): Int {
         return currentList.size
     }
-
 }
 
 val diffUtil3 = object : DiffUtil.ItemCallback<ItemModel>() {

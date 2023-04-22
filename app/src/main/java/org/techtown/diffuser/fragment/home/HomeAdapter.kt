@@ -51,7 +51,7 @@ class HomeAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val itemModel = currentList[position]
+            val itemModel = currentList[position]
         when (itemModel.viewType) {
             VIEW_TYPE_TITLE -> {
                 if (itemModel is TitleModel) {

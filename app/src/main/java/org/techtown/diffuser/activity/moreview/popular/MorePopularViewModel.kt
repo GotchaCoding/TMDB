@@ -39,7 +39,7 @@ class MorePopularViewModel @Inject constructor(
                             )
                         }
                         page++
-                        _items.value = _items.value!! + list
+                        _items.value = pureItems() + list
                     }
                     is Resource.Fail -> {
                     }

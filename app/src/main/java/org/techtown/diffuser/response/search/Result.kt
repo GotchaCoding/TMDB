@@ -11,7 +11,7 @@ data class Result(
     @SerializedName("genre_ids")
     val genreIds: List<Int> = listOf(),
     @SerializedName("id")
-    val id: Int = 0,
+    val id: Long = 0,
     @SerializedName("original_language")
     val originalLanguage: String = "",
     @SerializedName("original_title")

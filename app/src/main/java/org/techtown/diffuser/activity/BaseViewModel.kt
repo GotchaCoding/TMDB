@@ -12,6 +12,7 @@ open class BaseViewModel : ViewModel(){
     protected val _items: MutableLiveData<List<ItemModel>> = MutableLiveData(listOf())
     val items: LiveData<List<ItemModel>> = _items
     var page: Int = 1
+    var editText : String = "슬램덩크"
 
     fun pureItems(): List<ItemModel> {
         return _items.value!!.filter {

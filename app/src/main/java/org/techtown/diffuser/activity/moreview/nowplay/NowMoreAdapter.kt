@@ -20,17 +20,10 @@ import org.techtown.diffuser.model.Movie
 class NowMoreAdapter : ListAdapter<ItemModel, RecyclerView.ViewHolder>(diffUtil4) {
 
     class NowMoreViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var image: ImageView
-        var title: TextView
-        var date: TextView
-        var contents: TextView
-
-        init {
-            image = itemView.findViewById(R.id.imgMore)
-            title = itemView.findViewById(R.id.tvMoreTitle)
-            date = itemView.findViewById(R.id.tvMoreDate)
-            contents = itemView.findViewById(R.id.tvMoreContent)
-        }
+        var image: ImageView = itemView.findViewById(R.id.imgMore)
+        var title: TextView = itemView.findViewById(R.id.tvMoreTitle)
+        var date: TextView = itemView.findViewById(R.id.tvMoreDate)
+        var contents: TextView = itemView.findViewById(R.id.tvMoreContent)
 
         fun setItem(item: Movie) {
             title.text = item.title
@@ -38,7 +31,6 @@ class NowMoreAdapter : ListAdapter<ItemModel, RecyclerView.ViewHolder>(diffUtil4
                 .into(image)
             date.text = item.rank
             contents.text = item.overView
-
         }
     }
 
@@ -61,9 +53,9 @@ class NowMoreAdapter : ListAdapter<ItemModel, RecyclerView.ViewHolder>(diffUtil4
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-       if (holder is NowMoreViewHolder) {
-           holder.setItem(currentList[position] as Movie)
-       }
+        if (holder is NowMoreViewHolder) {
+            holder.setItem(currentList[position] as Movie)
+        }
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -73,12 +65,12 @@ class NowMoreAdapter : ListAdapter<ItemModel, RecyclerView.ViewHolder>(diffUtil4
 
 val diffUtil4 = object : DiffUtil.ItemCallback<ItemModel>() {
     override fun areItemsTheSame(oldItem: ItemModel, newItem: ItemModel): Boolean {
-        Log.d("4.20" , "areItemsTheSame")
+        Log.d("4.20", "areItemsTheSame")
         return oldItem.id == newItem.id
     }
 
     override fun areContentsTheSame(oldItem: ItemModel, newItem: ItemModel): Boolean {
-        Log.d("4.20" , "areContentsTheSame")
+        Log.d("4.20", "areContentsTheSame")
         return oldItem.equals(newItem)
     }
 
