@@ -3,7 +3,6 @@ package org.techtown.diffuser.intercepter
 import okhttp3.Interceptor
 import okhttp3.Response
 import org.techtown.diffuser.BuildConfig
-import org.techtown.diffuser.application.DiffuserApp
 
 class ApiKeyIntercepter : Interceptor {
 

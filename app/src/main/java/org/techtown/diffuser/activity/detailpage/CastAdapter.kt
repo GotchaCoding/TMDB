@@ -1,6 +1,5 @@
 package org.techtown.diffuser.activity.detailpage
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,8 +11,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import org.techtown.diffuser.R
 import org.techtown.diffuser.model.CastRv
-import org.techtown.diffuser.model.HorizontalCastModel
-import org.techtown.diffuser.model.ItemModel
 
 class CastAdapter : ListAdapter<CastRv, CastAdapter.CastingViewHolder>(diffUtil2) {
 

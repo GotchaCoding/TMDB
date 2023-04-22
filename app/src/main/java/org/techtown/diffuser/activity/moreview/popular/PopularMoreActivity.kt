@@ -1,13 +1,11 @@
 package org.techtown.diffuser.activity.moreview.popular
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
-import org.techtown.diffuser.R
-import org.techtown.diffuser.activity.detailpage.DetailAdapter
 import org.techtown.diffuser.databinding.ActivityPopularMoreViewBinding
 
 

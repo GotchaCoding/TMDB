@@ -12,7 +12,6 @@ import com.bumptech.glide.Glide
 import org.techtown.diffuser.R
 import org.techtown.diffuser.activity.moreview.BottomLoadingViewHolder
 import org.techtown.diffuser.activity.moreview.popular.Constants
-import org.techtown.diffuser.activity.moreview.popular.PopularMoreAdapter
 import org.techtown.diffuser.fragment.home.HomeAdapter
 import org.techtown.diffuser.model.ItemModel
 import org.techtown.diffuser.model.Movie
@@ -42,16 +41,16 @@ class CommingMoreAdapter : ListAdapter<ItemModel, RecyclerView.ViewHolder>(diffU
         }
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        when (viewType) {
+        return when (viewType) {
             Constants.VIEW_TYPE_BOTTOM_MODEL -> {
                 val inflater = LayoutInflater.from(parent.context)
                 val itemView = inflater.inflate(R.layout.item_bottom_loading, parent, false)
-                return BottomLoadingViewHolder(itemView)
+                BottomLoadingViewHolder(itemView)
             }
             HomeAdapter.VIEW_TYPE_UPCOMMING -> {
                 val inflater = LayoutInflater.from(parent.context)
                 val itemView = inflater.inflate(R.layout.item_themore, parent, false)
-                return MoreCommingViewHolder(itemView)
+                MoreCommingViewHolder(itemView)
             }
             else -> {
                 throw Exception()

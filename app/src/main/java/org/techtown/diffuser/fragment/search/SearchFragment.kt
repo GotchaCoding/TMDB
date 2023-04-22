@@ -1,19 +1,12 @@
 package org.techtown.diffuser.fragment.search
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import dagger.hilt.android.AndroidEntryPoint
-import org.techtown.diffuser.R
-import org.techtown.diffuser.databinding.ActivityHomeFragmentBinding
 import org.techtown.diffuser.databinding.ActivitySearchFragmentBinding
-import org.techtown.diffuser.fragment.home.HomeAdapter
 
 @AndroidEntryPoint
 class SearchFragment : Fragment() {

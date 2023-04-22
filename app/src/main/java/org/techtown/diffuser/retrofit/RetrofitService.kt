@@ -1,10 +1,10 @@
 package org.techtown.diffuser.retrofit
 
 import org.techtown.diffuser.response.Upcomming
+import org.techtown.diffuser.response.detail.cast.CastResult
 import org.techtown.diffuser.response.detail.detailmovie.DetailPage_3
 import org.techtown.diffuser.response.nowplaying.NowPlayingResponse
 import org.techtown.diffuser.response.pupular.PopularMoviesResponse
-import org.techtown.diffuser.response.detail.cast.CastResult
 import org.techtown.diffuser.response.search.SearchResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -14,7 +14,7 @@ interface RetrofitService {
 
     @GET("/3/movie/popular")
     suspend fun getPopularMovie(
-        @Query("language") lnaguage : String,
+        @Query("language") language : String,
         @Query("page") page : Int,
         @Query("region") region : String
     ) : PopularMoviesResponse
@@ -25,7 +25,6 @@ interface RetrofitService {
         @Query("page") page : Int,
         @Query("region") region : String
     ) : NowPlayingResponse
-
 
     @GET("/3/movie/{movie_id}")
     suspend fun getDetailPage(

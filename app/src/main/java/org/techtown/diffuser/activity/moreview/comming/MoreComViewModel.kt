@@ -43,7 +43,6 @@ class MoreComViewModel @Inject constructor(
                         _items.value = pureItems() + list
                     }
                     is Resource.Fail -> {
-
                     }
                 }
             }.launchIn(viewModelScope)

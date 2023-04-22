@@ -1,7 +1,7 @@
 package org.techtown.diffuser.activity.moreview.nowplay
 
-import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -10,7 +10,6 @@ import org.techtown.diffuser.Resource
 import org.techtown.diffuser.activity.BaseViewModel
 import org.techtown.diffuser.activity.moreview.popular.BottomLoadingModel
 import org.techtown.diffuser.fragment.home.HomeAdapter
-import org.techtown.diffuser.model.ItemModel
 import org.techtown.diffuser.model.Movie
 import javax.inject.Inject
 
@@ -46,7 +45,6 @@ class MoreNowplayViewModel @Inject constructor(
                         _items.value = pureItems() + list
                     }
                     is Resource.Fail -> {
-
                     }
                 }
             }.launchIn(viewModelScope)

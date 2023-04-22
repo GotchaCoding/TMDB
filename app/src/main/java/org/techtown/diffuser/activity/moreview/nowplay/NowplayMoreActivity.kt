@@ -1,12 +1,11 @@
 package org.techtown.diffuser.activity.moreview.nowplay
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
-import org.techtown.diffuser.R
 import org.techtown.diffuser.databinding.ActivityNowplayMoreViewBinding
 
 @AndroidEntryPoint

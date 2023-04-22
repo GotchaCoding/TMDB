@@ -88,7 +88,7 @@ class DetailViewModel @Inject constructor(
                                     postUrl = model.posterPath,
                                     backDropUrl = model.backdropPath,
                                     id = RECYCLERVIEW_ID_TOP_IN_TOP,
-                                    isfailure = false
+                                    isFailure = false
                                 ),
                                 viewType = DetailAdapter.VIEW_TYPE_DETAIL_BACKGROND,
                                 isFailure = false,
@@ -111,7 +111,7 @@ class DetailViewModel @Inject constructor(
                                     overview = "",
                                     postUrl = "",
                                     backDropUrl = "",
-                                    isfailure = true,
+                                    isFailure = true,
                                     id = RECYCLERVIEW_ID_TOP_IN_TOP,
                                     isLoading = false,
                                 ),

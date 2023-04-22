@@ -1,15 +1,13 @@
 package org.techtown.diffuser.activity.moreview.comming
 
-import android.app.Activity
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
-import org.techtown.diffuser.R
-import org.techtown.diffuser.activity.moreview.popular.PopularMoreAdapter
 import org.techtown.diffuser.databinding.ActivityCommingMoreViewBinding
+
 @AndroidEntryPoint
 class CommingMoreActivity : AppCompatActivity() {
     lateinit var binding : ActivityCommingMoreViewBinding

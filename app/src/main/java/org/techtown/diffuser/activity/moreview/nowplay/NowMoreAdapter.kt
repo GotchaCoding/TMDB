@@ -33,7 +33,6 @@ class NowMoreAdapter : ListAdapter<ItemModel, RecyclerView.ViewHolder>(diffUtil4
         }
 
         fun setItem(item: Movie) {
-            Log.d("4.20" , "setItem")
             title.text = item.title
             Glide.with(itemView).load("https://image.tmdb.org/t/p/w500" + item.imagePoster)
                 .into(image)
@@ -44,18 +43,16 @@ class NowMoreAdapter : ListAdapter<ItemModel, RecyclerView.ViewHolder>(diffUtil4
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        Log.d("4.20" , "onCreateViewHolder")
-        Log.d("4.20" , "viewType : $viewType")
-        when (viewType) {
+        return when (viewType) {
             Constants.VIEW_TYPE_BOTTOM_MODEL -> {
                 val inflater = LayoutInflater.from(parent.context)
                 val itemView = inflater.inflate(R.layout.item_bottom_loading, parent, false)
-                return BottomLoadingViewHolder(itemView)
+                BottomLoadingViewHolder(itemView)
             }
             HomeAdapter.VIEW_TYPE_NOW_MOVIE -> {
                 val inflater = LayoutInflater.from(parent.context)
                 val itemView = inflater.inflate(R.layout.item_themore, parent, false)
-                return NowMoreViewHolder(itemView)
+                NowMoreViewHolder(itemView)
             }
             else -> {
                 throw Exception()
@@ -69,15 +66,9 @@ class NowMoreAdapter : ListAdapter<ItemModel, RecyclerView.ViewHolder>(diffUtil4
        }
     }
 
-//    override fun getItemCount(): Int {
-//        return currentList.size
-//    }
-
     override fun getItemViewType(position: Int): Int {
         return currentList[position].viewType
     }
-
-
 }
 
 val diffUtil4 = object : DiffUtil.ItemCallback<ItemModel>() {

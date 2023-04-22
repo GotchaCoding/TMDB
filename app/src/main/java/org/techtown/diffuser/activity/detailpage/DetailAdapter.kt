@@ -13,7 +13,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
 import org.techtown.diffuser.R
-import org.techtown.diffuser.model.*
+import org.techtown.diffuser.model.ItemModel
+import org.techtown.diffuser.model.Movie
+import org.techtown.diffuser.model.TitleModel
+import org.techtown.diffuser.model.WrappingDetailModel
 
 class DetailAdapter(val ItemClickListener :  (View, Int, Movie?) -> Unit) :
     ListAdapter<ItemModel, RecyclerView.ViewHolder>(diffUtil) {
@@ -95,7 +98,7 @@ class DetailAdapter(val ItemClickListener :  (View, Int, Movie?) -> Unit) :
             if (item.isLoading) { //로딩중
                 vLoading.isVisible = true
                 view_failure.isVisible = false
-            } else if (item.detailTopModel?.isfailure == false) { //성공
+            } else if (item.detailTopModel?.isFailure == false) { //성공
                 vLoading.isVisible = false
                 view_failure.isVisible = false
                 Glide.with(itemView)
@@ -147,7 +150,7 @@ class DetailAdapter(val ItemClickListener :  (View, Int, Movie?) -> Unit) :
                 vLoading.isVisible = item.isLoading
 
                 if (item.castModel != null) {
-                    adapter.submitList(item.castModel.castlist)
+                    adapter.submitList(item.castModel.castList)
 
                 }
             }

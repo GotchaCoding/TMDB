@@ -1,6 +1,6 @@
 package org.techtown.diffuser.activity.moreview.popular
 
-import androidx.lifecycle.*
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -42,8 +42,6 @@ class MorePopularViewModel @Inject constructor(
                         _items.value = _items.value!! + list
                     }
                     is Resource.Fail -> {
-
-//
                     }
                 }
             }.launchIn(viewModelScope)
