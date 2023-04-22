@@ -1,6 +1,5 @@
 package org.techtown.diffuser.fragment.search
 
-import android.content.Context
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -8,15 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import org.techtown.diffuser.databinding.ActivitySearchFragmentBinding
-import org.techtown.diffuser.fragment.home.HomeAdapter
-import org.techtown.diffuser.fragment.home.HomeViewModel
-import org.w3c.dom.Text
 
 @AndroidEntryPoint
 class SearchFragment : Fragment() {
@@ -37,28 +32,9 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        var editText = binding.btnSearch
-        var text: String = editText.text.toString()
-
-
-
-//        editText.setOnEditorActionListener(object : TextView.OnEditorActionListener {
-//            override fun onEditorAction(p0: TextView?, p1: Int, p2: KeyEvent?): Boolean {
-//                if (p1 == EditorInfo.IME_ACTION_DONE) {
-//                    var text = editText.text.toString()
-////                    viewModel.fetch(text)
-//                    Toast.makeText(context, "Welcome to GFG", Toast.LENGTH_SHORT).show()
-//                    return true
-//                }
-//                return false
-//            }
-
-//        })
         initView()
         initObserver()
-        viewModel.fetch()
-
+        viewModel.fetch("")
     }
 
     private fun initObserver() {
@@ -73,6 +49,22 @@ class SearchFragment : Fragment() {
             adapter = SearchAdapter()
             recyclerviewTheMore.adapter = adapter
             recyclerviewTheMore.layoutManager = layoutManager
+
+            edtSearch.setOnEditorActionListener(object : TextView.OnEditorActionListener {
+                override fun onEditorAction(p0: TextView?, p1: Int, p2: KeyEvent?): Boolean {
+                    if (p1 == EditorInfo.IME_ACTION_DONE) {
+                        var title: String = edtSearch.text.toString()
+                        viewModel.fetch(title)
+                        return true
+                    }
+                    return false
+                }
+            })
+
+            btnSearch.setOnClickListener{
+                var title: String = edtSearch.text.toString()
+                viewModel.fetch(title)
+            }
         }
     }
 }

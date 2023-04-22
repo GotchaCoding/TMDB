@@ -49,6 +49,6 @@ interface RetrofitService {
     suspend fun  getSearch(
         @Query("language") language: String,
         @Query("page") page : Int,
-        @Query("query") query: String
+        @Query("query") query: String,
     ) : SearchResponse
 }

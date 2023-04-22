@@ -3,7 +3,7 @@ package org.techtown.diffuser.model
  data class Movie(
     val title: String = "",
     val rank: String = "",
-    val imagePoster: String = "",
+    val imagePoster: String? = "",
     val imageDrop: String = "",
     val overView : String = "",
     override val viewType: Int,

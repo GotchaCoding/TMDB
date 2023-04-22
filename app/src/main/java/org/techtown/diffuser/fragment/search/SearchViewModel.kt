@@ -9,6 +9,8 @@ import kotlinx.coroutines.flow.onEach
 import org.techtown.diffuser.Repository
 import org.techtown.diffuser.Resource
 import org.techtown.diffuser.activity.BaseViewModel
+import org.techtown.diffuser.activity.moreview.popular.BottomLoadingModel.id
+import org.techtown.diffuser.activity.moreview.popular.BottomLoadingModel.viewType
 import org.techtown.diffuser.fragment.home.HomeAdapter
 import org.techtown.diffuser.model.Movie
 import javax.inject.Inject
@@ -16,16 +18,15 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     private val repository: Repository,
-
     ) : BaseViewModel() {
 
     init {
         _items.value = listOf()
     }
 
-    fun fetch() {
+    fun fetch(title : String) {
         repository
-            .getSearch(editText)
+            .getSearch(title)
             .onEach { result ->
                 when (result) {
                     is Resource.Loading -> {
@@ -39,14 +40,15 @@ class SearchViewModel @Inject constructor(
                                 rank = it.releaseDate,
                                 imagePoster = it.posterPath,
                                 viewType = HomeAdapter.VIEW_TYPE_POPULAR_MOVIE,
+                                overView = it.overview,
                                 id = it.id
                             )
+                        }.filter {
+                            it.imagePoster != null
                         }
-
                         _items.value = list
                     }
                     is Resource.Fail -> {
-
                     }
                 }
             }.launchIn(viewModelScope)

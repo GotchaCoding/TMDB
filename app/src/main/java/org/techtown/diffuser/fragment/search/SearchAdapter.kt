@@ -30,39 +30,28 @@ class SearchAdapter : ListAdapter<ItemModel, SearchAdapter.SearchViewHolder>(dif
             date.text = item.rank
             contents.text = item.overView
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
-        Log.d("4.22" , "onCreateViewHolder")
         val inflater = LayoutInflater.from(parent.context)
         val itemView = inflater.inflate(R.layout.item_themore, parent, false)
         return SearchViewHolder(itemView)
     }
 
     override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
-        Log.d("4.22" , "onBindViewHolder")
             holder.setItem(currentList[position] as Movie)
-
     }
 
     override fun getItemViewType(position: Int): Int {
-        Log.d("4.22" , "getItemViewType")
         return currentList[position].viewType
     }
 }
 
-
-
     val diffUtil_search = object : DiffUtil.ItemCallback<ItemModel>() {
         override fun areItemsTheSame(oldItem: ItemModel, newItem: ItemModel): Boolean {
-            Log.d("4.22" , "areItemsTheSame")
-
             return oldItem.id == newItem.id
         }
-
         override fun areContentsTheSame(oldItem: ItemModel, newItem: ItemModel): Boolean {
-            Log.d("4.22" , "areContentsTheSame")
             return oldItem.equals(newItem)
         }
     }

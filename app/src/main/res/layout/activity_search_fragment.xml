@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/viewConst"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="50dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -18,9 +18,12 @@
     <EditText
         android:id="@+id/edtSearch"
         android:layout_width="300dp"
-        android:layout_height="40dp"
+        android:layout_height="50dp"
+        android:hint="영화 제목을 입력해 주세요"
+        android:textColorHint="@color/white"
         android:textColor="@color/white"
         android:textSize="16sp"
+        android:inputType="text"
         android:imeOptions="actionDone"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
