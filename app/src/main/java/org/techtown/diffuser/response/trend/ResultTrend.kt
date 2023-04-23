@@ -1,9 +1,9 @@
-package org.techtown.diffuser.response
+package org.techtown.diffuser.response.trend
 
 
 import com.google.gson.annotations.SerializedName
 
-data class Result(
+data class ResultTrend(
     @SerializedName("adult")
     val adult: Boolean = false,
     @SerializedName("backdrop_path")
@@ -12,6 +12,8 @@ data class Result(
     val genreIds: List<Int> = listOf(),
     @SerializedName("id")
     val id: Long = 0,
+    @SerializedName("media_type")
+    val mediaType: String = "",
     @SerializedName("original_language")
     val originalLanguage: String = "",
     @SerializedName("original_title")

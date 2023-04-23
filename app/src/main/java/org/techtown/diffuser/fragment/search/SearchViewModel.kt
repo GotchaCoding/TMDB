@@ -1,6 +1,9 @@
 package org.techtown.diffuser.fragment.search
 
+import android.content.Intent
 import android.widget.EditText
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,19 +15,23 @@ import org.techtown.diffuser.activity.BaseViewModel
 import org.techtown.diffuser.activity.moreview.popular.BottomLoadingModel.id
 import org.techtown.diffuser.activity.moreview.popular.BottomLoadingModel.viewType
 import org.techtown.diffuser.fragment.home.HomeAdapter
+import org.techtown.diffuser.model.ItemModel
 import org.techtown.diffuser.model.Movie
+import org.techtown.diffuser.response.trend.ResultTrend
 import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     private val repository: Repository,
-    ) : BaseViewModel() {
-
+) : BaseViewModel() {
+    val _trendItems: MutableLiveData<List<ResultTrend>> = MutableLiveData(listOf())
+    val trendItems: LiveData<List<ResultTrend>> = _trendItems
     init {
         _items.value = listOf()
+
     }
 
-    fun fetch(title : String) {
+    fun fetch(title: String) {
         repository
             .getSearch(title)
             .onEach { result ->
@@ -47,6 +54,37 @@ class SearchViewModel @Inject constructor(
                             it.imagePoster != null
                         }
                         _items.value = list
+                    }
+                    is Resource.Fail -> {
+                    }
+                }
+            }.launchIn(viewModelScope)
+    }
+
+    fun fetchTrend() {
+        repository
+            .getTrend()
+            .onEach { result ->
+                when (result) {
+                    is Resource.Loading -> {
+                    }
+                    is Resource.Success -> {
+                        val response = result.model
+
+                        val test = response.results
+                        _trendItems.value =   _trendItems.value!! + test
+
+
+                        val list = response.results.map {
+                            Movie(
+                                title = it.title,
+                                rank = it.releaseDate,
+                                imagePoster = it.posterPath,
+                                viewType = HomeAdapter.VIEW_TYPE_POPULAR_MOVIE,
+                                overView = it.overview,
+                                id = it.id
+                            )
+                        }
                     }
                     is Resource.Fail -> {
                     }

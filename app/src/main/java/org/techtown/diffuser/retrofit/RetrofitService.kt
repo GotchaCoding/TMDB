@@ -1,11 +1,12 @@
 package org.techtown.diffuser.retrofit
 
-import org.techtown.diffuser.response.Upcomming
+import org.techtown.diffuser.response.upcomming.Upcomming
 import org.techtown.diffuser.response.detail.cast.CastResult
 import org.techtown.diffuser.response.detail.detailmovie.DetailPage_3
 import org.techtown.diffuser.response.nowplaying.NowPlayingResponse
 import org.techtown.diffuser.response.pupular.PopularMoviesResponse
 import org.techtown.diffuser.response.search.SearchResponse
+import org.techtown.diffuser.response.trend.TrendResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -46,9 +47,14 @@ interface RetrofitService {
     ) : Upcomming
 
     @GET("3/search/movie")
-    suspend fun  getSearch(
+    suspend fun getSearch(
         @Query("language") language: String,
         @Query("page") page : Int,
         @Query("query") query: String,
     ) : SearchResponse
+
+    @GET("3/trending/movie/day")
+    suspend fun getTrend(
+        @Query("language") language: String
+    ) : TrendResponse
 }

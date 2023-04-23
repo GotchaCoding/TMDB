@@ -14,16 +14,15 @@ import org.techtown.diffuser.R
 import org.techtown.diffuser.model.ItemModel
 import org.techtown.diffuser.model.Movie
 
-class SearchAdapter : ListAdapter<ItemModel, SearchAdapter.SearchViewHolder>(diffUtil_search){
+class SearchAdapter : ListAdapter<ItemModel, SearchAdapter.SearchViewHolder>(diffUtil_search) {
 
-    class SearchViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
+    class SearchViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var image: ImageView = itemView.findViewById(R.id.imgMore)
         var title: TextView = itemView.findViewById(R.id.tvMoreTitle)
         var date: TextView = itemView.findViewById(R.id.tvMoreDate)
         var contents: TextView = itemView.findViewById(R.id.tvMoreContent)
 
         fun setItem(item: Movie) {
-            Log.d("4.22" , "setItem")
             title.text = item.title
             Glide.with(itemView).load("https://image.tmdb.org/t/p/w500" + item.imagePoster)
                 .into(image)
@@ -39,7 +38,7 @@ class SearchAdapter : ListAdapter<ItemModel, SearchAdapter.SearchViewHolder>(dif
     }
 
     override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
-            holder.setItem(currentList[position] as Movie)
+        holder.setItem(currentList[position] as Movie)
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -47,11 +46,12 @@ class SearchAdapter : ListAdapter<ItemModel, SearchAdapter.SearchViewHolder>(dif
     }
 }
 
-    val diffUtil_search = object : DiffUtil.ItemCallback<ItemModel>() {
-        override fun areItemsTheSame(oldItem: ItemModel, newItem: ItemModel): Boolean {
-            return oldItem.id == newItem.id
-        }
-        override fun areContentsTheSame(oldItem: ItemModel, newItem: ItemModel): Boolean {
-            return oldItem.equals(newItem)
-        }
+val diffUtil_search = object : DiffUtil.ItemCallback<ItemModel>() {
+    override fun areItemsTheSame(oldItem: ItemModel, newItem: ItemModel): Boolean {
+        return oldItem.id == newItem.id
     }
+
+    override fun areContentsTheSame(oldItem: ItemModel, newItem: ItemModel): Boolean {
+        return oldItem.equals(newItem)
+    }
+}

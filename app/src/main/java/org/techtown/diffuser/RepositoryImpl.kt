@@ -1,12 +1,13 @@
 package org.techtown.diffuser
 
 import kotlinx.coroutines.flow.Flow
-import org.techtown.diffuser.response.Upcomming
+import org.techtown.diffuser.response.upcomming.Upcomming
 import org.techtown.diffuser.response.detail.cast.CastResult
 import org.techtown.diffuser.response.detail.detailmovie.DetailPage_3
 import org.techtown.diffuser.response.nowplaying.NowPlayingResponse
 import org.techtown.diffuser.response.pupular.PopularMoviesResponse
 import org.techtown.diffuser.response.search.SearchResponse
+import org.techtown.diffuser.response.trend.TrendResponse
 import org.techtown.diffuser.retrofit.RetrofitService
 import javax.inject.Inject
 
@@ -45,6 +46,14 @@ class RepositoryImpl @Inject constructor(
         return callApi(
             responseFunction = {
                 service.getSearch("ko", 1, title)
+            }
+        )
+    }
+
+    override fun getTrend(): Flow<Resource<TrendResponse>> {
+        return callApi(
+            responseFunction = {
+                service.getTrend("ko")
             }
         )
     }
