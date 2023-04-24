@@ -1,18 +1,21 @@
 package org.techtown.diffuser.fragment.search
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
+import org.techtown.diffuser.MainActivity
 import org.techtown.diffuser.R
 import org.techtown.diffuser.databinding.ActivitySearchFragmentBinding
 
@@ -46,6 +49,7 @@ class SearchFragment : Fragment() {
         viewModel.fetch("")
         viewModel.fetchTrend()
         titleClick()
+        attachBackPressedCallback()
     }
 
     private fun initObserver() {
@@ -56,7 +60,7 @@ class SearchFragment : Fragment() {
 
     private fun initTrendObserver() {
         viewModel.trendItems.observe(viewLifecycleOwner) {
-            var size = viewModel.trendItems.value!!.size
+            val size = viewModel.trendItems.value!!.size
             if (size >= 1) {
                 oneTitle = viewModel.trendItems.value!!.get(0).title
                 twoTitle = viewModel.trendItems.value!!.get(1).title
@@ -80,7 +84,7 @@ class SearchFragment : Fragment() {
             edtSearch.setOnEditorActionListener(object : TextView.OnEditorActionListener {
                 override fun onEditorAction(p0: TextView?, p1: Int, p2: KeyEvent?): Boolean {
                     if (p1 == EditorInfo.IME_ACTION_DONE) {
-                        var title: String = edtSearch.text.toString()
+                        val title: String = edtSearch.text.toString()
                         viewModel.fetch(title)
                         tvHint.isVisible = false
                         return true
@@ -89,27 +93,42 @@ class SearchFragment : Fragment() {
                 }
             })
             btnSearch.setOnClickListener {
-                var title: String = edtSearch.text.toString()
+                val title: String = edtSearch.text.toString()
                 viewModel.fetch(title)
                 tvHint.isVisible = false
             }
             tvHint.bringToFront()
+            animation()
         }
     }
 
-    fun titleClick() = with(binding) {
+    private fun titleClick() = with(binding) {
         tvFirst.setOnClickListener {
             edtSearch.setText(oneTitle)
         }
         tvSecond.setOnClickListener {
-            edtSearch.setText(threeTitle)
+            edtSearch.setText(twoTitle)
         }
         tvThird.setOnClickListener {
-            edtSearch.setText(twoTitle)
+            edtSearch.setText(threeTitle)
         }
         tvFour.setOnClickListener {
             edtSearch.setText(fourTitle)
         }
     }
-    
+
+    private fun animation() {
+        val animation = AnimationUtils.loadAnimation(context, R.anim.alpha)
+        binding.tvHint.startAnimation(animation)
+    }
+
+    private fun attachBackPressedCallback() {
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+//            requireActivity().supportFragmentManager.popBackStack()
+                return
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+    }
 }
