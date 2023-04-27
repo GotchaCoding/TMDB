@@ -11,6 +11,6 @@ import org.techtown.diffuser.RepositoryImpl
 @InstallIn(SingletonComponent::class)
 abstract class RepositoryModule {
 
-    @Binds
-    abstract fun provideRepository(repository: RepositoryImpl): Repository
+    @Binds// 라이브러리처럼 외부에서 생서자 받아와서 제어 할 수 없으면 provide .  제어가능하면 bind
+    abstract fun provideRepository(repositoryImpl: RepositoryImpl): Repository // RepositoryImpl 부분에 provide or onbind 없는데 생성자로 주입 가능?
 }

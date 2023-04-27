@@ -26,7 +26,6 @@ class CommingMoreActivity : AppCompatActivity() {
             adapter.submitList(it)
         }
         viewModel.fetch()
-
     }
 
     private fun initView(){

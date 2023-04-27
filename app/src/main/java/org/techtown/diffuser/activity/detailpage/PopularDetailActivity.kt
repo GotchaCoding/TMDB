@@ -16,7 +16,6 @@ class PopularDetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshL
 
     lateinit var swipe: SwipeRefreshLayout
 
-
     private val viewModel: DetailViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,7 +28,6 @@ class PopularDetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshL
 //        viewModel.items.observe(this, Observer<List<ItemModel>> {test:List<ItemModel> -> adapter.submitList(test) })
         viewModel.items.observe(this@PopularDetailActivity) { items ->
             adapter.submitList(items)
-
         }
     }
 
@@ -45,7 +43,6 @@ class PopularDetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshL
                     viewModel.fetchCast()
                 }
             }
-
         }
         binding.recyclerviewDetail.adapter = adapter
         binding.recyclerviewDetail.layoutManager = layoutManager
@@ -65,5 +62,4 @@ class PopularDetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshL
     override fun onRefresh() {
         fetchAll()
     }
-
 }

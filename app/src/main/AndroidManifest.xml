@@ -59,11 +59,11 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
+            android:exported="true"> <!--다른 앱에 의해서 해당 액티비티가 실행될 수 있는지 없는지를 나타냄.  true는 실행.-->
+            <intent-filter>  <!--암시적 인텐트. 주로 클래스명을 알수 없는 외부엡의 컴포넌트를 실행.
+            다른 앱의 액티비티 실행시 클래스명 모르므로 이렇게 필터를 담아 실행하면  이정보를 해석해서 컴포넌트를 실행. (암시적 인텐트)-->
+                <action android:name="android.intent.action.MAIN" /><!-- 컴포넌트가 어떤 능력을 갖추고 있는지에 대한 문자열입니다. 개발자가 임의로 지정하는 단어도 가능하며, 라이브러이에서 지정한 문자열을 이용해도 됩니다.-->
+                <category android:name="android.intent.category.LAUNCHER" /> <!--컴포넌트에 대한 추가 정보로 어느 점주의 컴포넌트인지를 표현하는 데 사용됨.  -->
             </intent-filter>
 
             <meta-data

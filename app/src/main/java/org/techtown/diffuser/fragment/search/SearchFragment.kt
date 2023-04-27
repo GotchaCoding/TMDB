@@ -1,6 +1,5 @@
 package org.techtown.diffuser.fragment.search
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -15,7 +14,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
-import org.techtown.diffuser.MainActivity
 import org.techtown.diffuser.R
 import org.techtown.diffuser.databinding.ActivitySearchFragmentBinding
 

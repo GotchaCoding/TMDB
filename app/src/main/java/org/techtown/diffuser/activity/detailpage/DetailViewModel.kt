@@ -20,17 +20,7 @@ class DetailViewModel @Inject constructor(
     private val _items: MutableLiveData<List<ItemModel>> = MutableLiveData()
     val items: LiveData<List<ItemModel>> = _items
 
-
-    companion object {
-
-        const val RECYCLERVIEW_ID_TOP_IN_TOP = -1L
-        const val RECYCLERVIEW_ID_TOP = -2L
-        const val RECYCLERVIEW_ID_TITLE = -3L
-        const val RECYCLERVIEW_ID_CAST = -4L
-    }
-
     init {
-
         val topModel = DetailTopModel(
             "",
             "",
@@ -186,5 +176,12 @@ class DetailViewModel @Inject constructor(
                 }
             }
         }.launchIn(viewModelScope)
+    }
+
+    companion object {
+        const val RECYCLERVIEW_ID_TOP_IN_TOP = -1L
+        const val RECYCLERVIEW_ID_TOP = -2L
+        const val RECYCLERVIEW_ID_TITLE = -3L
+        const val RECYCLERVIEW_ID_CAST = -4L
     }
 }

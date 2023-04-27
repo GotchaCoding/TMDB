@@ -14,11 +14,11 @@ import retrofit2.http.Query
 interface RetrofitService {
 
     @GET("/3/movie/popular")
-    suspend fun getPopularMovie(
+    suspend fun getPopularMovie( //이벤트를 Flow로 처리하기위해  함수도 suspend 함수로 변경
         @Query("language") language : String,
         @Query("page") page : Int,
         @Query("region") region : String
-    ) : PopularMoviesResponse
+    ) : PopularMoviesResponse  //이벤트를 Flow로 처리하기위해 리턴타입을 call 방식에서 레트로핏 Response 타입으로 변경
 
     @GET("/3/movie/now_playing")
     suspend fun getNowPlayingMovie(

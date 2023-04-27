@@ -7,5 +7,4 @@ data class TitleModel(
     val theMore: TheMore? = null,
     override val viewType: Int,
     override val id: Long
-) : ItemModel(id, viewType) {
-}
+) : ItemModel(id, viewType)

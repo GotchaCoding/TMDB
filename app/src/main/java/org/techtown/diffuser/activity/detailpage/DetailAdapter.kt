@@ -18,9 +18,8 @@ import org.techtown.diffuser.model.Movie
 import org.techtown.diffuser.model.TitleModel
 import org.techtown.diffuser.model.WrappingDetailModel
 
-class DetailAdapter(val ItemClickListener :  (View, Int, Movie?) -> Unit) :
+class DetailAdapter(val ItemClickListener: (View, Int, Movie?) -> Unit) :
     ListAdapter<ItemModel, RecyclerView.ViewHolder>(diffUtil) {
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         when (viewType) {
@@ -70,27 +69,19 @@ class DetailAdapter(val ItemClickListener :  (View, Int, Movie?) -> Unit) :
         return currentList[position].viewType
     }
 
-
-    class BackImageViewHolder(itemView: View, val ItemClickListener :  (View, Int, Movie?) -> Unit ) :
+    class BackImageViewHolder(itemView: View, val ItemClickListener: (View, Int, Movie?) -> Unit) :
         RecyclerView.ViewHolder(itemView) {
-        var imgBackgrond: ImageView
-        var imgPoster: ImageView
-        var title: TextView
-        var overview: TextView
-        var vLoading: LottieAnimationView
-        var view_failure: TextView
+        var imgBackgrond: ImageView = itemView.findViewById(R.id.img_background)
+        var imgPoster: ImageView = itemView.findViewById(R.id.img_poster)
+        var title: TextView = itemView.findViewById(R.id.tvTitle_detail)
+        var overview: TextView = itemView.findViewById(R.id.tvOverview)
+        var vLoading: LottieAnimationView = itemView.findViewById(R.id.vLoading_topmodel)
+        var view_failure: TextView = itemView.findViewById(R.id.onFailure_detail)
 
         init {
-            imgBackgrond = itemView.findViewById(R.id.img_background)
-            imgPoster = itemView.findViewById(R.id.img_poster)
-            title = itemView.findViewById(R.id.tvTitle_detail)
-            overview = itemView.findViewById(R.id.tvOverview)
-            vLoading = itemView.findViewById(R.id.vLoading_topmodel)
             vLoading.setAnimation(R.raw.loading)
             vLoading.repeatCount = 10
             vLoading.playAnimation()
-            view_failure = itemView.findViewById(R.id.onFailure_detail)
-
         }
 
         fun setItem(item: WrappingDetailModel) {
@@ -116,22 +107,18 @@ class DetailAdapter(val ItemClickListener :  (View, Int, Movie?) -> Unit) :
                     ItemClickListener(it, VIEW_TYPE_DETAIL_BACKGROND, null)
                 }
             }
-
-
         }
     }
 
-    class CastViewHolder(itemView: View, val ItemClickListener :  (View, Int, Movie?) -> Unit ) :
+    class CastViewHolder(itemView: View, val ItemClickListener: (View, Int, Movie?) -> Unit) :
         RecyclerView.ViewHolder(itemView) {
 
-        var rvCast: RecyclerView
-        var vLoading: LottieAnimationView
+        var rvCast: RecyclerView = itemView.findViewById(R.id.rvCast)
+        var vLoading: LottieAnimationView = itemView.findViewById(R.id.vLoading)
         var adapter = CastAdapter()
         var view_failure: TextView
 
         init {
-            rvCast = itemView.findViewById(R.id.rvCast)
-            vLoading = itemView.findViewById(R.id.vLoading)
             vLoading.setAnimation(R.raw.loading)
             vLoading.repeatCount = 10
             vLoading.playAnimation()
@@ -151,7 +138,6 @@ class DetailAdapter(val ItemClickListener :  (View, Int, Movie?) -> Unit) :
 
                 if (item.castModel != null) {
                     adapter.submitList(item.castModel.castList)
-
                 }
             }
             view_failure.setOnClickListener {
@@ -162,13 +148,8 @@ class DetailAdapter(val ItemClickListener :  (View, Int, Movie?) -> Unit) :
 
     class TitleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        var tvTitle: TextView
-        var tvMoreview : TextView
-
-        init {
-            tvTitle = itemView.findViewById(R.id.tvTitle)
-            tvMoreview = itemView.findViewById(R.id.tvMoreview)
-        }
+        var tvTitle: TextView = itemView.findViewById(R.id.tvTitle)
+        var tvMoreview: TextView = itemView.findViewById(R.id.tvMoreview)
 
         fun setItem(item: TitleModel) {
             tvTitle.text = item.title

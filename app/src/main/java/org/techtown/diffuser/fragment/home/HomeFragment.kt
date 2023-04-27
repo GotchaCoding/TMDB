@@ -21,8 +21,8 @@ import org.techtown.diffuser.fragment.home.HomeAdapter.Companion.VIEW_TYPE_NOW_M
 import org.techtown.diffuser.fragment.home.HomeAdapter.Companion.VIEW_TYPE_POPULAR_MOVIE
 import org.techtown.diffuser.fragment.home.HomeAdapter.Companion.VIEW_TYPE_UPCOMMING
 
-@AndroidEntryPoint
-class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
+@AndroidEntryPoint  //프래그먼트 힐트 주입 어노테이션
+class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {  //프래그먼트 상속, 스와이프리프레시 리스너 상속
     lateinit var binding: ActivityHomeFragmentBinding
     private lateinit var adapter: HomeAdapter
 
@@ -45,43 +45,43 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         attachBackPressedCallback()
     }
 
-    private fun initObserver() {
-        viewModel.items.observe(viewLifecycleOwner) { items ->
-            adapter.submitList(items)
+    private fun initObserver() { //
+        viewModel.items.observe(viewLifecycleOwner) { items ->  // 뷰모델의 items를 관찰 : LiveData<List<ItemModel>
+            adapter.submitList(items)  //변경이 생기면 ListAdapter diffutil로  데이터 전송. --> 아이템과 컨텐츠 동일여부 판독.
         }
     }
 
     private fun initView() = with(binding) {
-        swipe.setOnRefreshListener {
-            onRefresh()
-            swipe.isRefreshing = false
+        swipe.setOnRefreshListener {      //스와이프리프레시리스너
+            onRefresh()    // 스와이프리프레시리스너 동작시 실행할 내용.
+            swipe.isRefreshing = false   // 로딩화면 제거
         }
         val layoutManager = LinearLayoutManager(context)
 
-        adapter = HomeAdapter(
-            itemClickListener = { _, viewType, movie ->
-                if (movie != null) {
+        adapter = HomeAdapter(  //HomeAdapter 객체 만들때  생성자 부분의 인터페이스와 람다함수 초기화
+            itemClickListener = { _, viewType, movie -> // 사용안하는 매개변수 '_' 처리.
+                if (movie != null) { //클릭시 movie 정보는 반드시 필요.
                     val intent = Intent(context, PopularDetailActivity::class.java)
-                    intent.putExtra("movie_id", movie.id)
+                    intent.putExtra("movie_id", movie.id)  //movie.id 인텐트로 송부하고 PopularDetailActivity 엑티비티 실행.
                     startActivity(intent)
                 }
 
-                when (viewType) {
-                    VIEW_TYPE_POPULAR_MOVIE -> {
-                        viewModel.fetch()
-                    }
-                    VIEW_TYPE_NOW_MOVIE -> {
-                        viewModel.fetch2()
-                    }
-                    VIEW_TYPE_UPCOMMING -> {
-                        viewModel.fetchUpcomming()
-                    }
-                }
+//                when (viewType) {  //
+//                    VIEW_TYPE_POPULAR_MOVIE -> {
+//                        viewModel.fetch()
+//                    }
+//                    VIEW_TYPE_NOW_MOVIE -> {
+//                        viewModel.fetch2()
+//                    }
+//                    VIEW_TYPE_UPCOMMING -> {
+//                        viewModel.fetchUpcomming()
+//                    }
+//                }
             },
             moreViewClick = object : MoreViewClick {
                 override fun onClick(theMore: TheMore) {
                     when (theMore) {
-                        TheMore.THEMORE_POPULAR -> {
+                        TheMore.THEMORE_POPULAR -> {  //enum class TheMore 패턴매칭으로 알맞은 엑티비티 실행.
                             val intent = Intent(context, PopularMoreActivity::class.java)
                             startActivity(intent)
                         }
@@ -116,7 +116,7 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private fun attachBackPressedCallback() {
         val callback = object : OnBackPressedCallback(true){
             override fun handleOnBackPressed() {
-                requireActivity().supportFragmentManager.popBackStack()
+                requireActivity().supportFragmentManager.popBackStack()  //  현재 프래그먼트를 백 스택에서 제거하고 이전 프래그먼트로 돌아가도록 하려햇는데..? 효과없음
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)

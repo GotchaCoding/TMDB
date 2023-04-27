@@ -11,9 +11,9 @@ import org.techtown.diffuser.R
 import org.techtown.diffuser.model.Movie
 
 class HorizontalPopularMoviesRecyclerAdapter(private val itemClickListener: (View, Int, Movie?) -> Unit) :
-    RecyclerView.Adapter<HorizontalPopularMoviesRecyclerAdapter.MovieViewHolder>() {
+    RecyclerView.Adapter<HorizontalPopularMoviesRecyclerAdapter.MovieViewHolder>() {   // 제너럴 타입을   일반 리사이클러뷰처럼  커스텀뷰홀더 타입으로 지정.( 여러 뷰홀더를 안쓸꺼니까)
 
-    var items: List<Movie> = listOf()
+    var items: List<Movie> = listOf()  //어뎁터 내에 사용하는 리스트. Moive클래스 정보만 필요.
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         val inflater = LayoutInflater.from(parent.context)

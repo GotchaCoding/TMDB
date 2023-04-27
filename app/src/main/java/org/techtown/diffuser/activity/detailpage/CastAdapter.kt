@@ -14,7 +14,6 @@ import org.techtown.diffuser.model.CastRv
 
 class CastAdapter : ListAdapter<CastRv, CastAdapter.CastingViewHolder>(diffUtil2) {
 
-
     class CastingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var imgActor: ImageView
         var character: TextView
@@ -50,7 +49,6 @@ class CastAdapter : ListAdapter<CastRv, CastAdapter.CastingViewHolder>(diffUtil2
     override fun getItemCount(): Int {
         return currentList.size
     }
-
 }
 
 val diffUtil2 = object : DiffUtil.ItemCallback<CastRv>() {
