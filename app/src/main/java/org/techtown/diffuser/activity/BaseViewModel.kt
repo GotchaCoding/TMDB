@@ -14,9 +14,7 @@ open class BaseViewModel : ViewModel(){  // 뷰모델의 중복내용 base 모�
     var page: Int = 1
 
     fun pureItems(): List<ItemModel> {
-        return _items.value!!.filter { //ItemModel 타입 중에서도 Movie 타입으로만 필터링하여 리턴.
-            it is Movie
-        }
+        return _items.value!!.filterIsInstance<Movie>()
     }
     fun isLoading() : Boolean { //BottomLoadingModel 객체가 Null 이면 false,  null이 아니면(객체가 잇으면) true
         return _items.value!!.filterIsInstance<BottomLoadingModel>().isNotEmpty()

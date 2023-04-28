@@ -7,10 +7,7 @@ import kotlinx.coroutines.flow.onEach
 import org.techtown.diffuser.Repository
 import org.techtown.diffuser.Resource
 import org.techtown.diffuser.activity.BaseViewModel
-import org.techtown.diffuser.model.HorizontalMovieModel
-import org.techtown.diffuser.model.Movie
-import org.techtown.diffuser.model.TitleModel
-import org.techtown.diffuser.model.WrappingModel
+import org.techtown.diffuser.model.*
 import javax.inject.Inject
 
 @HiltViewModel  //뷰모델에서 hilt 주입을 사용하려면 어노테이션.
@@ -54,9 +51,12 @@ class HomeViewModel @Inject constructor(
         _items.value = defaultList  //MutableLiveData<List<ItemModel>> 타입의 items를  로딩뷰가 보이게 디폴트 리스트로 설정.
     }
 
+
     fun fetch() {
+
+        val page = 1
         repository
-            .getPopular(page) //이벤트가 발생하고 있는 부분.  // 인터페이스 이기 때문에 하위 클래스에서 오버라이드 해서 사용해야함.  매개변수로 RepositoryImpl를 받아왓기때문에(분명히 연관관계가 있는데). 오버라이드 된 getPopular를 사용하게 됨.
+            .getPopular(page) //이벤트가 발생하고 있는 부분.  // repository는 RopositoryModule 에서 repositoryImpl를 주입받   // 실제로는 impl 인데 인터페이스 제약 걸려잇음.
             .onEach { result ->  // 위의 이벤트 발생부분에 대한 처리부분.  이벤트 발생결과는 callApi 의 결과이므로 Resource seal 클래스타입으로 리턴받음.
                 when (result) {
                     is Resource.Loading -> {
@@ -107,10 +107,10 @@ class HomeViewModel @Inject constructor(
                         }
                     }
                 }
-            }.launchIn(viewModelScope)   //collect는 코드진행이 멈추므로(스트림 끝날때까지 기다림) launchin을 사용(새로운 코루틴 만들고 이벤트 동작시마다 동작).
+            }.launchIn(viewModelScope)   // viewModelScope는 finish 될때까지 코드를 실행함. (화면뒤로가기시 석세스 페일 안불림) (getPopular 이후 뒤로가기 누르면 뷰모델 스코프 종료) collect는 코드진행이 멈추므로(스트림 끝날때까지 기다림) launchin을 사용(새로운 코루틴 만들고 이벤트 동작시마다 동작).
     }
 
-    fun fetch2() {
+    fun fetchNowPlay() {
         repository
             .getNowPlay(page)
             .onEach { result ->
@@ -166,7 +166,7 @@ class HomeViewModel @Inject constructor(
             }.launchIn(viewModelScope)
     }
 
-    fun fetchUpcomming() {
+    fun fetchUpComming() {
         repository
             .getUpComming(page)
             .onEach { result ->

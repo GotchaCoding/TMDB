@@ -26,24 +26,21 @@ class HomeAdapter(
         parent: ViewGroup,
         viewType: Int
     ): RecyclerView.ViewHolder {  // 매개변수로 뷰타입을 받아와 뷰타입별로 어떤 레이아웃을 사용할지 정하고 각자 다른 뷰홀더를 리턴함.
+        val inflater = LayoutInflater.from(parent.context)
         when (viewType) {
             VIEW_TYPE_TITLE -> {
-                val inflater = LayoutInflater.from(parent.context)
                 val itemView = inflater.inflate(R.layout.item_titlepopualr, parent, false)
                 return TitleViewHolder(itemView, moreViewClick)
             }
             VIEW_TYPE_POPULAR_MOVIE -> {
-                val inflater = LayoutInflater.from(parent.context)
                 val itemView = inflater.inflate(R.layout.viewholder_popularmovies, parent, false)
                 return HorizontalPopularMoviesViewHolder(itemView, itemClickListener)
             }
             VIEW_TYPE_NOW_MOVIE -> {
-                val inflater = LayoutInflater.from(parent.context)
                 val itemView = inflater.inflate(R.layout.viewholder_popularmovies, parent, false)
                 return NowMovieViewHolder(itemView, itemClickListener)
             }
             VIEW_TYPE_UPCOMMING -> {
-                val inflater = LayoutInflater.from(parent.context)
                 val itemView = inflater.inflate(R.layout.viewholder_popularmovies, parent, false)
                 return HorizontalPopularMoviesViewHolder(itemView, itemClickListener)
             }
@@ -120,7 +117,7 @@ class HomeAdapter(
             }
 
             viewFailure.setOnClickListener {  //실패뷰  클릭리스너.  클릭시
-                ItemClickListener(it, item.viewType, null) // 아이템클릭리스너 실행. 스트레티지 패턴:  행동은 HomeFragment 에 위임. ???위임까진 아닌거 같고 HomeAdapter 객체 만들때 타고타고 들어와서 전달됨.
+                ItemClickListener(it, item.viewType, null) // 아이템클릭리스너 실행. 스트레티지 패턴:   HomeAdapter 객체 만들때 타고타고 들어와서 전달됨.
             }
         }
 

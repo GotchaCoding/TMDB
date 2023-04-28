@@ -1,5 +1,6 @@
 package org.techtown.diffuser.activity.moreview.nowplay
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,6 +23,7 @@ class MoreNowplayViewModel @Inject constructor(
     fun fetch() {
         if(isLoading()) return
 
+        Log.e("kmh!!!", "page count : $page")
         repository
             .getNowPlay(page)
             .onEach { result ->

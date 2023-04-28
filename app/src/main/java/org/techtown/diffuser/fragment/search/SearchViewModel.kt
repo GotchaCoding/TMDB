@@ -18,8 +18,8 @@ import javax.inject.Inject
 class SearchViewModel @Inject constructor(
     private val repository: Repository,
 ) : BaseViewModel() {
-    private val _trendItems: MutableLiveData<List<ResultTrend>> = MutableLiveData(listOf())
-    val trendItems: LiveData<List<ResultTrend>> = _trendItems
+    private val _trendItems: MutableLiveData<List<String>> = MutableLiveData(listOf())
+    val trendItems: LiveData<List<String>> = _trendItems
 
     init {
         _items.value = listOf()
@@ -55,6 +55,7 @@ class SearchViewModel @Inject constructor(
             }.launchIn(viewModelScope)
     }
 
+
     fun fetchTrend() {
         repository
             .getTrend()
@@ -65,8 +66,10 @@ class SearchViewModel @Inject constructor(
                     is Resource.Success -> {
                         val response = result.model
 
-                        val listResult = response.results
-                        _trendItems.value = _trendItems.value!! + listResult
+                        val titles = response.results.map {
+                            it.title
+                        }
+                        _trendItems.value = _trendItems.value!! + titles
                     }
                     is Resource.Fail -> {
                     }

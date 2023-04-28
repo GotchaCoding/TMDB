@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
-import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -47,7 +46,6 @@ class SearchFragment : Fragment() {
         viewModel.fetch("")
         viewModel.fetchTrend()
         titleClick()
-        attachBackPressedCallback()
     }
 
     private fun initObserver() {
@@ -57,13 +55,12 @@ class SearchFragment : Fragment() {
     }
 
     private fun initTrendObserver() {
-        viewModel.trendItems.observe(viewLifecycleOwner) {
-            val size = viewModel.trendItems.value!!.size
-            if (size >= 1) {
-                oneTitle = viewModel.trendItems.value!!.get(0).title
-                twoTitle = viewModel.trendItems.value!!.get(1).title
-                threeTitle = viewModel.trendItems.value!!.get(2).title
-                fourTitle = viewModel.trendItems.value!!.get(3).title
+        viewModel.trendItems.observe(viewLifecycleOwner) { titles ->
+            if (titles.isNotEmpty()) {
+                oneTitle = titles[0]
+                twoTitle = titles[1]
+                threeTitle = titles[2]
+                fourTitle = titles[3]
                 binding.tvFirst.text = oneTitle
                 binding.tvSecond.text = twoTitle
                 binding.tvThird.text = threeTitle
@@ -118,15 +115,5 @@ class SearchFragment : Fragment() {
     private fun animation() {
         val animation = AnimationUtils.loadAnimation(context, R.anim.alpha)
         binding.tvHint.startAnimation(animation)
-    }
-
-    private fun attachBackPressedCallback() {
-        val callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-//            requireActivity().supportFragmentManager.popBackStack()
-                return
-            }
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
     }
 }

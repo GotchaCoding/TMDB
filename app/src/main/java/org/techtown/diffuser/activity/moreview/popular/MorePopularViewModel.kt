@@ -42,6 +42,7 @@ class MorePopularViewModel @Inject constructor(
                         _items.value = pureItems() + list
                     }
                     is Resource.Fail -> {
+                        _items.value = pureItems()
                     }
                 }
             }.launchIn(viewModelScope)

@@ -5,17 +5,20 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import dagger.hilt.android.AndroidEntryPoint
 import org.techtown.diffuser.databinding.ActivityPopularMoreViewBinding
 
 
 @AndroidEntryPoint
-class PopularMoreActivity : AppCompatActivity() {
+class PopularMoreActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
     lateinit var binding: ActivityPopularMoreViewBinding
 
     private lateinit var adapter: PopularMoreAdapter
 
     private val viewModel: MorePopularViewModel by viewModels()
+
+    lateinit var swipe: SwipeRefreshLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,6 +31,12 @@ class PopularMoreActivity : AppCompatActivity() {
             adapter.submitList(items)
         }
         viewModel.fetch()
+
+        swipe = binding.swipePopular
+        swipe.setOnRefreshListener {
+            onRefresh()
+            swipe.isRefreshing = false
+        }
     }
 
 
@@ -47,5 +56,10 @@ class PopularMoreActivity : AppCompatActivity() {
             }
         })
 
+    }
+
+    override fun onRefresh() {
+        viewModel.page = 1
+        viewModel.fetch()
     }
 }

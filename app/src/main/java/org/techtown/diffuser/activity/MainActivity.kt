@@ -2,6 +2,7 @@ package org.techtown.diffuser
 
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.navigation.NavigationBarView
@@ -34,6 +35,20 @@ class MainActivity : AppCompatActivity(),
         )
         //리스너 연결
         binding.bottomNavigationView.setOnItemSelectedListener(this)
+        attachBackPressedCallback()
+    }
+
+    private fun attachBackPressedCallback() {
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (binding.pager.currentItem == 1) {
+                    binding.pager.currentItem = 0
+                } else {
+                    finish()
+                }
+            }
+        }
+        onBackPressedDispatcher.addCallback(this, callback)
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {

@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -42,7 +41,6 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {  //프�
         initView()
         initObserver()
         fetchAll()
-        attachBackPressedCallback()
     }
 
     private fun initObserver() { //
@@ -66,17 +64,17 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {  //프�
                     startActivity(intent)
                 }
 
-//                when (viewType) {  //
-//                    VIEW_TYPE_POPULAR_MOVIE -> {
-//                        viewModel.fetch()
-//                    }
-//                    VIEW_TYPE_NOW_MOVIE -> {
-//                        viewModel.fetch2()
-//                    }
-//                    VIEW_TYPE_UPCOMMING -> {
-//                        viewModel.fetchUpcomming()
-//                    }
-//                }
+                when (viewType) {  // 실패뷰 떳을때 클릭시 뷰타입별로 패치
+                    VIEW_TYPE_POPULAR_MOVIE -> {
+                        viewModel.fetch()
+                    }
+                    VIEW_TYPE_NOW_MOVIE -> {
+                        viewModel.fetchNowPlay()
+                    }
+                    VIEW_TYPE_UPCOMMING -> {
+                        viewModel.fetchUpComming()
+                    }
+                }
             },
             moreViewClick = object : MoreViewClick {
                 override fun onClick(theMore: TheMore) {
@@ -92,11 +90,8 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {  //프�
                         TheMore.THEMORE_COMMING -> {
                             val intent = Intent(context, CommingMoreActivity::class.java)
                             startActivity(intent)
-
                         }
-
                     }
-
                 }
             })
         recyclerview.adapter = adapter
@@ -105,21 +100,12 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {  //프�
 
     private fun fetchAll() {
         viewModel.fetch()
-        viewModel.fetch2()
-        viewModel.fetchUpcomming()
+        viewModel.fetchNowPlay()
+        viewModel.fetchUpComming()
     }
 
     override fun onRefresh() {
         fetchAll()
-    }
-
-    private fun attachBackPressedCallback() {
-        val callback = object : OnBackPressedCallback(true){
-            override fun handleOnBackPressed() {
-                requireActivity().supportFragmentManager.popBackStack()  //  현재 프래그먼트를 백 스택에서 제거하고 이전 프래그먼트로 돌아가도록 하려햇는데..? 효과없음
-            }
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
     }
 
     companion object {

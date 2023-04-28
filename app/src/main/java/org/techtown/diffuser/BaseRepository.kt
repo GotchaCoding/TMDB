@@ -1,5 +1,6 @@
 package org.techtown.diffuser
 
+import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
@@ -21,8 +22,10 @@ open class BaseRepository {  //callApi 메서드는 매개변수로 suspend 람�
         return try {
             Resource.Success(responseFunction.invoke())  //성공부터 try 에러없이 통신 성공이면 여기서 종료.   detailpage_3
         } catch (e: HttpException) {   // 레트로핏 통신 실패시  HttpException 에러 타입인지 확인.
+            Log.e("kmh!!!"  ,  "HttpException")
             Resource.Fail(ApiException.HttpException(code = e.code()))
         } catch (e: IOException) {  // HttpException 에러가 아니라면 IOException 에러인지 확인
+            Log.e("kmh!!!"  ,  "IOException")
             Resource.Fail(ApiException.NetworkException)
         } catch (e: Exception) {  // 그 이외 에러
             Resource.Fail(ApiException.UnknownException)

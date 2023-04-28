@@ -5,16 +5,19 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import dagger.hilt.android.AndroidEntryPoint
 import org.techtown.diffuser.databinding.ActivityNowplayMoreViewBinding
 
 @AndroidEntryPoint
-class NowplayMoreActivity : AppCompatActivity() {
+class NowplayMoreActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
     lateinit var binding: ActivityNowplayMoreViewBinding
 
     private lateinit var adapter: NowMoreAdapter
 
-    private val viewModel : MoreNowplayViewModel by viewModels()
+    private val viewModel: MoreNowplayViewModel by viewModels()
+
+    lateinit var swipe: SwipeRefreshLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,27 +25,39 @@ class NowplayMoreActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         initView()
-        viewModel.items.observe(this@NowplayMoreActivity){ items ->
+        viewModel.items.observe(this@NowplayMoreActivity) { items ->
             adapter.submitList(items)
         }
         viewModel.fetch()
+
+
     }
 
-    private fun initView(){
+    private fun initView() {
         val layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         adapter = NowMoreAdapter()
         binding.recyclerviewTheMore.adapter = adapter
         binding.recyclerviewTheMore.layoutManager = layoutManager
-        binding.recyclerviewTheMore.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+        binding.recyclerviewTheMore.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 val layoutManager = recyclerView.layoutManager as LinearLayoutManager
                 val totalItem = layoutManager.itemCount
                 val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
-                if(lastVisibleItem == totalItem -2) {
+                if (lastVisibleItem == totalItem - 2) {
                     viewModel.fetch()
                 }
             }
         })
 
+        swipe = binding.swipeNow
+        swipe.setOnRefreshListener {
+            onRefresh()
+            swipe.isRefreshing = false
+        }
+    }
+
+    override fun onRefresh() {
+        viewModel.page = 1
+        viewModel.fetch()
     }
 }
