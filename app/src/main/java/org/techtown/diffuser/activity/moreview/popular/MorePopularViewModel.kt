@@ -7,8 +7,11 @@ import kotlinx.coroutines.flow.onEach
 import org.techtown.diffuser.Repository
 import org.techtown.diffuser.Resource
 import org.techtown.diffuser.activity.BaseViewModel
+import org.techtown.diffuser.activity.moreview.popular.BottomLoadingModel.viewType
 import org.techtown.diffuser.fragment.home.HomeAdapter
+import org.techtown.diffuser.fragment.home.HomeAdapter.Companion.VIEW_TYPE_POPULAR_MOVIE
 import org.techtown.diffuser.model.Movie
+import org.techtown.diffuser.model.WrappingSmallModel
 import javax.inject.Inject
 
 @HiltViewModel
@@ -42,7 +45,13 @@ class MorePopularViewModel @Inject constructor(
                         _items.value = pureItems() + list
                     }
                     is Resource.Fail -> {
-                        _items.value = pureItems()
+                        val wrappingList = WrappingSmallModel(
+                            isFailure = true,
+                            movies = null,
+                            id = 0,
+                            viewType = HomeAdapter.VIEW_TYPE_POPULAR_MOVIE
+                        )
+                        _items.value = listOf(wrappingList)
                     }
                 }
             }.launchIn(viewModelScope)

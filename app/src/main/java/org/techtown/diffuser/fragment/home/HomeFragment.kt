@@ -57,27 +57,20 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {  //프�
         val layoutManager = LinearLayoutManager(context)
 
         adapter = HomeAdapter(  //HomeAdapter 객체 만들때  생성자 부분의 인터페이스와 람다함수 초기화
-            itemClickListener = { _, viewType, movie -> // 사용안하는 매개변수 '_' 처리.
-                if (movie != null) { //클릭시 movie 정보는 반드시 필요.
-                    val intent = Intent(context, PopularDetailActivity::class.java)
-                    intent.putExtra("movie_id", movie.id)  //movie.id 인텐트로 송부하고 PopularDetailActivity 엑티비티 실행.
-                    startActivity(intent)
-                }
+            itemClickListener = { _, viewType, movie, theMore -> // 사용안하는 매개변수 '_' 처리.
+                if (movie == null) {
+                    when (viewType) {  // 실패뷰 떳을때 클릭시 뷰타입별로 패치
+                        VIEW_TYPE_POPULAR_MOVIE -> {
+                            viewModel.fetch()
+                        }
+                        VIEW_TYPE_NOW_MOVIE -> {
+                            viewModel.fetchNowPlay()
+                        }
+                        VIEW_TYPE_UPCOMMING -> {
+                            viewModel.fetchUpComming()
+                        }
+                    }
 
-                when (viewType) {  // 실패뷰 떳을때 클릭시 뷰타입별로 패치
-                    VIEW_TYPE_POPULAR_MOVIE -> {
-                        viewModel.fetch()
-                    }
-                    VIEW_TYPE_NOW_MOVIE -> {
-                        viewModel.fetchNowPlay()
-                    }
-                    VIEW_TYPE_UPCOMMING -> {
-                        viewModel.fetchUpComming()
-                    }
-                }
-            },
-            moreViewClick = object : MoreViewClick {
-                override fun onClick(theMore: TheMore) {
                     when (theMore) {
                         TheMore.THEMORE_POPULAR -> {  //enum class TheMore 패턴매칭으로 알맞은 엑티비티 실행.
                             val intent = Intent(context, PopularMoreActivity::class.java)
@@ -91,9 +84,18 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {  //프�
                             val intent = Intent(context, CommingMoreActivity::class.java)
                             startActivity(intent)
                         }
+                        else -> {}
                     }
+                } else {//클릭시 movie 정보는 반드시 필요.
+                    val intent = Intent(context, PopularDetailActivity::class.java)
+                    intent.putExtra(
+                        "movie_id",
+                        movie.id
+                    )  //movie.id 인텐트로 송부하고 PopularDetailActivity 엑티비티 실행.
+                    startActivity(intent)
                 }
-            })
+            }
+        )
         recyclerview.adapter = adapter
         recyclerview.layoutManager = layoutManager
     }
@@ -115,7 +117,6 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {  //프�
         const val RECYCLERVIEW_ID_COMMING = -4L
     }
 }
-
 
 enum class TheMore {
     THEMORE_POPULAR,

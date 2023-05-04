@@ -6,13 +6,26 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import org.techtown.diffuser.BaseAdapter
 import org.techtown.diffuser.R
 import org.techtown.diffuser.model.CastRv
 
-class CastAdapter : ListAdapter<CastRv, CastAdapter.CastingViewHolder>(diffUtil2) {
+class CastAdapter : BaseAdapter() {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CastingViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+        val itemView = inflater.inflate(R.layout.item_cast, parent, false)
+        return CastingViewHolder(itemView)
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val itemModel = currentList[position]
+        if (holder is CastingViewHolder && itemModel is CastRv) {
+            holder.setItem(itemModel)
+        }
+    }
 
     class CastingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var imgActor: ImageView
@@ -32,31 +45,5 @@ class CastAdapter : ListAdapter<CastRv, CastAdapter.CastingViewHolder>(diffUtil2
             character.text = item.castChracter
             name.text = item.castName
         }
-    }
-
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CastingViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        val itemView = inflater.inflate(R.layout.item_cast, parent, false)
-        return CastingViewHolder(itemView)
-    }
-
-    override fun onBindViewHolder(holder: CastingViewHolder, position: Int) {
-        val castRvModel = currentList[position]
-        holder.setItem(castRvModel)
-    }
-
-    override fun getItemCount(): Int {
-        return currentList.size
-    }
-}
-
-val diffUtil2 = object : DiffUtil.ItemCallback<CastRv>() {
-    override fun areItemsTheSame(oldItem: CastRv, newItem: CastRv): Boolean {
-        return oldItem.id == newItem.id
-    }
-
-    override fun areContentsTheSame(oldItem: CastRv, newItem: CastRv): Boolean {
-        return oldItem.equals(newItem)
     }
 }

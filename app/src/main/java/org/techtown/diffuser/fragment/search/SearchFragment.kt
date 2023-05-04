@@ -1,6 +1,7 @@
 package org.techtown.diffuser.fragment.search
 
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.core.view.isVisible
+import androidx.core.view.size
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -43,7 +45,7 @@ class SearchFragment : Fragment() {
         initView()
         initObserver()
         initTrendObserver()
-        viewModel.fetch("")
+//        viewModel.fetch("")
         viewModel.fetchTrend()
         titleClick()
     }
@@ -82,6 +84,7 @@ class SearchFragment : Fragment() {
                         val title: String = edtSearch.text.toString()
                         viewModel.fetch(title)
                         tvHint.isVisible = false
+                        clearEdt()
                         return true
                     }
                     return false
@@ -91,9 +94,12 @@ class SearchFragment : Fragment() {
                 val title: String = edtSearch.text.toString()
                 viewModel.fetch(title)
                 tvHint.isVisible = false
+                clearEdt()
+                Log.d("kmh!!!", "버튼recyclerviewSize : ${adapter.itemCount}")
             }
             tvHint.bringToFront()
             animation()
+            Log.d("kmh!!!", "recyclerviewSize : ${adapter.itemCount}")
         }
     }
 
@@ -111,6 +117,8 @@ class SearchFragment : Fragment() {
             edtSearch.setText(fourTitle)
         }
     }
+
+    private fun clearEdt() = binding.edtSearch.setText("")
 
     private fun animation() {
         val animation = AnimationUtils.loadAnimation(context, R.anim.alpha)

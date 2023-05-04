@@ -18,7 +18,7 @@ import org.techtown.diffuser.model.Movie
 import org.techtown.diffuser.model.TitleModel
 import org.techtown.diffuser.model.WrappingDetailModel
 
-class DetailAdapter(val ItemClickListener: (View, Int, Movie?) -> Unit) :
+class DetailAdapter(private val itemClickListener: (View, Int, Movie?) -> Unit) :
     ListAdapter<ItemModel, RecyclerView.ViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -26,12 +26,12 @@ class DetailAdapter(val ItemClickListener: (View, Int, Movie?) -> Unit) :
             VIEW_TYPE_DETAIL_BACKGROND -> {
                 val inflater = LayoutInflater.from(parent.context)
                 val itemView = inflater.inflate(R.layout.item_detail_image, parent, false)
-                return BackImageViewHolder(itemView, ItemClickListener)
+                return BackImageViewHolder(itemView, itemClickListener)
             }
             VIEW_TYPE_DETAIL_CASTING -> {
                 val inflater = LayoutInflater.from(parent.context)
-                val itemView = inflater.inflate(R.layout.viewholder_cast, parent, false)
-                return CastViewHolder(itemView, ItemClickListener)
+                val itemView = inflater.inflate(R.layout.item_detail_cast, parent, false)
+                return CastViewHolder(itemView, itemClickListener)
             }
             VIEW_TYPE_DETAIL_TITLE -> {
                 val inflater = LayoutInflater.from(parent.context)
@@ -71,16 +71,16 @@ class DetailAdapter(val ItemClickListener: (View, Int, Movie?) -> Unit) :
 
     class BackImageViewHolder(itemView: View, val ItemClickListener: (View, Int, Movie?) -> Unit) :
         RecyclerView.ViewHolder(itemView) {
-        var imgBackgrond: ImageView = itemView.findViewById(R.id.img_background)
-        var imgPoster: ImageView = itemView.findViewById(R.id.img_poster)
-        var title: TextView = itemView.findViewById(R.id.tvTitle_detail)
-        var overview: TextView = itemView.findViewById(R.id.tvOverview)
-        var vLoading: LottieAnimationView = itemView.findViewById(R.id.vLoading_topmodel)
-        var view_failure: TextView = itemView.findViewById(R.id.onFailure_detail)
+        private val imgBackgrond: ImageView = itemView.findViewById(R.id.img_background)
+        private val imgPoster: ImageView = itemView.findViewById(R.id.img_poster)
+        private val title: TextView = itemView.findViewById(R.id.tvTitle_detail)
+        private val overview: TextView = itemView.findViewById(R.id.tvOverview)
+        private val vLoading: LottieAnimationView = itemView.findViewById(R.id.vLoading_topmodel)
+        private val viewFailure: TextView = itemView.findViewById(R.id.onFailure_detail)
 
         init {
             vLoading.setAnimation(R.raw.loading)
-            vLoading.repeatCount = 10
+            vLoading.repeatCount = -1
             vLoading.playAnimation()
         }
 
@@ -88,10 +88,10 @@ class DetailAdapter(val ItemClickListener: (View, Int, Movie?) -> Unit) :
 
             if (item.isLoading) { //로딩중
                 vLoading.isVisible = true
-                view_failure.isVisible = false
+                viewFailure.isVisible = false
             } else if (item.detailTopModel?.isFailure == false) { //성공
                 vLoading.isVisible = false
-                view_failure.isVisible = false
+                viewFailure.isVisible = false
                 Glide.with(itemView)
                     .load("https://image.tmdb.org/t/p/w500" + item.detailTopModel.backDropUrl)
                     .into(imgBackgrond)
@@ -101,9 +101,9 @@ class DetailAdapter(val ItemClickListener: (View, Int, Movie?) -> Unit) :
                     .load("https://image.tmdb.org/t/p/w500" + item.detailTopModel.postUrl)
                     .into(imgPoster)
             } else {//실패
-                view_failure.isVisible = true
+                viewFailure.isVisible = true
                 vLoading.isVisible = false
-                view_failure.setOnClickListener {
+                viewFailure.setOnClickListener {
                     ItemClickListener(it, VIEW_TYPE_DETAIL_BACKGROND, null)
                 }
             }
@@ -120,7 +120,7 @@ class DetailAdapter(val ItemClickListener: (View, Int, Movie?) -> Unit) :
 
         init {
             vLoading.setAnimation(R.raw.loading)
-            vLoading.repeatCount = 10
+            vLoading.repeatCount = -1
             vLoading.playAnimation()
             rvCast.adapter = adapter
             rvCast.layoutManager =

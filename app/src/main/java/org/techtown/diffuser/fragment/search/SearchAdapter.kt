@@ -3,54 +3,42 @@ package org.techtown.diffuser.fragment.search
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import org.techtown.diffuser.BaseAdapter
 import org.techtown.diffuser.R
-import org.techtown.diffuser.model.ItemModel
+import org.techtown.diffuser.activity.moreview.popular.Constants.VIEW_TYPE_COMMON_MORE
+import org.techtown.diffuser.activity.moreview.popular.Constants.VIEW_TYPE_FAIL
+import org.techtown.diffuser.activity.moreview.viewHolder.CommonMoreViewHolder
 import org.techtown.diffuser.model.Movie
 
-class SearchAdapter : ListAdapter<ItemModel, SearchAdapter.SearchViewHolder>(diffUtil_search) {
+class SearchAdapter : BaseAdapter() {
 
-    class SearchViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var image: ImageView = itemView.findViewById(R.id.imgMore)
-        var title: TextView = itemView.findViewById(R.id.tvMoreTitle)
-        var date: TextView = itemView.findViewById(R.id.tvMoreDate)
-        var contents: TextView = itemView.findViewById(R.id.tvMoreContent)
+    class FailViewHolder(itemView: View) : ViewHolder(itemView)
 
-        fun setItem(item: Movie) {
-            title.text = item.title
-            Glide.with(itemView).load("https://image.tmdb.org/t/p/w500" + item.imagePoster)
-                .into(image)
-            date.text = item.rank
-            contents.text = item.overView
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): ViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+        return when (viewType) {
+            VIEW_TYPE_COMMON_MORE -> {
+                val itemView = inflater.inflate(R.layout.item_themore, parent, false)
+                CommonMoreViewHolder(itemView)
+            }
+            VIEW_TYPE_FAIL -> {
+                val itemView = inflater.inflate(R.layout.item_failure, parent, false)
+                FailViewHolder(itemView)
+            }
+            else -> {
+                super.onCreateViewHolder(parent, viewType)
+            }
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        val itemView = inflater.inflate(R.layout.item_themore, parent, false)
-        return SearchViewHolder(itemView)
-    }
-
-    override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
-        holder.setItem(currentList[position] as Movie)
-    }
-
-    override fun getItemViewType(position: Int): Int {
-        return currentList[position].viewType
-    }
-}
-
-val diffUtil_search = object : DiffUtil.ItemCallback<ItemModel>() {
-    override fun areItemsTheSame(oldItem: ItemModel, newItem: ItemModel): Boolean {
-        return oldItem.id == newItem.id
-    }
-
-    override fun areContentsTheSame(oldItem: ItemModel, newItem: ItemModel): Boolean {
-        return oldItem.equals(newItem)
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val itemModel = currentList[position]
+        if (holder is CommonMoreViewHolder) {
+            holder.setItem(itemModel as Movie)
+        }
     }
 }

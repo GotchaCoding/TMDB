@@ -12,7 +12,7 @@ import com.bumptech.glide.Glide
 import org.techtown.diffuser.R
 import org.techtown.diffuser.model.Movie
 
-class HorizontalNowPlayingAdapter(private val ItemClickListener: (View, Int, Movie?) -> Unit) :
+class HorizontalNowPlayingAdapter(private val ItemClickListener: (View, Int, Movie?, TheMore?) -> Unit) :
     ListAdapter<Movie, NowMovieViewHolder>(diffUtil_movie) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NowMovieViewHolder {
@@ -34,7 +34,7 @@ class HorizontalNowPlayingAdapter(private val ItemClickListener: (View, Int, Mov
 
 class NowMovieViewHolder(
     itemView: View,
-    private val ItemClickListener: (View, Int, Movie?) -> Unit
+    private val ItemClickListener: (View, Int, Movie?, TheMore?) -> Unit
 ) :
     RecyclerView.ViewHolder(itemView) {
 
@@ -48,7 +48,7 @@ class NowMovieViewHolder(
         Glide.with(itemView).load("https://image.tmdb.org/t/p/w500" + item.imageDrop).into(image)
 
         itemView.setOnClickListener {
-            ItemClickListener(it, item.viewType, item)
+            ItemClickListener(it, item.viewType, item, TheMore.THEMORE_NOW)
         }
     }
 }

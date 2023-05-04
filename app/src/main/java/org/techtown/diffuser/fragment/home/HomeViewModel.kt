@@ -1,5 +1,6 @@
 package org.techtown.diffuser.fragment.home
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -93,8 +94,10 @@ class HomeViewModel @Inject constructor(
                         }
                     }
                     is Resource.Fail -> { // 레트로핏 통신 실패시  Resource.Fail 을 응답받게 됨( http or io exception)
+                        Log.e("kmh!!!" , "Resource.Fail1 : ${_items.value}")
                         _items.value = _items.value!!.mapIndexed { index, itemModel ->  //실패시  레트로핏 통신 받아서 movie List 식으로 넣어줘야하는 부분이 없으므로
                             if (index == 1 && itemModel is WrappingModel) {  //인덱스 1 부분의 로딩부분을 제거하고 model은 디폴트와 마찬가지로 그대로 null, 그리고 실패뷰를 true로 설정.
+                                Log.e("kmh!!!" , "Resource.Fail2 : ${_items.value}")
                                 itemModel.copy(
                                     isLoading = false,
                                     model = null,

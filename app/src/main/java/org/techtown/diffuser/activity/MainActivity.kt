@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity(),
         attachBackPressedCallback()
     }
 
-    private fun attachBackPressedCallback() {
+    private fun attachBackPressedCallback() {   //뒤로가기 클릭시  검색프래그먼트인 경우 홈프래그먼트로 이동.  홈에선 엑티비티 종료
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if (binding.pager.currentItem == 1) {
@@ -53,8 +53,8 @@ class MainActivity : AppCompatActivity(),
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.item_home -> {  //네비게이션 아이콘 클릭시 navigation에 등록된 id 정보를 이용해 페이져 아이탬 번호 등록.
-                binding.pager.currentItem = 0
+            R.id.item_home -> {  //네비게이션 아이콘 클릭시 뷰페이저 아이템번호로 프래그먼트 전환
+                binding.pager.currentItem = 0  //currentItem  현재 선택한 페이지를 설정. 뷰페이저가 이미 첫번재 레이아웃을 완료햇다면 지정된 아이탬 프래그먼트로 전환됨.
                 return true
             }
             R.id.item_search -> {

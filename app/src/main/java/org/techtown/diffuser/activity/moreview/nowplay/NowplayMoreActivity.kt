@@ -29,8 +29,6 @@ class NowplayMoreActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshLis
             adapter.submitList(items)
         }
         viewModel.fetch()
-
-
     }
 
     private fun initView() {

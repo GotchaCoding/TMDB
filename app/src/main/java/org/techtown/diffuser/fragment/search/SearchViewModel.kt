@@ -1,5 +1,6 @@
 package org.techtown.diffuser.fragment.search
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -9,9 +10,10 @@ import kotlinx.coroutines.flow.onEach
 import org.techtown.diffuser.Repository
 import org.techtown.diffuser.Resource
 import org.techtown.diffuser.activity.BaseViewModel
-import org.techtown.diffuser.fragment.home.HomeAdapter
+import org.techtown.diffuser.activity.moreview.popular.Constants.VIEW_TYPE_COMMON_MORE
+import org.techtown.diffuser.activity.moreview.popular.Constants.VIEW_TYPE_FAIL
 import org.techtown.diffuser.model.Movie
-import org.techtown.diffuser.response.trend.ResultTrend
+import org.techtown.diffuser.model.WrappingSmallModel
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,9 +23,6 @@ class SearchViewModel @Inject constructor(
     private val _trendItems: MutableLiveData<List<String>> = MutableLiveData(listOf())
     val trendItems: LiveData<List<String>> = _trendItems
 
-    init {
-        _items.value = listOf()
-    }
 
     fun fetch(title: String) {
         repository
@@ -31,6 +30,7 @@ class SearchViewModel @Inject constructor(
             .onEach { result ->
                 when (result) {
                     is Resource.Loading -> {
+
                     }
                     is Resource.Success -> {
                         val response = result.model
@@ -40,7 +40,7 @@ class SearchViewModel @Inject constructor(
                                 title = it.title,
                                 rank = it.releaseDate,
                                 imagePoster = it.posterPath,
-                                viewType = HomeAdapter.VIEW_TYPE_POPULAR_MOVIE,
+                                viewType = VIEW_TYPE_COMMON_MORE,
                                 overView = it.overview,
                                 id = it.id
                             )
@@ -48,8 +48,11 @@ class SearchViewModel @Inject constructor(
                             it.imagePoster != null
                         }
                         _items.value = list
+                        Log.e("kmh!!!", "Resource.Success : ${_items.value}")
                     }
                     is Resource.Fail -> {
+                        Log.e("kmh!!!", "Resource.Fail3 : ${_items.value}")
+                        _items.value = listOf(SearchFailModel)
                     }
                 }
             }.launchIn(viewModelScope)
@@ -76,4 +79,6 @@ class SearchViewModel @Inject constructor(
                 }
             }.launchIn(viewModelScope)
     }
+
+
 }

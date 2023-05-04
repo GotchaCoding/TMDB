@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide
 import org.techtown.diffuser.R
 import org.techtown.diffuser.model.Movie
 
-class HorizontalPopularMoviesRecyclerAdapter(private val itemClickListener: (View, Int, Movie?) -> Unit) :
+class HorizontalPopularMoviesRecyclerAdapter(private val itemClickListener: (View, Int, Movie?, TheMore) -> Unit) :
     RecyclerView.Adapter<HorizontalPopularMoviesRecyclerAdapter.MovieViewHolder>() {   // 제너럴 타입을   일반 리사이클러뷰처럼  커스텀뷰홀더 타입으로 지정.( 여러 뷰홀더를 안쓸꺼니까)
 
     var items: List<Movie> = listOf()  //어뎁터 내에 사용하는 리스트. Moive클래스 정보만 필요.
@@ -36,7 +36,7 @@ class HorizontalPopularMoviesRecyclerAdapter(private val itemClickListener: (Vie
 
     class MovieViewHolder(
         itemView: View,
-        private val ItemClickListener: (View, Int, Movie?) -> Unit
+        private val ItemClickListener: (View, Int, Movie?, TheMore) -> Unit
     ) :
         RecyclerView.ViewHolder(itemView) {
 
@@ -51,7 +51,7 @@ class HorizontalPopularMoviesRecyclerAdapter(private val itemClickListener: (Vie
                 .into(image)
 
             itemView.setOnClickListener {
-                ItemClickListener(it, item.viewType, item)
+                ItemClickListener(it, item.viewType, item, TheMore.THEMORE_POPULAR)
             }
         }
     }
