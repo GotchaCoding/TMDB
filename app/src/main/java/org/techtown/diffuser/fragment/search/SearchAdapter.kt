@@ -6,8 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import org.techtown.diffuser.BaseAdapter
 import org.techtown.diffuser.R
-import org.techtown.diffuser.activity.moreview.popular.Constants.VIEW_TYPE_COMMON_MORE
-import org.techtown.diffuser.activity.moreview.popular.Constants.VIEW_TYPE_FAIL
+import org.techtown.diffuser.con.Constants.VIEW_TYPE_COMMON_MORE
+import org.techtown.diffuser.con.Constants.VIEW_TYPE_FAIL
 import org.techtown.diffuser.activity.moreview.viewHolder.CommonMoreViewHolder
 import org.techtown.diffuser.model.Movie
 

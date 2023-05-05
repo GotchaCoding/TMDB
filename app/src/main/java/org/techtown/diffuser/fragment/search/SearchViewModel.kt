@@ -10,10 +10,9 @@ import kotlinx.coroutines.flow.onEach
 import org.techtown.diffuser.Repository
 import org.techtown.diffuser.Resource
 import org.techtown.diffuser.activity.BaseViewModel
-import org.techtown.diffuser.activity.moreview.popular.Constants.VIEW_TYPE_COMMON_MORE
-import org.techtown.diffuser.activity.moreview.popular.Constants.VIEW_TYPE_FAIL
+import org.techtown.diffuser.con.Constants.VIEW_TYPE_COMMON_MORE
+import org.techtown.diffuser.model.FailModel
 import org.techtown.diffuser.model.Movie
-import org.techtown.diffuser.model.WrappingSmallModel
 import javax.inject.Inject
 
 @HiltViewModel
@@ -52,7 +51,7 @@ class SearchViewModel @Inject constructor(
                     }
                     is Resource.Fail -> {
                         Log.e("kmh!!!", "Resource.Fail3 : ${_items.value}")
-                        _items.value = listOf(SearchFailModel)
+                        _items.value = listOf(FailModel)
                     }
                 }
             }.launchIn(viewModelScope)

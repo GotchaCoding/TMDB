@@ -1,4 +1,4 @@
-package org.techtown.diffuser.activity.moreview.popular
+package org.techtown.diffuser.con
 
 object Constants {
     const val KEY_BOTTOM_MODEL_ID = -100L

@@ -1,12 +1,14 @@
 package org.techtown.diffuser
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import org.techtown.diffuser.activity.moreview.BottomLoadingViewHolder
-import org.techtown.diffuser.activity.moreview.popular.Constants
+import org.techtown.diffuser.activity.moreview.popular.PopularMoreAdapter
+import org.techtown.diffuser.con.Constants
 import org.techtown.diffuser.model.ItemModel
 
 abstract class BaseAdapter : ListAdapter<ItemModel, RecyclerView.ViewHolder>(diffUtil) {
@@ -19,6 +21,11 @@ abstract class BaseAdapter : ListAdapter<ItemModel, RecyclerView.ViewHolder>(dif
                 val itemView = inflater.inflate(R.layout.item_bottom_loading, parent, false)
                 BottomLoadingViewHolder(itemView)
             }
+            Constants.VIEW_TYPE_FAIL -> {
+                val inflater = LayoutInflater.from(parent.context)
+                val itemView = inflater.inflate(R.layout.item_failure, parent, false)
+                return FailViewHolder(itemView)
+            }
             else -> {
                 throw Exception()
             }
@@ -28,6 +35,7 @@ abstract class BaseAdapter : ListAdapter<ItemModel, RecyclerView.ViewHolder>(dif
     override fun getItemViewType(position: Int): Int {
         return currentList[position].viewType
     }
+    class FailViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 }
 
 val diffUtil = object : DiffUtil.ItemCallback<ItemModel>() {  //두개의 데이터 목록을 가지고 차이점이 있는 아이템만 자동 업데이트

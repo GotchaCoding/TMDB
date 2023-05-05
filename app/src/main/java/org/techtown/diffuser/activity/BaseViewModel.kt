@@ -3,7 +3,7 @@ package org.techtown.diffuser.activity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import org.techtown.diffuser.activity.moreview.popular.BottomLoadingModel
+import org.techtown.diffuser.model.BottomLoadingModel
 import org.techtown.diffuser.model.ItemModel
 import org.techtown.diffuser.model.Movie
 

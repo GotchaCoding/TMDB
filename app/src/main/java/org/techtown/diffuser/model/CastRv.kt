@@ -1,6 +1,6 @@
 package org.techtown.diffuser.model
 
-import org.techtown.diffuser.activity.moreview.popular.Constants.VIEW_TYPE_CAST_RV
+import org.techtown.diffuser.con.Constants.VIEW_TYPE_CAST_RV
 
 data class CastRv(
     val imgActor : String? = "",

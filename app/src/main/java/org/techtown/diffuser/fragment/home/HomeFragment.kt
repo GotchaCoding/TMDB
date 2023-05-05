@@ -14,7 +14,6 @@ import org.techtown.diffuser.activity.detailpage.PopularDetailActivity
 import org.techtown.diffuser.activity.moreview.comming.CommingMoreActivity
 import org.techtown.diffuser.activity.moreview.nowplay.NowplayMoreActivity
 import org.techtown.diffuser.activity.moreview.popular.PopularMoreActivity
-import org.techtown.diffuser.clickInterface.MoreViewClick
 import org.techtown.diffuser.databinding.ActivityHomeFragmentBinding
 import org.techtown.diffuser.fragment.home.HomeAdapter.Companion.VIEW_TYPE_NOW_MOVIE
 import org.techtown.diffuser.fragment.home.HomeAdapter.Companion.VIEW_TYPE_POPULAR_MOVIE

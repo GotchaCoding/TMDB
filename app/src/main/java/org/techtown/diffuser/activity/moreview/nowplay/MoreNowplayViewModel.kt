@@ -9,8 +9,9 @@ import kotlinx.coroutines.flow.onEach
 import org.techtown.diffuser.Repository
 import org.techtown.diffuser.Resource
 import org.techtown.diffuser.activity.BaseViewModel
-import org.techtown.diffuser.activity.moreview.popular.BottomLoadingModel
+import org.techtown.diffuser.model.BottomLoadingModel
 import org.techtown.diffuser.fragment.home.HomeAdapter
+import org.techtown.diffuser.model.FailModel
 import org.techtown.diffuser.model.Movie
 import javax.inject.Inject
 
@@ -47,6 +48,7 @@ class MoreNowplayViewModel @Inject constructor(
                         _items.value = pureItems() + list
                     }
                     is Resource.Fail -> {
+                        _items.value = listOf(FailModel)
                     }
                 }
             }.launchIn(viewModelScope)
