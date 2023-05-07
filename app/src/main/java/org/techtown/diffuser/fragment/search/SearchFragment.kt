@@ -1,5 +1,6 @@
 package org.techtown.diffuser.fragment.search
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
@@ -15,6 +16,8 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import org.techtown.diffuser.R
+import org.techtown.diffuser.activity.detailpage.PopularDetailActivity
+import org.techtown.diffuser.con.Constants
 import org.techtown.diffuser.databinding.ActivitySearchFragmentBinding
 
 @AndroidEntryPoint
@@ -44,7 +47,6 @@ class SearchFragment : Fragment() {
         initView()
         initObserver()
         initTrendObserver()
-//        viewModel.fetch("")
         viewModel.fetchTrend()
         titleClick()
     }
@@ -73,7 +75,24 @@ class SearchFragment : Fragment() {
     private fun initView() {
         with(binding) {
             val layoutManager = LinearLayoutManager(context)
-            adapter = SearchAdapter()
+            adapter = SearchAdapter(
+                    itemClickListener = { _, viewType, movie, _ ->
+                        when (viewType) {
+                            Constants.VIEW_TYPE_FAIL -> {
+                                viewModel.fetch("")
+                            }
+                            else -> {
+                                movie?.let {
+                                    val intent = Intent(context, PopularDetailActivity::class.java)
+                                    intent.putExtra(
+                                        "movie_id",
+                                        movie.id
+                                    )
+                                    startActivity(intent)
+                                }
+                            }
+                        }
+                    })
             recyclerviewTheMore.adapter = adapter
             recyclerviewTheMore.layoutManager = layoutManager
 

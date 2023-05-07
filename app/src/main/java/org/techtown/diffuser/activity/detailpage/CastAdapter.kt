@@ -9,9 +9,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import org.techtown.diffuser.BaseAdapter
 import org.techtown.diffuser.R
+import org.techtown.diffuser.fragment.home.TheMore
 import org.techtown.diffuser.model.CastRv
+import org.techtown.diffuser.model.Movie
 
-class CastAdapter : BaseAdapter() {
+class CastAdapter(itemClickListener: (View, Int, Movie?, TheMore?) -> Unit) :
+    BaseAdapter(itemClickListener) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CastingViewHolder {
         val inflater = LayoutInflater.from(parent.context)

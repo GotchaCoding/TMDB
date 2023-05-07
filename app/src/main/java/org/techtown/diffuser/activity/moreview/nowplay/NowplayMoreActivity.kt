@@ -1,5 +1,6 @@
 package org.techtown.diffuser.activity.moreview.nowplay
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -7,6 +8,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import dagger.hilt.android.AndroidEntryPoint
+import org.techtown.diffuser.activity.detailpage.PopularDetailActivity
+import org.techtown.diffuser.con.Constants
 import org.techtown.diffuser.databinding.ActivityNowplayMoreViewBinding
 
 @AndroidEntryPoint
@@ -33,7 +36,24 @@ class NowplayMoreActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshLis
 
     private fun initView() {
         val layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        adapter = NowMoreAdapter()
+        adapter = NowMoreAdapter(
+            itemClickListener = { _, viewType, movie, _ ->
+                when (viewType) {
+                    Constants.VIEW_TYPE_FAIL -> {
+                        viewModel.fetch()
+                    }
+                    else -> {
+                        movie?.let {
+                            val intent = Intent(this, PopularDetailActivity::class.java)
+                            intent.putExtra(
+                                "movie_id",
+                                movie.id
+                            )
+                            startActivity(intent)
+                        }
+                    }
+                }
+            })
         binding.recyclerviewTheMore.adapter = adapter
         binding.recyclerviewTheMore.layoutManager = layoutManager
         binding.recyclerviewTheMore.addOnScrollListener(object : RecyclerView.OnScrollListener() {

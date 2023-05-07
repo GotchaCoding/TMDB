@@ -6,10 +6,12 @@
     android:background="@color/background">
 
     <TextView
+        android:id="@+id/tvFail"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:text="@string/error"
         android:textColor="@color/white"
+        android:background="?attr/selectableItemBackground"
         android:textSize="25dp"
         android:gravity="center"
         app:layout_constraintTop_toTopOf="parent"

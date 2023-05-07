@@ -15,8 +15,8 @@ import org.techtown.diffuser.model.TitleModel
 import org.techtown.diffuser.model.WrappingModel
 
 class HomeAdapter(
-    private val itemClickListener: (View, Int, Movie?, TheMore?) -> Unit, // MoreViewClick 인터페이스 속성 생성자 포함 : (View, Int, Movie?) 매개변수로 람다함수를 실행
-) : BaseAdapter() {
+    itemClickListener: (View, Int, Movie?, TheMore?) -> Unit, // MoreViewClick 인터페이스 속성 생성자 포함 : (View, Int, Movie?) 매개변수로 람다함수를 실행
+) : BaseAdapter(itemClickListener) {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -79,7 +79,7 @@ class HomeAdapter(
 
     class HorizontalPopularMoviesViewHolder(
         itemView: View,
-        private val ItemClickListener: (View, Int, Movie?, TheMore?) -> Unit
+        private val itemClickListener: (View, Int, Movie?, TheMore?) -> Unit
     ) : RecyclerView.ViewHolder(itemView) {
 
         private var rvMain: RecyclerView =
@@ -87,7 +87,7 @@ class HomeAdapter(
         private var vLoading: LottieAnimationView = itemView.findViewById(R.id.vLoading) //로딩 에니메이션
         private var viewFailure: TextView = itemView.findViewById(R.id.onFailure)  //실패뷰
 
-        var adapter = HorizontalPopularMoviesRecyclerAdapter(ItemClickListener)  // 멀티리사이클러뷰 어뎁터 설정.
+        var adapter = HorizontalPopularMoviesRecyclerAdapter(itemClickListener)  // 멀티리사이클러뷰 어뎁터 설정.
 
         init {
             vLoading.setAnimation(R.raw.loading)    //에니메이션뷰 세팅
@@ -115,12 +115,12 @@ class HomeAdapter(
             }
 
             viewFailure.setOnClickListener {  //실패뷰  클릭리스너.  클릭시
-                ItemClickListener(
+                itemClickListener(
                     it,
                     item.viewType,
                     null,
                     null
-                ) // 아이템클릭리스너 실행. 스트레티지 패턴:   HomeAdapter 객체 만들때 타고타고 들어와서 전달됨.
+                )
             }
         }
 

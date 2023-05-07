@@ -36,7 +36,7 @@ class HorizontalPopularMoviesRecyclerAdapter(private val itemClickListener: (Vie
 
     class MovieViewHolder(
         itemView: View,
-        private val ItemClickListener: (View, Int, Movie?, TheMore) -> Unit
+        private val itemClickListener: (View, Int, Movie?, TheMore) -> Unit
     ) :
         RecyclerView.ViewHolder(itemView) {
 
@@ -51,7 +51,7 @@ class HorizontalPopularMoviesRecyclerAdapter(private val itemClickListener: (Vie
                 .into(image)
 
             itemView.setOnClickListener {
-                ItemClickListener(it, item.viewType, item, TheMore.THEMORE_POPULAR)
+                itemClickListener(it, item.viewType, item, TheMore.THEMORE_POPULAR)
             }
         }
     }

@@ -6,20 +6,19 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.isVisible
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
+import org.techtown.diffuser.BaseAdapter
 import org.techtown.diffuser.R
-import org.techtown.diffuser.model.ItemModel
+import org.techtown.diffuser.fragment.home.TheMore
 import org.techtown.diffuser.model.Movie
 import org.techtown.diffuser.model.TitleModel
 import org.techtown.diffuser.model.WrappingDetailModel
 
-class DetailAdapter(private val itemClickListener: (View, Int, Movie?) -> Unit) :
-    ListAdapter<ItemModel, RecyclerView.ViewHolder>(diffUtil) {
+class DetailAdapter(itemClickListener: (View, Int, Movie?, TheMore?) -> Unit) :
+    BaseAdapter(itemClickListener) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         when (viewType) {
@@ -65,11 +64,11 @@ class DetailAdapter(private val itemClickListener: (View, Int, Movie?) -> Unit) 
         }
     }
 
-    override fun getItemViewType(position: Int): Int {
-        return currentList[position].viewType
-    }
 
-    class BackImageViewHolder(itemView: View, val ItemClickListener: (View, Int, Movie?) -> Unit) :
+    class BackImageViewHolder(
+        itemView: View,
+        val ItemClickListener: (View, Int, Movie?, TheMore?) -> Unit
+    ) :
         RecyclerView.ViewHolder(itemView) {
         private val imgBackgrond: ImageView = itemView.findViewById(R.id.img_background)
         private val imgPoster: ImageView = itemView.findViewById(R.id.img_poster)
@@ -104,18 +103,22 @@ class DetailAdapter(private val itemClickListener: (View, Int, Movie?) -> Unit) 
                 viewFailure.isVisible = true
                 vLoading.isVisible = false
                 viewFailure.setOnClickListener {
-                    ItemClickListener(it, VIEW_TYPE_DETAIL_BACKGROND, null)
+                    ItemClickListener(it, VIEW_TYPE_DETAIL_BACKGROND, null, null)
                 }
             }
         }
     }
 
-    class CastViewHolder(itemView: View, val ItemClickListener: (View, Int, Movie?) -> Unit) :
+    class CastViewHolder(
+        itemView: View,
+        val ItemClickListener: (View, Int, Movie?, TheMore?) -> Unit
+    ) :
         RecyclerView.ViewHolder(itemView) {
 
         var rvCast: RecyclerView = itemView.findViewById(R.id.rvCast)
         var vLoading: LottieAnimationView = itemView.findViewById(R.id.vLoading)
-        var adapter = CastAdapter()
+        var adapter =
+            CastAdapter(itemClickListener = { view: View, i: Int, movie: Movie?, theMore: TheMore? -> })  //todo  추후 확인 필요. 베이스어뎁터에 itemClickListener를 넣으니 이곳도 어떤 처리가 필요함.
         var view_failure: TextView
 
         init {
@@ -141,7 +144,7 @@ class DetailAdapter(private val itemClickListener: (View, Int, Movie?) -> Unit) 
                 }
             }
             view_failure.setOnClickListener {
-                ItemClickListener(it, item.viewType, null)
+                ItemClickListener(it, item.viewType, null, null)
             }
         }
     }
@@ -162,15 +165,4 @@ class DetailAdapter(private val itemClickListener: (View, Int, Movie?) -> Unit) 
         const val VIEW_TYPE_DETAIL_CASTING = 1
         const val VIEW_TYPE_DETAIL_TITLE = 2
     }
-}
-
-val diffUtil = object : DiffUtil.ItemCallback<ItemModel>() {
-    override fun areItemsTheSame(oldItem: ItemModel, newItem: ItemModel): Boolean {
-        return oldItem.id == newItem.id
-    }
-
-    override fun areContentsTheSame(oldItem: ItemModel, newItem: ItemModel): Boolean {
-        return oldItem.equals(newItem)
-    }
-
 }

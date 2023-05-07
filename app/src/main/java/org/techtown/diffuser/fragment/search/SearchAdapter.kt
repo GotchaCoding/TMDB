@@ -6,14 +6,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import org.techtown.diffuser.BaseAdapter
 import org.techtown.diffuser.R
-import org.techtown.diffuser.con.Constants.VIEW_TYPE_COMMON_MORE
-import org.techtown.diffuser.con.Constants.VIEW_TYPE_FAIL
 import org.techtown.diffuser.activity.moreview.viewHolder.CommonMoreViewHolder
+import org.techtown.diffuser.con.Constants.VIEW_TYPE_COMMON_MORE
+import org.techtown.diffuser.fragment.home.TheMore
+import org.techtown.diffuser.model.FailModel
 import org.techtown.diffuser.model.Movie
 
-class SearchAdapter : BaseAdapter() {
-
-    class FailViewHolder(itemView: View) : ViewHolder(itemView)
+class SearchAdapter(itemClickListener: (View, Int, Movie?, TheMore?) -> Unit) :
+    BaseAdapter(itemClickListener) {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -23,11 +23,7 @@ class SearchAdapter : BaseAdapter() {
         return when (viewType) {
             VIEW_TYPE_COMMON_MORE -> {
                 val itemView = inflater.inflate(R.layout.item_themore, parent, false)
-                CommonMoreViewHolder(itemView)
-            }
-            VIEW_TYPE_FAIL -> {
-                val itemView = inflater.inflate(R.layout.item_failure, parent, false)
-                FailViewHolder(itemView)
+                CommonMoreViewHolder(itemView, itemClickListener)
             }
             else -> {
                 super.onCreateViewHolder(parent, viewType)
@@ -39,6 +35,9 @@ class SearchAdapter : BaseAdapter() {
         val itemModel = currentList[position]
         if (holder is CommonMoreViewHolder) {
             holder.setItem(itemModel as Movie)
+        }
+        if (holder is BaseAdapter.FailViewHolder) {
+            holder.setItem(itemModel as FailModel)
         }
     }
 }

@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import dagger.hilt.android.AndroidEntryPoint
 import org.techtown.diffuser.databinding.ActivityPopualrDetailBinding
+import org.techtown.diffuser.fragment.home.TheMore
 
 @AndroidEntryPoint
 class PopularDetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
@@ -34,7 +35,7 @@ class PopularDetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshL
     private fun initView() {
         val layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
-        adapter = DetailAdapter { view, viewType, movie ->
+        adapter = DetailAdapter { view, viewType, movie, _ : TheMore?->
             when (viewType) {
                 DetailAdapter.VIEW_TYPE_DETAIL_BACKGROND -> {
                     viewModel.fetch()

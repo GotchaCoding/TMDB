@@ -9,6 +9,4 @@ object Constants {
     const val VIEW_TYPE_FAIL = -200
     const val VIEW_TYPE_COMMON_MORE = -300
     const val VIEW_TYPE_CAST_RV = -400
-
-
 }
