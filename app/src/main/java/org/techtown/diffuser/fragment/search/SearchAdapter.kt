@@ -36,7 +36,7 @@ class SearchAdapter(itemClickListener: (View, Int, Movie?, TheMore?) -> Unit) :
         if (holder is CommonMoreViewHolder) {
             holder.setItem(itemModel as Movie)
         }
-        if (holder is BaseAdapter.FailViewHolder) {
+        if (holder is FailViewHolder) {
             holder.setItem(itemModel as FailModel)
         }
     }

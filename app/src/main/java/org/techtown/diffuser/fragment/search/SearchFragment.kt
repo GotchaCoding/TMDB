@@ -28,10 +28,10 @@ class SearchFragment : Fragment() {
 
     private val viewModel: SearchViewModel by viewModels()
 
-    lateinit var oneTitle: String
-    lateinit var twoTitle: String
-    lateinit var threeTitle: String
-    lateinit var fourTitle: String
+    var oneTitle: String = ""
+    var twoTitle: String = ""
+    var threeTitle: String = ""
+    var fourTitle: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -60,6 +60,7 @@ class SearchFragment : Fragment() {
     private fun initTrendObserver() {
         viewModel.trendItems.observe(viewLifecycleOwner) { titles ->
             if (titles.isNotEmpty()) {
+                binding.tvHint.isVisible = true
                 oneTitle = titles[0]
                 twoTitle = titles[1]
                 threeTitle = titles[2]
@@ -68,7 +69,7 @@ class SearchFragment : Fragment() {
                 binding.tvSecond.text = twoTitle
                 binding.tvThird.text = threeTitle
                 binding.tvFour.text = fourTitle
-            }
+            } else binding.tvHint.isVisible = false
         }
     }
 
@@ -76,23 +77,23 @@ class SearchFragment : Fragment() {
         with(binding) {
             val layoutManager = LinearLayoutManager(context)
             adapter = SearchAdapter(
-                    itemClickListener = { _, viewType, movie, _ ->
-                        when (viewType) {
-                            Constants.VIEW_TYPE_FAIL -> {
-                                viewModel.fetch("")
-                            }
-                            else -> {
-                                movie?.let {
-                                    val intent = Intent(context, PopularDetailActivity::class.java)
-                                    intent.putExtra(
-                                        "movie_id",
-                                        movie.id
-                                    )
-                                    startActivity(intent)
-                                }
+                itemClickListener = { _, viewType, movie, _ ->
+                    when (viewType) {
+                        Constants.VIEW_TYPE_FAIL -> {
+                            viewModel.fetch("")
+                        }
+                        else -> {
+                            movie?.let {
+                                val intent = Intent(context, PopularDetailActivity::class.java)
+                                intent.putExtra(
+                                    "movie_id",
+                                    movie.id
+                                )
+                                startActivity(intent)
                             }
                         }
-                    })
+                    }
+                })
             recyclerviewTheMore.adapter = adapter
             recyclerviewTheMore.layoutManager = layoutManager
 
