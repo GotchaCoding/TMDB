@@ -1,5 +1,6 @@
 package org.techtown.diffuser.fragment.search
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +20,7 @@ class SearchAdapter(itemClickListener: (View, Int, Movie?, TheMore?) -> Unit) :
         parent: ViewGroup,
         viewType: Int
     ): ViewHolder {
+        Log.e("kmh!!!", "onCreateViewHolder")
         val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
             VIEW_TYPE_COMMON_MORE -> {
@@ -32,6 +34,7 @@ class SearchAdapter(itemClickListener: (View, Int, Movie?, TheMore?) -> Unit) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        Log.e("kmh!!!", "onBindViewHolder")
         val itemModel = currentList[position]
         if (holder is CommonMoreViewHolder) {
             holder.setItem(itemModel as Movie)

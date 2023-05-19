@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
@@ -40,6 +41,14 @@ class HomeAdapter(
                 val itemView = inflater.inflate(R.layout.item_popularmovies, parent, false)
                 return HorizontalPopularMoviesViewHolder(itemView, itemClickListener)
             }
+            VIEW_TYPE_GRID_TITLE -> {
+                val itemView = inflater.inflate(R.layout.item_grid_title, parent, false)
+                return GridTitleViewHolder(itemView, itemClickListener)
+            }
+            VIEW_TYPE_GIRD_MOVIE -> {
+                val itemView = inflater.inflate(R.layout.item_popularmovies, parent, false)
+                return GridMovieViewHolder(itemView)
+            }
             else -> {  // 지정한 뷰타입이 아닐 시 에러
                 throw Exception()
             }
@@ -70,6 +79,16 @@ class HomeAdapter(
             }
             VIEW_TYPE_UPCOMMING -> {
                 if (holder is HorizontalPopularMoviesViewHolder && itemModel is WrappingModel) {
+                    holder.setItem(itemModel)
+                }
+            }
+            VIEW_TYPE_GRID_TITLE -> {
+                if (itemModel is TitleModel) {
+                    (holder as GridTitleViewHolder).setItem(itemModel)
+                }
+            }
+            VIEW_TYPE_GIRD_MOVIE -> {
+                if( holder is GridMovieViewHolder && itemModel is WrappingModel) {
                     holder.setItem(itemModel)
                 }
             }
@@ -149,6 +168,55 @@ class HomeAdapter(
         }
     }
 
+    class GridTitleViewHolder(
+        itemView: View,
+        private val itemClickListener: (View, Int, Movie?, TheMore?) -> Unit
+    ) : RecyclerView.ViewHolder(itemView) {
+        private var tvGridTitle : TextView = itemView.findViewById(R.id.tvGridTitle)
+
+        fun setItem(titleModel : TitleModel) {
+
+        }
+    }
+
+    class GridMovieViewHolder(
+        itemView: View,
+//        private val itemClickListener: (View, Int, Movie?, TheMore?) -> Unit
+    ) : RecyclerView.ViewHolder(itemView) {
+        private var rvMain: RecyclerView = itemView.findViewById(R.id.rvMain)
+        private var vLoading: LottieAnimationView = itemView.findViewById(R.id.vLoading)
+        private var viewFailure: TextView = itemView.findViewById(R.id.onFailure)
+
+        var adapter = GridMovieAdapter()
+
+        init {
+            vLoading.setAnimation(R.raw.loading)
+            vLoading.repeatCount = -1
+            vLoading.playAnimation()
+            rvMain.adapter = adapter
+            rvMain.layoutManager =
+                GridLayoutManager(itemView.context, 2)
+        }
+
+        fun setItem(item: WrappingModel) {
+            if (item.isFailure) {
+                viewFailure.isVisible = true
+                vLoading.isVisible = item.isLoading
+            } else {
+                viewFailure.isVisible = false
+                vLoading.isVisible = item.isLoading
+
+                if (item.model != null) {
+                    adapter.submitList(item.model.movies)
+                }
+            }
+
+//            viewFailure.setOnClickListener {
+//                itemClickListener(it, item.viewType, null, null)
+//            }
+        }
+    }
+
     class NowMovieViewHolder(
         itemView: View,
         private val itemClickListener: (View, Int, Movie?, TheMore?) -> Unit
@@ -193,6 +261,8 @@ class HomeAdapter(
         const val VIEW_TYPE_POPULAR_MOVIE = 1
         const val VIEW_TYPE_NOW_MOVIE = 2
         const val VIEW_TYPE_UPCOMMING = 3
+        const val VIEW_TYPE_GRID_TITLE = 4
+        const val VIEW_TYPE_GIRD_MOVIE = 5
     }
 }
 

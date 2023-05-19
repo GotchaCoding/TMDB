@@ -118,7 +118,7 @@ class DetailAdapter(itemClickListener: (View, Int, Movie?, TheMore?) -> Unit) :
         var rvCast: RecyclerView = itemView.findViewById(R.id.rvCast)
         var vLoading: LottieAnimationView = itemView.findViewById(R.id.vLoading)
         var adapter =
-            CastAdapter(itemClickListener = { view: View, i: Int, movie: Movie?, theMore: TheMore? -> })  //todo  추후 확인 필요. 베이스어뎁터에 itemClickListener를 넣으니 이곳도 어떤 처리가 필요함.
+            CastAdapter(itemClickListener = { _,_,_,_ -> })  //todo  추후 확인 필요. 베이스어뎁터에 itemClickListener를 넣으니 이곳도 어떤 처리가 필요함.
         var view_failure: TextView
 
         init {

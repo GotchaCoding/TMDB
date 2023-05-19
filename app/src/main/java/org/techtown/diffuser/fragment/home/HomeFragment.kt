@@ -15,6 +15,7 @@ import org.techtown.diffuser.activity.moreview.comming.CommingMoreActivity
 import org.techtown.diffuser.activity.moreview.nowplay.NowplayMoreActivity
 import org.techtown.diffuser.activity.moreview.popular.PopularMoreActivity
 import org.techtown.diffuser.databinding.ActivityHomeFragmentBinding
+import org.techtown.diffuser.fragment.home.HomeAdapter.Companion.VIEW_TYPE_GIRD_MOVIE
 import org.techtown.diffuser.fragment.home.HomeAdapter.Companion.VIEW_TYPE_NOW_MOVIE
 import org.techtown.diffuser.fragment.home.HomeAdapter.Companion.VIEW_TYPE_POPULAR_MOVIE
 import org.techtown.diffuser.fragment.home.HomeAdapter.Companion.VIEW_TYPE_UPCOMMING
@@ -68,6 +69,9 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {  //í”„ëž
                         VIEW_TYPE_UPCOMMING -> {
                             viewModel.fetchUpComming()
                         }
+                        VIEW_TYPE_GIRD_MOVIE -> {
+                            viewModel.fetchGrid()
+                        }
                     }
 
                     when (theMore) {
@@ -103,6 +107,7 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {  //í”„ëž
         viewModel.fetch()
         viewModel.fetchNowPlay()
         viewModel.fetchUpComming()
+        viewModel.fetchGrid()
     }
 
     override fun onRefresh() {
@@ -114,6 +119,8 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {  //í”„ëž
         const val RECYCLERVIEW_ID_TITME = -2L
         const val RECYCLERVIEW_ID_NOW = -3L
         const val RECYCLERVIEW_ID_COMMING = -4L
+        const val RECYCLERVIEW_ID_GRID_TITLE = -5L
+        const val RECYCLERVIEW_ID_GRID_MOVIE = -6L
     }
 }
 

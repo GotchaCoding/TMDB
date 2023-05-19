@@ -29,7 +29,6 @@ class HorizontalNowPlayingAdapter(private val ItemClickListener: (View, Int, Mov
     override fun getItemCount(): Int {
         return currentList.size
     }
-
 }
 
 class NowMovieViewHolder(

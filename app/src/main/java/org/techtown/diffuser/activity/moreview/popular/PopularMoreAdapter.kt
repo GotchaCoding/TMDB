@@ -1,5 +1,6 @@
 package org.techtown.diffuser.activity.moreview.popular
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,7 @@ import org.techtown.diffuser.model.Movie
 class PopularMoreAdapter( itemClickListener: (View, Int, Movie?, TheMore?) -> Unit) : BaseAdapter(itemClickListener) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        Log.e("kmh!!!" , "onCreateViewHolder" )
         return when (viewType) {
             VIEW_TYPE_COMMON_MORE -> {
                 val inflater = LayoutInflater.from(parent.context)
@@ -28,6 +30,7 @@ class PopularMoreAdapter( itemClickListener: (View, Int, Movie?, TheMore?) -> Un
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        Log.e("kmh!!!" , "onBindViewHolder" )
         if (holder is CommonMoreViewHolder) {
             holder.setItem(currentList[position] as Movie)
         }
