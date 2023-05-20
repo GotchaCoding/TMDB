@@ -51,12 +51,12 @@ class HomeViewModel @Inject constructor(
                     HomeAdapter.VIEW_TYPE_UPCOMMING,
                     id = HomeFragment.RECYCLERVIEW_ID_COMMING  // 지금단계에서는 VIEW_TYPE_UPCOMMING 을 쓰나 VIEW_TYPE_NOW_MOVIE 를 쓰나 크게 상관 없음. 어짜피 같은 레이아웃 사용.
                 ),
-//                TitleModel(
-//                    "지금 뜨는 영화 ㄱ",
-//                    theMore = null,
-//                    viewType = HomeAdapter.VIEW_TYPE_GRID_TITLE,
-//                    id = HomeFragment.RECYCLERVIEW_ID_GRID_TITLE
-//                ),
+                TitleModel(
+                    "지금 뜨는 영화 ㄱ",
+                    theMore = null,
+                    viewType = HomeAdapter.VIEW_TYPE_GRID_TITLE,
+                    id = HomeFragment.RECYCLERVIEW_ID_GRID_TITLE
+                ),
                 WrappingModel(
                     true, null,
                     HomeAdapter.VIEW_TYPE_GIRD_MOVIE,
@@ -271,7 +271,7 @@ class HomeViewModel @Inject constructor(
                         )
 
                         _items.value = _items.value!!.mapIndexed { index, itemModel ->
-                            if (index == 6 && itemModel is WrappingModel) {
+                            if (index == 7 && itemModel is WrappingModel) {
                                 itemModel.copy(
                                     isLoading = false,
                                     model = horizontalPopularModel,
@@ -286,7 +286,7 @@ class HomeViewModel @Inject constructor(
                     }
                     is Resource.Fail -> {
                         _items.value = _items.value!!.mapIndexed { index, itemModel ->
-                            if (index == 6 && itemModel is WrappingModel) {
+                            if (index == 7 && itemModel is WrappingModel) {
                                 itemModel.copy(
                                     isLoading = false,
                                     model = null,

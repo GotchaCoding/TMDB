@@ -2,6 +2,7 @@ package org.techtown.diffuser.fragment.home
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -58,7 +59,9 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {  //프�
 
         adapter = HomeAdapter(  //HomeAdapter 객체 만들때  생성자 부분의 인터페이스와 람다함수 초기화
             itemClickListener = { _, viewType, movie, theMore -> // 사용안하는 매개변수 '_' 처리.
+                Log.e("kmh!!!", "클릭 리스너 처음")
                 if (movie == null) {
+                    Log.e("kmh!!!", "클릭 리스너 if 문")
                     when (viewType) {  // 실패뷰 떳을때 클릭시 뷰타입별로 패치
                         VIEW_TYPE_POPULAR_MOVIE -> {
                             viewModel.fetch()
@@ -90,6 +93,7 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {  //프�
                         else -> {}
                     }
                 } else {//클릭시 movie 정보는 반드시 필요.
+                    Log.e("kmh!!!", "클릭 리스너 처음")
                     val intent = Intent(context, PopularDetailActivity::class.java)
                     intent.putExtra(
                         "movie_id",

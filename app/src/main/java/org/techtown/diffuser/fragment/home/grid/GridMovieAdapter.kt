@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -12,7 +11,7 @@ import com.bumptech.glide.Glide
 import org.techtown.diffuser.R
 import org.techtown.diffuser.model.Movie
 
-class GridMovieAdapter() :
+class GridMovieAdapter(private val itemClickListener: (View, Int, Movie?, TheMore?) -> Unit) :
     ListAdapter<Movie, GridMovieAdapter.GirdMovieMultiViewHolder>(diffUtil_grid) {
 
     override fun onCreateViewHolder(
@@ -20,8 +19,8 @@ class GridMovieAdapter() :
         viewType: Int
     ): GirdMovieMultiViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val itemView = inflater.inflate(R.layout.item_grid, parent, false)
-        return GirdMovieMultiViewHolder(itemView)
+        val itemView = inflater.inflate(R.layout.item_grid_movie, parent, false)
+        return GirdMovieMultiViewHolder(itemView, itemClickListener)
     }
 
     override fun onBindViewHolder(holder: GirdMovieMultiViewHolder, position: Int) {
@@ -34,22 +33,20 @@ class GridMovieAdapter() :
     }
 
     class GirdMovieMultiViewHolder(
-        itemView: View
+        itemView: View,
+        private val itemClickListener: (View, Int, Movie?, TheMore?) -> Unit
     ) : RecyclerView.ViewHolder(itemView) {
-//        var title: TextView = itemView.findViewById(R.id.tvGrid)
         var image: ImageView = itemView.findViewById(R.id.imgGrid)
-//        var rank: TextView = itemView.findViewById(R.id.tvGridRank)
 
         fun setItem(item: Movie) {
-//            title.text = item.title
-//            rank.text = item.rank
             Glide.with(itemView).load("https://image.tmdb.org/t/p/w500" + item.imagePoster)
                 .into(image)
+
+            itemView.setOnClickListener {
+                itemClickListener(it, item.viewType, item, null)
+            }
         }
-
     }
-
-
 }
 
 val diffUtil_grid = object : DiffUtil.ItemCallback<Movie>() {
