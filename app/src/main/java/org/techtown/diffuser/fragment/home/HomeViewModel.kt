@@ -51,17 +51,6 @@ class HomeViewModel @Inject constructor(
                     HomeAdapter.VIEW_TYPE_UPCOMMING,
                     id = HomeFragment.RECYCLERVIEW_ID_COMMING  // 지금단계에서는 VIEW_TYPE_UPCOMMING 을 쓰나 VIEW_TYPE_NOW_MOVIE 를 쓰나 크게 상관 없음. 어짜피 같은 레이아웃 사용.
                 ),
-                TitleModel(
-                    "지금 뜨는 영화 ㄱ",
-                    theMore = null,
-                    viewType = HomeAdapter.VIEW_TYPE_GRID_TITLE,
-                    id = HomeFragment.RECYCLERVIEW_ID_GRID_TITLE
-                ),
-                WrappingModel(
-                    true, null,
-                    HomeAdapter.VIEW_TYPE_GIRD_MOVIE,
-                    id = HomeFragment.RECYCLERVIEW_ID_GRID_MOVIE
-                )
             )
         _items.value =
             defaultList  //MutableLiveData<List<ItemModel>> 타입의 items를  로딩뷰가 보이게 디폴트 리스트로 설정.
@@ -236,63 +225,6 @@ class HomeViewModel @Inject constructor(
                                     viewType = HomeAdapter.VIEW_TYPE_UPCOMMING,
                                     isFailure = true,
                                     id = HomeFragment.RECYCLERVIEW_ID_COMMING
-                                )
-                            } else {
-                                itemModel
-                            }
-                        }
-                    }
-                }
-            }.launchIn(viewModelScope)
-    }
-
-    fun fetchGrid() {
-        repository
-            .getTrend()
-            .onEach { result ->
-                when (result) {
-                    is Resource.Loading -> {
-                    }
-                    is Resource.Success -> {
-                        val model = result.model
-                        val list = model.results.map {
-                            Movie(
-                                title = it.title,
-                                rank = it.releaseDate,
-                                imagePoster = it.posterPath,
-                                viewType = HomeAdapter.VIEW_TYPE_GIRD_MOVIE,
-                                id = it.id
-                            )
-                        }.filter { it.imagePoster != null }
-                        val horizontalPopularModel = HorizontalMovieModel(
-                            list,
-                            HomeAdapter.VIEW_TYPE_GIRD_MOVIE,
-                            id = HomeFragment.RECYCLERVIEW_ID_GRID_MOVIE
-                        )
-
-                        _items.value = _items.value!!.mapIndexed { index, itemModel ->
-                            if (index == 7 && itemModel is WrappingModel) {
-                                itemModel.copy(
-                                    isLoading = false,
-                                    model = horizontalPopularModel,
-                                    viewType = HomeAdapter.VIEW_TYPE_GIRD_MOVIE,
-                                    isFailure = false,
-                                    id = HomeFragment.RECYCLERVIEW_ID_GRID_MOVIE
-                                )
-                            } else {
-                                itemModel
-                            }
-                        }
-                    }
-                    is Resource.Fail -> {
-                        _items.value = _items.value!!.mapIndexed { index, itemModel ->
-                            if (index == 7 && itemModel is WrappingModel) {
-                                itemModel.copy(
-                                    isLoading = false,
-                                    model = null,
-                                    viewType = HomeAdapter.VIEW_TYPE_GIRD_MOVIE,
-                                    isFailure = true,
-                                    id = HomeFragment.RECYCLERVIEW_ID_GRID_MOVIE
                                 )
                             } else {
                                 itemModel

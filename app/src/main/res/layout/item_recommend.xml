@@ -6,12 +6,23 @@
 
     <ImageView
         android:id="@+id/imgGrid"
-        android:layout_width="160dp"
-        android:layout_height="240dp"
+        android:layout_width="wrap_content"
+        android:layout_height="270dp"
         android:background="@drawable/imageshape"
         android:layout_marginBottom="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <CheckBox
+        android:id="@+id/checkbox"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="7dp"
+        android:button="@android:color/transparent"
+        android:background="@drawable/checkedbox_selector"
+        app:layout_constraintTop_toTopOf="@id/imgGrid"
+        app:layout_constraintEnd_toEndOf="@id/imgGrid"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

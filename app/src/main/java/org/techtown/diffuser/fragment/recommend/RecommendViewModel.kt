@@ -23,7 +23,7 @@ class RecommendViewModel @Inject constructor(
             TitleModel(
                 title = "추천영화",
                 viewType = Constants.VIEW_TYPE_RECOMMEND_TITLE,
-                id = Constants.KEY_RECOMMEND_TITLE_ID
+                id = Constants.KEY_RECOMMEND_TITLE_ID,
             )
         )
         _items.value = defaultList
