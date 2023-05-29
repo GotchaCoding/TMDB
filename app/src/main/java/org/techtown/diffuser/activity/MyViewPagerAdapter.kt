@@ -8,7 +8,7 @@ import org.techtown.diffuser.fragment.recommend.RecommendFragment
 import org.techtown.diffuser.fragment.search.SearchFragment
 
 class MyViewPagerAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
-    private val fragments: List<Fragment> = listOf(HomeFragment(),RecommendFragment.newInstance(), SearchFragment())
+    private val fragments: List<Fragment> = listOf(HomeFragment.newInstance(),RecommendFragment.newInstance(), SearchFragment.newInstance())
 
     override fun getItemCount(): Int {
         return fragments.size

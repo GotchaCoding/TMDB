@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.onEach
 import org.techtown.diffuser.Repository
 import org.techtown.diffuser.Resource
 import org.techtown.diffuser.activity.BaseViewModel
+import org.techtown.diffuser.con.Constants
 import org.techtown.diffuser.model.*
 import javax.inject.Inject
 
@@ -18,38 +19,39 @@ class HomeViewModel @Inject constructor(
 
     init {
         val defaultList =
-            listOf(   //fetch 하여 데이터를 넣기 전에  뷰를 미리 구성하여 세팅.  fetch 전 로딩뷰를 보여주기 위함. 로딩뷰 default 로 보여주고 있다가 Fetch 이후 사라지게 .
+            listOf(
+                //fetch 하여 데이터를 넣기 전에  뷰를 미리 구성하여 세팅.  fetch 전 로딩뷰를 보여주기 위함. 로딩뷰 default 로 보여주고 있다가 Fetch 이후 사라지게 .
                 TitleModel(
                     "인기영화",
                     TheMore.THEMORE_POPULAR,
                     HomeAdapter.VIEW_TYPE_TITLE,  //뷰타입 뷰홀더 생성과 온바인드시에 활용.
-                    HomeFragment.RECYCLERVIEW_ID_TITME   //diffUtil 에서 Item 비교시 활용. 이후 Movie id를 다시 넣어주어 고유값을 가지게 될 예정.
+                    Constants.KEY_RECYCLERVIEW_ID_TITLE   //diffUtil 에서 Item 비교시 활용. 이후 Movie id를 다시 넣어주어 고유값을 가지게 될 예정.
                 ),
                 WrappingModel( // 로딩뷰와  실패뷰, 그리고 호리즌탈무비모델을 생성자속성으로 가지고 있음.
                     true, null,   // 로딩 구현.  모델은 null
-                    HomeAdapter.VIEW_TYPE_POPULAR_MOVIE, id = HomeFragment.RECYCLERVIEW_ID_POPULAR
+                    HomeAdapter.VIEW_TYPE_POPULAR_MOVIE, id = Constants.KEY_RECYCLERVIEW_ID_POPULAR
                 ),
                 TitleModel(
                     "상영중 영화",
                     TheMore.THEMORE_NOW,
                     HomeAdapter.VIEW_TYPE_TITLE,
-                    HomeFragment.RECYCLERVIEW_ID_TITME
+                    Constants.KEY_RECYCLERVIEW_ID_TITLE
                 ),
                 WrappingModel(
                     true, null,
-                    HomeAdapter.VIEW_TYPE_NOW_MOVIE, id = HomeFragment.RECYCLERVIEW_ID_NOW
+                    HomeAdapter.VIEW_TYPE_NOW_MOVIE, id = Constants.KEY_RECYCLERVIEW_ID_NOW
                 ),
                 TitleModel(
                     "개봉 예정",
                     TheMore.THEMORE_COMMING,
                     HomeAdapter.VIEW_TYPE_TITLE,
-                    HomeFragment.RECYCLERVIEW_ID_TITME
+                    Constants.KEY_RECYCLERVIEW_ID_TITLE
                 ),
                 WrappingModel(
                     true,
                     null,
                     HomeAdapter.VIEW_TYPE_UPCOMMING,
-                    id = HomeFragment.RECYCLERVIEW_ID_COMMING  // 지금단계에서는 VIEW_TYPE_UPCOMMING 을 쓰나 VIEW_TYPE_NOW_MOVIE 를 쓰나 크게 상관 없음. 어짜피 같은 레이아웃 사용.
+                    id = Constants.KEY_RECYCLERVIEW_ID_COMMING  // 지금단계에서는 VIEW_TYPE_UPCOMMING 을 쓰나 VIEW_TYPE_NOW_MOVIE 를 쓰나 크게 상관 없음. 어짜피 같은 레이아웃 사용.
                 ),
             )
         _items.value =
@@ -83,7 +85,7 @@ class HomeViewModel @Inject constructor(
                             HorizontalMovieModel(
                                 list, //생성자 속성으로 List<Moive> 를 가지고 있음
                                 HomeAdapter.VIEW_TYPE_POPULAR_MOVIE,
-                                id = HomeFragment.RECYCLERVIEW_ID_POPULAR
+                                id = Constants.KEY_RECYCLERVIEW_ID_POPULAR
                             )
 
                         _items.value =
@@ -143,7 +145,7 @@ class HomeViewModel @Inject constructor(
                         val nowPlaying = HorizontalMovieModel(
                             list,
                             HomeAdapter.VIEW_TYPE_NOW_MOVIE,
-                            id = HomeFragment.RECYCLERVIEW_ID_NOW
+                            id = Constants.KEY_RECYCLERVIEW_ID_NOW
                         )
                         _items.value = items.value!!.mapIndexed { index, itemModel ->
                             if (index == 3 && itemModel is WrappingModel) {
@@ -152,7 +154,7 @@ class HomeViewModel @Inject constructor(
                                     model = nowPlaying,
                                     viewType = HomeAdapter.VIEW_TYPE_NOW_MOVIE,
                                     isFailure = false,
-                                    id = HomeFragment.RECYCLERVIEW_ID_NOW
+                                    id = Constants.KEY_RECYCLERVIEW_ID_NOW
                                 )
                             } else {
                                 itemModel
@@ -167,7 +169,7 @@ class HomeViewModel @Inject constructor(
                                     model = null,
                                     viewType = HomeAdapter.VIEW_TYPE_NOW_MOVIE,
                                     isFailure = true,
-                                    id = HomeFragment.RECYCLERVIEW_ID_NOW
+                                    id = Constants.KEY_RECYCLERVIEW_ID_NOW
                                 )
                             } else {
                                 itemModel
@@ -199,7 +201,7 @@ class HomeViewModel @Inject constructor(
                         val horizontalPopularModel = HorizontalMovieModel(
                             list,
                             HomeAdapter.VIEW_TYPE_UPCOMMING,
-                            id = HomeFragment.RECYCLERVIEW_ID_COMMING
+                            id = Constants.KEY_RECYCLERVIEW_ID_COMMING
                         )
 
                         _items.value = _items.value!!.mapIndexed { index, itemModel ->
@@ -209,7 +211,7 @@ class HomeViewModel @Inject constructor(
                                     model = horizontalPopularModel,
                                     viewType = HomeAdapter.VIEW_TYPE_UPCOMMING,
                                     isFailure = false,
-                                    id = HomeFragment.RECYCLERVIEW_ID_COMMING
+                                    id = Constants.KEY_RECYCLERVIEW_ID_COMMING
                                 )
                             } else {
                                 itemModel
@@ -224,7 +226,7 @@ class HomeViewModel @Inject constructor(
                                     model = null,
                                     viewType = HomeAdapter.VIEW_TYPE_UPCOMMING,
                                     isFailure = true,
-                                    id = HomeFragment.RECYCLERVIEW_ID_COMMING
+                                    id = Constants.KEY_RECYCLERVIEW_ID_COMMING
                                 )
                             } else {
                                 itemModel

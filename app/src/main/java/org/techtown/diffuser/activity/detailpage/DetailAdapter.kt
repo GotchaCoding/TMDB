@@ -149,16 +149,7 @@ class DetailAdapter(itemClickListener: (View, Int, Movie?, TheMore?) -> Unit) :
         }
     }
 
-    class TitleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        var tvTitle: TextView = itemView.findViewById(R.id.tvTitle)
-        var tvMoreview: TextView = itemView.findViewById(R.id.tvMoreview)
-
-        fun setItem(item: TitleModel) {
-            tvTitle.text = item.title
-            tvMoreview.text = ""
-        }
-    }
 
     companion object {
         const val VIEW_TYPE_DETAIL_BACKGROND = 0

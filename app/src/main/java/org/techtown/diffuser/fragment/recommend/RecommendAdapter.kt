@@ -8,9 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import org.techtown.diffuser.BaseAdapter
 import org.techtown.diffuser.R
-import org.techtown.diffuser.activity.detailpage.DetailAdapter
+import org.techtown.diffuser.activity.detailpage.TitleViewHolder
 import org.techtown.diffuser.con.Constants
-import org.techtown.diffuser.fragment.home.HomeAdapter
 import org.techtown.diffuser.fragment.home.TheMore
 import org.techtown.diffuser.model.Movie
 import org.techtown.diffuser.model.TitleModel
@@ -23,7 +22,7 @@ class RecommendAdapter (
             Constants.VIEW_TYPE_RECOMMEND_TITLE -> {
                 val inflater = LayoutInflater.from(parent.context)
                 val itemView = inflater.inflate(R.layout.item_titlepopualr, parent, false)
-                DetailAdapter.TitleViewHolder(itemView)
+                TitleViewHolder(itemView)
             }
             Constants.VIEW_TYPE_RECOMMEND_ITEM -> {
                 val inflater = LayoutInflater.from(parent.context)
@@ -39,7 +38,7 @@ class RecommendAdapter (
         val item = currentList[position]
         if (holder is RecommendViewHolder) {
             holder.setItem(item as Movie)
-        } else if ( holder is DetailAdapter.TitleViewHolder) {
+        } else if ( holder is TitleViewHolder) {
             holder.setItem(item as TitleModel)
         }
 

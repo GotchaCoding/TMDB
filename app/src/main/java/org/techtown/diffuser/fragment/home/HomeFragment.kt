@@ -19,6 +19,7 @@ import org.techtown.diffuser.databinding.ActivityHomeFragmentBinding
 import org.techtown.diffuser.fragment.home.HomeAdapter.Companion.VIEW_TYPE_NOW_MOVIE
 import org.techtown.diffuser.fragment.home.HomeAdapter.Companion.VIEW_TYPE_POPULAR_MOVIE
 import org.techtown.diffuser.fragment.home.HomeAdapter.Companion.VIEW_TYPE_UPCOMMING
+import org.techtown.diffuser.fragment.recommend.RecommendFragment
 
 @AndroidEntryPoint  //프래그먼트 힐트 주입 어노테이션
 class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {  //프래그먼트 상속, 스와이프리프레시 리스너 상속
@@ -114,10 +115,9 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {  //프�
     }
 
     companion object {
-        const val RECYCLERVIEW_ID_POPULAR = -1L
-        const val RECYCLERVIEW_ID_TITME = -2L
-        const val RECYCLERVIEW_ID_NOW = -3L
-        const val RECYCLERVIEW_ID_COMMING = -4L
+        fun newInstance(): Fragment {
+            return HomeFragment()
+        }
     }
 }
 

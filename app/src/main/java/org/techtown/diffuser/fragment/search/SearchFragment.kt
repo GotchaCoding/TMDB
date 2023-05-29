@@ -19,6 +19,7 @@ import org.techtown.diffuser.R
 import org.techtown.diffuser.activity.detailpage.PopularDetailActivity
 import org.techtown.diffuser.con.Constants
 import org.techtown.diffuser.databinding.ActivitySearchFragmentBinding
+import org.techtown.diffuser.fragment.recommend.RecommendFragment
 
 @AndroidEntryPoint
 class SearchFragment : Fragment() {
@@ -142,5 +143,11 @@ class SearchFragment : Fragment() {
     private fun animation() {
         val animation = AnimationUtils.loadAnimation(context, R.anim.alpha)
         binding.tvHint.startAnimation(animation)
+    }
+
+    companion object {
+        fun newInstance() : Fragment {
+            return SearchFragment()
+        }
     }
 }
