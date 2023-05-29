@@ -33,7 +33,7 @@ abstract class BaseAdapter(
                 return FailViewHolder(itemView, itemClickListener)
             }
             else -> {
-                throw Exception()
+                throw Exception("ViewHolder Exception")
             }
         }
     }

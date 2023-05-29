@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity(),
     private fun attachBackPressedCallback() {   //뒤로가기 클릭시  검색프래그먼트인 경우 홈프래그먼트로 이동.  홈에선 엑티비티 종료
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (binding.pager.currentItem == 1) {
+                if (binding.pager.currentItem == 1 || binding.pager.currentItem ==2) {
                     binding.pager.currentItem = 0
                 } else {
                     finish()
@@ -57,8 +57,12 @@ class MainActivity : AppCompatActivity(),
                 binding.pager.currentItem = 0  //currentItem  현재 선택한 페이지를 설정. 뷰페이저가 이미 첫번재 레이아웃을 완료햇다면 지정된 아이탬 프래그먼트로 전환됨.
                 return true
             }
+            R.id.item_recommend -> {
+                binding.pager.currentItem =1
+                return true
+            }
             R.id.item_search -> {
-                binding.pager.currentItem = 1
+                binding.pager.currentItem = 2
                 return true
             }
             else -> {
