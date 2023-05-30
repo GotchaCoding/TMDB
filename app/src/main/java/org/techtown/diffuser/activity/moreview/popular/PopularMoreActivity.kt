@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import dagger.hilt.android.AndroidEntryPoint
 import org.techtown.diffuser.activity.detailpage.PopularDetailActivity
-import org.techtown.diffuser.con.Constants.VIEW_TYPE_FAIL
+import org.techtown.diffuser.constants.Constants.VIEW_TYPE_FAIL
 import org.techtown.diffuser.databinding.ActivityPopularMoreViewBinding
 
 

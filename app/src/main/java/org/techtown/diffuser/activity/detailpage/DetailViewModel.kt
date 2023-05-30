@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.techtown.diffuser.Repository
 import org.techtown.diffuser.Resource
+import org.techtown.diffuser.constants.Constants
 import org.techtown.diffuser.model.*
 import javax.inject.Inject
 
@@ -26,7 +27,7 @@ class DetailViewModel @Inject constructor(
             "",
             "",
             "",
-            id = RECYCLERVIEW_ID_TOP_IN_TOP
+            id = Constants.KEY_RECYCLERVIEW_ID_TOP_IN_TOP
         )
 
         val defaultList = listOf(
@@ -34,23 +35,23 @@ class DetailViewModel @Inject constructor(
                 true,
                 null,
                 topModel,
-                DetailAdapter.VIEW_TYPE_DETAIL_BACKGROND,
+                Constants.VIEW_TYPE_DETAIL_BACKGROND,
                 isFailure = false,
-                id = RECYCLERVIEW_ID_TOP
+                id = Constants.KEY_RECYCLERVIEW_ID_TOP
             ),
             TitleModel(
                 "캐스팅",
                 null,
-                DetailAdapter.VIEW_TYPE_DETAIL_TITLE,
-                RECYCLERVIEW_ID_TITLE
+                Constants.VIEW_TYPE_DETAIL_TITLE,
+                Constants.KEY_RECYCLERVIEW_ID_TITLE
             ),
             WrappingDetailModel(
                 true,
                 null,
                 null,
-                DetailAdapter.VIEW_TYPE_DETAIL_CASTING,
+                Constants.VIEW_TYPE_DETAIL_CASTING,
                 false,
-                RECYCLERVIEW_ID_CAST
+                Constants.KEY_RECYCLERVIEW_ID_CAST
             )
         )
         _items.value = defaultList
@@ -77,12 +78,12 @@ class DetailViewModel @Inject constructor(
                                     overview = model.overview,
                                     postUrl = model.posterPath,
                                     backDropUrl = model.backdropPath,
-                                    id = RECYCLERVIEW_ID_TOP_IN_TOP,
+                                    id = Constants.KEY_RECYCLERVIEW_ID_TOP_IN_TOP,
                                     isFailure = false
                                 ),
-                                viewType = DetailAdapter.VIEW_TYPE_DETAIL_BACKGROND,
+                                viewType = Constants.VIEW_TYPE_DETAIL_BACKGROND,
                                 isFailure = false,
-                                id = RECYCLERVIEW_ID_TOP
+                                id = Constants.KEY_RECYCLERVIEW_ID_TOP
                             )
 
                         } else {
@@ -102,12 +103,12 @@ class DetailViewModel @Inject constructor(
                                     postUrl = "",
                                     backDropUrl = "",
                                     isFailure = true,
-                                    id = RECYCLERVIEW_ID_TOP_IN_TOP,
+                                    id = Constants.KEY_RECYCLERVIEW_ID_TOP_IN_TOP,
                                     isLoading = false,
                                 ),
-                                viewType = DetailAdapter.VIEW_TYPE_DETAIL_BACKGROND,
+                                viewType = Constants.VIEW_TYPE_DETAIL_BACKGROND,
                                 isFailure = true,
-                                id = RECYCLERVIEW_ID_TOP
+                                id = Constants.KEY_RECYCLERVIEW_ID_TOP
 
                             )
                         } else {
@@ -141,9 +142,9 @@ class DetailViewModel @Inject constructor(
 
                     val castModel =
                         HorizontalCastModel(
-                            id = RECYCLERVIEW_ID_CAST,
+                            id = Constants.KEY_RECYCLERVIEW_ID_CAST,
                             list,
-                            DetailAdapter.VIEW_TYPE_DETAIL_CASTING
+                            Constants.VIEW_TYPE_DETAIL_CASTING
                         )
                     _items.value = items.value!!.mapIndexed { index, itemModel ->
                         if (index == 2 && itemModel is WrappingDetailModel) {
@@ -151,7 +152,7 @@ class DetailViewModel @Inject constructor(
                                 isLoading = false,
                                 castModel = castModel,
                                 detailTopModel = null,
-                                viewType = DetailAdapter.VIEW_TYPE_DETAIL_CASTING,
+                                viewType = Constants.VIEW_TYPE_DETAIL_CASTING,
                                 isFailure = false
                             )
                         } else {
@@ -166,7 +167,7 @@ class DetailViewModel @Inject constructor(
                                 isLoading = false,
                                 castModel = null,
                                 detailTopModel = null,
-                                viewType = DetailAdapter.VIEW_TYPE_DETAIL_CASTING,
+                                viewType = Constants.VIEW_TYPE_DETAIL_CASTING,
                                 isFailure = true
                             )
                         } else {
@@ -178,10 +179,4 @@ class DetailViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    companion object {
-        const val RECYCLERVIEW_ID_TOP_IN_TOP = -1L
-        const val RECYCLERVIEW_ID_TOP = -2L
-        const val RECYCLERVIEW_ID_TITLE = -3L
-        const val RECYCLERVIEW_ID_CAST = -4L
-    }
 }

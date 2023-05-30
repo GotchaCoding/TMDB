@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import org.techtown.diffuser.activity.moreview.BottomLoadingViewHolder
-import org.techtown.diffuser.con.Constants
+import org.techtown.diffuser.constants.Constants
 import org.techtown.diffuser.fragment.home.TheMore
 import org.techtown.diffuser.model.FailModel
 import org.techtown.diffuser.model.ItemModel

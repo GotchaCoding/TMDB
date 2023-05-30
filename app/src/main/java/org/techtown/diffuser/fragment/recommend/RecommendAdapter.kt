@@ -9,7 +9,7 @@ import com.bumptech.glide.Glide
 import org.techtown.diffuser.BaseAdapter
 import org.techtown.diffuser.R
 import org.techtown.diffuser.activity.detailpage.TitleViewHolder
-import org.techtown.diffuser.con.Constants
+import org.techtown.diffuser.constants.Constants
 import org.techtown.diffuser.fragment.home.TheMore
 import org.techtown.diffuser.model.Movie
 import org.techtown.diffuser.model.TitleModel

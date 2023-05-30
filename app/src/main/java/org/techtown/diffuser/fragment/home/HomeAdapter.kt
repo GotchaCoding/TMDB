@@ -10,6 +10,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
 import org.techtown.diffuser.BaseAdapter
 import org.techtown.diffuser.R
+import org.techtown.diffuser.constants.Constants
+import org.techtown.diffuser.constants.Constants.VIEW_TYPE_NOW_MOVIE
+import org.techtown.diffuser.constants.Constants.VIEW_TYPE_POPULAR_MOVIE
+import org.techtown.diffuser.constants.Constants.VIEW_TYPE_TITLE
+import org.techtown.diffuser.constants.Constants.VIEW_TYPE_UPCOMMING
 import org.techtown.diffuser.model.Movie
 import org.techtown.diffuser.model.TitleModel
 import org.techtown.diffuser.model.WrappingModel
@@ -189,11 +194,5 @@ class HomeAdapter(
         }
     }
 
-    companion object {    // 뷰타입을 지정할 상수 세팅
-        const val VIEW_TYPE_TITLE = 0
-        const val VIEW_TYPE_POPULAR_MOVIE = 1
-        const val VIEW_TYPE_NOW_MOVIE = 2
-        const val VIEW_TYPE_UPCOMMING = 3
-    }
 }
 

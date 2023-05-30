@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import org.techtown.diffuser.R
 import org.techtown.diffuser.activity.detailpage.PopularDetailActivity
-import org.techtown.diffuser.con.Constants
+import org.techtown.diffuser.constants.Constants
 import org.techtown.diffuser.databinding.FragmentSearchBinding
 import org.techtown.diffuser.fragment.BaseFragment
 

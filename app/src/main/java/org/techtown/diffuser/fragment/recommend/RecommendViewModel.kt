@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.onEach
 import org.techtown.diffuser.Repository
 import org.techtown.diffuser.Resource
 import org.techtown.diffuser.activity.BaseViewModel
-import org.techtown.diffuser.con.Constants
+import org.techtown.diffuser.constants.Constants
 import org.techtown.diffuser.model.ItemModel
 import org.techtown.diffuser.model.Movie
 import org.techtown.diffuser.model.TitleModel

@@ -12,6 +12,10 @@ import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
 import org.techtown.diffuser.BaseAdapter
 import org.techtown.diffuser.R
+import org.techtown.diffuser.constants.Constants
+import org.techtown.diffuser.constants.Constants.VIEW_TYPE_DETAIL_BACKGROND
+import org.techtown.diffuser.constants.Constants.VIEW_TYPE_DETAIL_CASTING
+import org.techtown.diffuser.constants.Constants.VIEW_TYPE_DETAIL_TITLE
 import org.techtown.diffuser.fragment.home.TheMore
 import org.techtown.diffuser.model.Movie
 import org.techtown.diffuser.model.TitleModel
@@ -22,17 +26,17 @@ class DetailAdapter(itemClickListener: (View, Int, Movie?, TheMore?) -> Unit) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         when (viewType) {
-            VIEW_TYPE_DETAIL_BACKGROND -> {
+            Constants.VIEW_TYPE_DETAIL_BACKGROND -> {
                 val inflater = LayoutInflater.from(parent.context)
                 val itemView = inflater.inflate(R.layout.item_detail_image, parent, false)
                 return BackImageViewHolder(itemView, itemClickListener)
             }
-            VIEW_TYPE_DETAIL_CASTING -> {
+            Constants.VIEW_TYPE_DETAIL_CASTING -> {
                 val inflater = LayoutInflater.from(parent.context)
                 val itemView = inflater.inflate(R.layout.item_detail_cast, parent, false)
                 return CastViewHolder(itemView, itemClickListener)
             }
-            VIEW_TYPE_DETAIL_TITLE -> {
+            Constants.VIEW_TYPE_DETAIL_TITLE -> {
                 val inflater = LayoutInflater.from(parent.context)
                 val itemView = inflater.inflate(R.layout.item_titlepopualr, parent, false)
                 return TitleViewHolder(itemView)
@@ -46,17 +50,17 @@ class DetailAdapter(itemClickListener: (View, Int, Movie?, TheMore?) -> Unit) :
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val itemModel = currentList[position]
         when (itemModel.viewType) {
-            VIEW_TYPE_DETAIL_BACKGROND -> {
+            Constants.VIEW_TYPE_DETAIL_BACKGROND -> {
                 if (itemModel is WrappingDetailModel) {
                     (holder as BackImageViewHolder).setItem(itemModel)
                 }
             }
-            VIEW_TYPE_DETAIL_CASTING -> {
+            Constants.VIEW_TYPE_DETAIL_CASTING -> {
                 if (itemModel is WrappingDetailModel) {
                     (holder as CastViewHolder).setItem(itemModel)
                 }
             }
-            VIEW_TYPE_DETAIL_TITLE -> {
+            Constants.VIEW_TYPE_DETAIL_TITLE -> {
                 if (itemModel is TitleModel) {
                     (holder as TitleViewHolder).setItem(itemModel)
                 }
@@ -149,11 +153,4 @@ class DetailAdapter(itemClickListener: (View, Int, Movie?, TheMore?) -> Unit) :
         }
     }
 
-
-
-    companion object {
-        const val VIEW_TYPE_DETAIL_BACKGROND = 0
-        const val VIEW_TYPE_DETAIL_CASTING = 1
-        const val VIEW_TYPE_DETAIL_TITLE = 2
-    }
 }

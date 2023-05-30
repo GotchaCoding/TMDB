@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.onEach
 import org.techtown.diffuser.Repository
 import org.techtown.diffuser.Resource
 import org.techtown.diffuser.activity.BaseViewModel
+import org.techtown.diffuser.constants.Constants
 import org.techtown.diffuser.model.BottomLoadingModel
 import org.techtown.diffuser.fragment.home.HomeAdapter
 import org.techtown.diffuser.model.FailModel
@@ -36,7 +37,7 @@ class MoreComViewModel @Inject constructor(
                                 rank = it.releaseDate,
                                 imagePoster = it.posterPath,
                                 overView = it.overview,
-                                viewType = HomeAdapter.VIEW_TYPE_UPCOMMING,
+                                viewType = Constants.VIEW_TYPE_UPCOMMING,
                                 id = it.id
                             )
                         }

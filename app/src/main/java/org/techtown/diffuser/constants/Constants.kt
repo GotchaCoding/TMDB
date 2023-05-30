@@ -1,4 +1,4 @@
-package org.techtown.diffuser.con
+package org.techtown.diffuser.constants
 
 object Constants {
     const val KEY_BOTTOM_MODEL_ID = -100L
@@ -8,6 +8,10 @@ object Constants {
     const val KEY_RECYCLERVIEW_ID_TITLE = -2L
     const val KEY_RECYCLERVIEW_ID_NOW = -3L
     const val KEY_RECYCLERVIEW_ID_COMMING = -4L
+    const val KEY_RECYCLERVIEW_ID_TOP_IN_TOP = -5L
+    const val KEY_RECYCLERVIEW_ID_TOP = -6L
+    const val KEY_RECYCLERVIEW_ID_CAST = -7L
+
 
 
     const val VIEW_TYPE_BOTTOM_MODEL = -100
@@ -17,8 +21,11 @@ object Constants {
     const val VIEW_TYPE_RECOMMEND_TITLE = -600
     const val VIEW_TYPE_RECOMMEND_ITEM = -700
     const val VIEW_TYPE_TITLE = 0
-    const val VIEW_TYPE_POPULAR_MOVIE = 1
-    const val VIEW_TYPE_NOW_MOVIE = 2
-    const val VIEW_TYPE_UPCOMMING = 3
+    const val VIEW_TYPE_POPULAR_MOVIE = -1
+    const val VIEW_TYPE_NOW_MOVIE = -2
+    const val VIEW_TYPE_UPCOMMING = -3
+    const val VIEW_TYPE_DETAIL_BACKGROND = -4
+    const val VIEW_TYPE_DETAIL_CASTING = -5
+    const val VIEW_TYPE_DETAIL_TITLE = -6
 
 }

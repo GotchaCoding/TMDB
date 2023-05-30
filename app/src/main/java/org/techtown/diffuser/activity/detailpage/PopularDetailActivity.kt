@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import dagger.hilt.android.AndroidEntryPoint
+import org.techtown.diffuser.constants.Constants
 import org.techtown.diffuser.databinding.ActivityPopualrDetailBinding
 import org.techtown.diffuser.fragment.home.TheMore
 
@@ -37,10 +38,10 @@ class PopularDetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshL
 
         adapter = DetailAdapter { view, viewType, movie, _ : TheMore?->
             when (viewType) {
-                DetailAdapter.VIEW_TYPE_DETAIL_BACKGROND -> {
+                Constants.VIEW_TYPE_DETAIL_BACKGROND -> {
                     viewModel.fetch()
                 }
-                DetailAdapter.VIEW_TYPE_DETAIL_CASTING -> {
+                Constants.VIEW_TYPE_DETAIL_CASTING -> {
                     viewModel.fetchCast()
                 }
             }

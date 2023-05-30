@@ -15,11 +15,9 @@ import org.techtown.diffuser.activity.detailpage.PopularDetailActivity
 import org.techtown.diffuser.activity.moreview.comming.CommingMoreActivity
 import org.techtown.diffuser.activity.moreview.nowplay.NowplayMoreActivity
 import org.techtown.diffuser.activity.moreview.popular.PopularMoreActivity
+import org.techtown.diffuser.constants.Constants
 import org.techtown.diffuser.databinding.FragmentHomeBinding
 import org.techtown.diffuser.fragment.BaseFragment
-import org.techtown.diffuser.fragment.home.HomeAdapter.Companion.VIEW_TYPE_NOW_MOVIE
-import org.techtown.diffuser.fragment.home.HomeAdapter.Companion.VIEW_TYPE_POPULAR_MOVIE
-import org.techtown.diffuser.fragment.home.HomeAdapter.Companion.VIEW_TYPE_UPCOMMING
 
 @AndroidEntryPoint  //프래그먼트 힐트 주입 어노테이션
 class HomeFragment : BaseFragment<FragmentHomeBinding>(), SwipeRefreshLayout.OnRefreshListener {  //프래그먼트 상속, 스와이프리프레시 리스너 상속
@@ -56,13 +54,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), SwipeRefreshLayout.OnR
                 if (movie == null) {
                     Log.e("kmh!!!", "클릭 리스너 if 문")
                     when (viewType) {  // 실패뷰 떳을때 클릭시 뷰타입별로 패치
-                        VIEW_TYPE_POPULAR_MOVIE -> {
+                        Constants.VIEW_TYPE_POPULAR_MOVIE -> {
                             viewModel.fetch()
                         }
-                        VIEW_TYPE_NOW_MOVIE -> {
+                        Constants.VIEW_TYPE_NOW_MOVIE -> {
                             viewModel.fetchNowPlay()
                         }
-                        VIEW_TYPE_UPCOMMING -> {
+                        Constants.VIEW_TYPE_UPCOMMING -> {
                             viewModel.fetchUpComming()
                         }
                     }
