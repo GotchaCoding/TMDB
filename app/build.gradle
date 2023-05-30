@@ -39,6 +39,9 @@ android {
     viewBinding {
         enabled = true
     }
+    dataBinding{
+        enabled true
+    }
 
 }
 
@@ -68,6 +71,7 @@ dependencies {
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+
 }
 
 kapt {

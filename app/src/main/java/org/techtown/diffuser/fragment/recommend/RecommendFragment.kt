@@ -9,23 +9,16 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import org.techtown.diffuser.databinding.FragmentRecommendBinding
+import org.techtown.diffuser.fragment.BaseFragment
 
 @AndroidEntryPoint
-class RecommendFragment : Fragment() {
+class RecommendFragment : BaseFragment<FragmentRecommendBinding>() {
+    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentRecommendBinding
+        get() = FragmentRecommendBinding::inflate
 
-    lateinit var binding: FragmentRecommendBinding
     private lateinit var adapter: RecommendAdapter
 
     private val viewModel: RecommendViewModel by viewModels()
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentRecommendBinding.inflate(inflater, container, false)
-        return binding.root
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -63,8 +56,9 @@ class RecommendFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance() : Fragment {
+        fun newInstance(): Fragment {
             return RecommendFragment()
         }
     }
+
 }

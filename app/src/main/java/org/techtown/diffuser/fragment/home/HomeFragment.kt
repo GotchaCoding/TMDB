@@ -15,27 +15,20 @@ import org.techtown.diffuser.activity.detailpage.PopularDetailActivity
 import org.techtown.diffuser.activity.moreview.comming.CommingMoreActivity
 import org.techtown.diffuser.activity.moreview.nowplay.NowplayMoreActivity
 import org.techtown.diffuser.activity.moreview.popular.PopularMoreActivity
-import org.techtown.diffuser.databinding.ActivityHomeFragmentBinding
+import org.techtown.diffuser.databinding.FragmentHomeBinding
+import org.techtown.diffuser.fragment.BaseFragment
 import org.techtown.diffuser.fragment.home.HomeAdapter.Companion.VIEW_TYPE_NOW_MOVIE
 import org.techtown.diffuser.fragment.home.HomeAdapter.Companion.VIEW_TYPE_POPULAR_MOVIE
 import org.techtown.diffuser.fragment.home.HomeAdapter.Companion.VIEW_TYPE_UPCOMMING
-import org.techtown.diffuser.fragment.recommend.RecommendFragment
 
 @AndroidEntryPoint  //프래그먼트 힐트 주입 어노테이션
-class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {  //프래그먼트 상속, 스와이프리프레시 리스너 상속
-    lateinit var binding: ActivityHomeFragmentBinding
+class HomeFragment : BaseFragment<FragmentHomeBinding>(), SwipeRefreshLayout.OnRefreshListener {  //프래그먼트 상속, 스와이프리프레시 리스너 상속
+    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentHomeBinding
+        get() = FragmentHomeBinding::inflate
+
     private lateinit var adapter: HomeAdapter
 
     private val viewModel: HomeViewModel by viewModels()
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = ActivityHomeFragmentBinding.inflate(inflater, container, false)
-        return binding.root
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -119,6 +112,7 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {  //프�
             return HomeFragment()
         }
     }
+
 }
 
 enum class TheMore {

@@ -18,13 +18,31 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.techtown.diffuser.R
 import org.techtown.diffuser.activity.detailpage.PopularDetailActivity
 import org.techtown.diffuser.con.Constants
-import org.techtown.diffuser.databinding.ActivitySearchFragmentBinding
-import org.techtown.diffuser.fragment.recommend.RecommendFragment
+import org.techtown.diffuser.databinding.FragmentSearchBinding
+import org.techtown.diffuser.fragment.BaseFragment
 
 @AndroidEntryPoint
-class SearchFragment : Fragment() {
-    lateinit var binding: ActivitySearchFragmentBinding
+class SearchFragment : BaseFragment<FragmentSearchBinding>() {
+    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentSearchBinding
+        get() = FragmentSearchBinding::inflate
 
+    private fun titleClick() = with(binding) {
+        tvFirst.setOnClickListener {
+            edtSearch.setText(oneTitle)
+        }
+        tvSecond.setOnClickListener {
+            edtSearch.setText(twoTitle)
+        }
+        tvThird.setOnClickListener {
+            edtSearch.setText(threeTitle)
+        }
+        tvFour.setOnClickListener {
+            edtSearch.setText(fourTitle)
+        }
+    }
+
+
+    private fun clearEdt() = binding.edtSearch.setText("")
     private lateinit var adapter: SearchAdapter
 
     private val viewModel: SearchViewModel by viewModels()
@@ -34,14 +52,6 @@ class SearchFragment : Fragment() {
     var threeTitle: String = ""
     var fourTitle: String = ""
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = ActivitySearchFragmentBinding.inflate(inflater, container, false)
-        return binding.root
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -74,7 +84,7 @@ class SearchFragment : Fragment() {
         }
     }
 
-    private fun initView() {
+    fun initView() {
         with(binding) {
             val layoutManager = LinearLayoutManager(context)
             adapter = SearchAdapter(
@@ -123,30 +133,13 @@ class SearchFragment : Fragment() {
         }
     }
 
-    private fun titleClick() = with(binding) {
-        tvFirst.setOnClickListener {
-            edtSearch.setText(oneTitle)
-        }
-        tvSecond.setOnClickListener {
-            edtSearch.setText(twoTitle)
-        }
-        tvThird.setOnClickListener {
-            edtSearch.setText(threeTitle)
-        }
-        tvFour.setOnClickListener {
-            edtSearch.setText(fourTitle)
-        }
-    }
-
-    private fun clearEdt() = binding.edtSearch.setText("")
-
     private fun animation() {
         val animation = AnimationUtils.loadAnimation(context, R.anim.alpha)
         binding.tvHint.startAnimation(animation)
     }
 
     companion object {
-        fun newInstance() : Fragment {
+        fun newInstance(): Fragment {
             return SearchFragment()
         }
     }
