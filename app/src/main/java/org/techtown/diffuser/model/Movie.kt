@@ -6,6 +6,7 @@ package org.techtown.diffuser.model
     val imagePoster: String? = "",
     val imageDrop: String = "",
     val overView : String = "",
+    var isCheckedMark : Boolean = false,
     override val viewType: Int,
     override val id: Long
 ) : ItemModel(id, viewType)
