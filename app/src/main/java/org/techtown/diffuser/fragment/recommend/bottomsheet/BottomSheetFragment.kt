@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
@@ -36,7 +37,9 @@ class BottomSheetFragment() : BottomSheetDialogFragment() {
     private val viewModel: BottomSheetViewModel by viewModels()
     private lateinit var adapter: BottomSheetAdapter
 
-    private lateinit var tv: TextView
+    private lateinit var tvTitle: TextView
+    private lateinit var tvStory: TextView
+    private lateinit var btnClose: Button
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,7 +48,9 @@ class BottomSheetFragment() : BottomSheetDialogFragment() {
     ): View? {
         val view = inflater.inflate(R.layout.bottom_sheet_layout, container, false)
         rv = view.findViewById(R.id.rv_middle)
-        tv = view.findViewById(R.id.tvBottom)
+        tvTitle = view.findViewById(R.id.tvBottomTitle)
+        tvStory = view.findViewById(R.id.tvBottomStory)
+        btnClose = view.findViewById(R.id.btnHide)
         return view
     }
 
@@ -55,6 +60,10 @@ class BottomSheetFragment() : BottomSheetDialogFragment() {
         initObserver()
         viewModel.fetch()
 
+        btnClose.setOnClickListener {
+            dismiss()
+        }
+
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -62,6 +71,7 @@ class BottomSheetFragment() : BottomSheetDialogFragment() {
             behavior.isFitToContents = false
             behavior.peekHeight = 300
             behavior.expandedOffset = 150
+            behavior.halfExpandedRatio = 0.65F
         }
         return dialog
     }
@@ -71,7 +81,7 @@ class BottomSheetFragment() : BottomSheetDialogFragment() {
         layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
 
-                if(position > 55) {
+                if (position > 55) {
                     val size = 1
                     return size
                 }
@@ -85,7 +95,12 @@ class BottomSheetFragment() : BottomSheetDialogFragment() {
             }
         }
         adapter = BottomSheetAdapter(
-            itemClickListener = { _, viewType, movie, theMore -> }
+            itemClickListener = { _, viewType, movie, theMore ->
+                tvTitle.text = movie?.title
+                tvStory.text = movie?.overView
+                Log.e("kmh", "title : ${tvTitle.text}")
+                Log.e("kmh", "story : ${tvStory.text}")
+            }
         )
 
         rv.adapter = adapter
@@ -95,7 +110,6 @@ class BottomSheetFragment() : BottomSheetDialogFragment() {
                 val layoutManager = recyclerView.layoutManager as GridLayoutManager
                 val totalItem = layoutManager.itemCount
                 val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
-                Log.e("kmh!!!" , "totalItem : ${totalItem.toString()} lastvisible: ${lastVisibleItem.toString()}")
                 if (lastVisibleItem == totalItem - 1) {
                     viewModel.fetch()
                 }

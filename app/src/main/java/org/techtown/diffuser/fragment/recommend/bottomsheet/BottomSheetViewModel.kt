@@ -15,13 +15,13 @@ import javax.inject.Inject
 @HiltViewModel
 class BottomSheetViewModel @Inject constructor(
     private val repository: Repository
-) : BaseViewModel(){
+) : BaseViewModel() {
 
-    fun fetch(){
+    fun fetch() {
         if (isLoading()) return
 
         repository.getTrend(page).onEach { result ->
-            when(result){
+            when (result) {
                 is Resource.Loading -> {
                     _items.value = pureItems() + BottomLoadingModel
                 }
@@ -29,45 +29,47 @@ class BottomSheetViewModel @Inject constructor(
                     val model = result.model
                     var list = model.results.mapIndexed { index, it ->
 
-                        val num =  index % 20
+                        val num = index % 20
 
-                        if( num == 1 || num == 9 || num == 12) {
+                        if (num == 1 || num == 9 || num == 12) {
                             Movie(
                                 title = it.title,
                                 rank = it.releaseDate,
                                 imagePoster = it.posterPath,
                                 viewType = Constants.VIEW_TYPE_BOTTOM_BIGPIC,
                                 imageDrop = it.backdropPath,
-                                id = it.id
+                                id = it.id,
+                                overView = it.overview
                             )
-                        } else if ( num == 19) {
+                        } else if (num == 19) {
                             Movie(
                                 title = it.title,
                                 rank = it.releaseDate,
                                 imagePoster = it.posterPath,
                                 viewType = Constants.VIEW_TYPE_BOTTOM_BIGPIC,
                                 imageDrop = null,
-                                id = it.id
+                                id = it.id,
+                                overView = it.overview
                             )
-                        }
-                        else {
-                        Movie(
-                            title = it.title,
-                            rank = it.releaseDate,
-                            imagePoster = it.posterPath,
-                            viewType = Constants.VIEW_TYPE_BOTTOMSHEET,
-                            imageDrop = it.backdropPath,
-                            id = it.id
-                        )
+                        } else {
+                            Movie(
+                                title = it.title,
+                                rank = it.releaseDate,
+                                imagePoster = it.posterPath,
+                                viewType = Constants.VIEW_TYPE_BOTTOMSHEET,
+                                imageDrop = it.backdropPath,
+                                id = it.id,
+                                overView = it.overview
+                            )
                         }
                     }.filter {
                         it.imageDrop != null
                     }
 
-
                     page++
-                    if(page >4) {
-                        list = list.map{ it
+                    if (page > 4) {
+                        list = list.map {
+                            it
                             it.copy(
                                 viewType = Constants.VIEW_TYPE_BOTTOMSHEET,
                             )

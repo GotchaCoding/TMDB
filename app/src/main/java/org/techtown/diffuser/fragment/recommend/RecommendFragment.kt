@@ -1,6 +1,8 @@
 package org.techtown.diffuser.fragment.recommend
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +13,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.manager.SupportRequestManagerFragment
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.internal.managers.FragmentComponentManager
+import org.techtown.diffuser.activity.detailpage.PopularDetailActivity
+import org.techtown.diffuser.constants.Constants
 import org.techtown.diffuser.databinding.FragmentRecommendBinding
 import org.techtown.diffuser.fragment.BaseFragment
 import org.techtown.diffuser.fragment.recommend.bottomsheet.BottomSheetFragment
@@ -23,12 +27,12 @@ class RecommendFragment : BaseFragment<FragmentRecommendBinding>() {
     private lateinit var adapter: RecommendAdapter
 
     private val viewModel: RecommendViewModel by viewModels()
+    private val bottomSheetFragment = BottomSheetFragment()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
         initObserver()
-        initBottomSheet()
         viewModel.fetch()
 
     }
@@ -47,7 +51,21 @@ class RecommendFragment : BaseFragment<FragmentRecommendBinding>() {
                 }
             }
             adapter = RecommendAdapter(
-                itemClickListener = { _, viewType, movie, theMore -> }
+                itemClickListener = { view, viewType, movie, theMore ->
+                    when (viewType) {
+                        Constants.VIEW_TYPE_RECOMMEND_TITLE -> {
+                            initBottomSheet()
+                        }
+                        Constants.VIEW_TYPE_RECOMMEND_ITEM -> {
+                            val intent = Intent(context, PopularDetailActivity::class.java)
+                            intent.putExtra(
+                                "movie_id",
+                                movie?.id
+                            )
+                            startActivity(intent)
+                        }
+                    }
+                }
             )
 
             rvMain.adapter = adapter
@@ -62,8 +80,7 @@ class RecommendFragment : BaseFragment<FragmentRecommendBinding>() {
     }
 
     private fun initBottomSheet() {
-        val bottomSheetFragment = BottomSheetFragment()
-        bottomSheetFragment.show(childFragmentManager , tag)
+        bottomSheetFragment.show(childFragmentManager, tag)
     }
 
     companion object {

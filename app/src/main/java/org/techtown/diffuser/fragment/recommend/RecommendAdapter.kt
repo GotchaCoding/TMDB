@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import org.techtown.diffuser.BaseAdapter
@@ -24,7 +25,7 @@ class RecommendAdapter(
             Constants.VIEW_TYPE_RECOMMEND_TITLE -> {
                 val inflater = LayoutInflater.from(parent.context)
                 val itemView = inflater.inflate(R.layout.item_titlepopualr, parent, false)
-                TitleViewHolder(itemView)
+                RecommendTitleViewHolder(itemView, itemClickListener)
             }
             Constants.VIEW_TYPE_RECOMMEND_ITEM -> {
                 val inflater = LayoutInflater.from(parent.context)
@@ -41,16 +42,33 @@ class RecommendAdapter(
         val item = currentList[position]
         if (holder is RecommendViewHolder) {
             holder.setItem(item as Movie)
-        } else if (holder is TitleViewHolder) {
+        } else if (holder is RecommendTitleViewHolder) {
             holder.setItem(item as TitleModel)
         }
     }
 
-    class RecommendViewHolder(
-        itemView: View, private val itemClickListener: (View, Int, Movie?, TheMore?) -> Unit
+    class RecommendTitleViewHolder(
+        itemView: View,
+        private val itemClickListener: (View, Int, Movie?, TheMore?) -> Unit
     ) : RecyclerView.ViewHolder(itemView) {
-        var image: ImageView = itemView.findViewById(R.id.imgGrid)
-        var bookMark: CheckBox = itemView.findViewById(R.id.checkbox)
+
+        private val tvTitle: TextView = itemView.findViewById(R.id.tvTitle)
+        private val tvMoreview: TextView = itemView.findViewById(R.id.tvMoreview)
+
+        fun setItem(item: TitleModel) {
+            tvTitle.text = item.title
+            tvMoreview.setOnClickListener {
+                itemClickListener(it, item.viewType, null, null)
+            }
+        }
+    }
+
+    class RecommendViewHolder(
+        itemView: View,
+        private val itemClickListener: (View, Int, Movie?, TheMore?) -> Unit
+    ) : RecyclerView.ViewHolder(itemView) {
+        private val image: ImageView = itemView.findViewById(R.id.imgGrid)
+        private val bookMark: CheckBox = itemView.findViewById(R.id.checkbox)
 
         fun setItem(item: Movie) {
             Glide.with(itemView).load("https://image.tmdb.org/t/p/w500" + item.imagePoster)
