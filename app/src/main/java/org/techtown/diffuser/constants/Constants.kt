@@ -27,5 +27,6 @@ object Constants {
     const val VIEW_TYPE_DETAIL_BACKGROND = -4
     const val VIEW_TYPE_DETAIL_CASTING = -5
     const val VIEW_TYPE_DETAIL_TITLE = -6
-
+    const val VIEW_TYPE_BOTTOMSHEET = -7
+    const val VIEW_TYPE_BOTTOM_BIGPIC = -8
 }

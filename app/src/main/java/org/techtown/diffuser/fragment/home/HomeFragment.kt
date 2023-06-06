@@ -33,6 +33,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), SwipeRefreshLayout.OnR
         initView()
         initObserver()
         fetchAll()
+
     }
 
     private fun initObserver() { //

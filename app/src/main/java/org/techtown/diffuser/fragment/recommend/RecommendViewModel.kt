@@ -30,7 +30,7 @@ class RecommendViewModel @Inject constructor(
     }
 
     fun fetch(){
-        repository.getTrend().onEach { result ->
+        repository.getTrend(page).onEach { result ->
             when(result){
                 is Resource.Loading -> {
 

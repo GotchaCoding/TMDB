@@ -55,6 +55,7 @@ interface RetrofitService {
 
     @GET("3/trending/movie/day")
     suspend fun getTrend(
-        @Query("language") language: String
+        @Query("language") language: String,
+        @Query("page") page : Int,
     ) : TrendResponse
 }

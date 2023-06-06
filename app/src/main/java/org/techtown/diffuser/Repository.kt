@@ -16,5 +16,5 @@ interface Repository {
     fun getCast(movieId : Long): Flow<Resource<CastResult>>
     fun getUpComming(page : Int): Flow<Resource<Upcomming>>
     fun getSearch(title : String): Flow<Resource<SearchResponse>>
-    fun getTrend() : Flow<Resource<TrendResponse>>
+    fun getTrend(page : Int) : Flow<Resource<TrendResponse>>
 }

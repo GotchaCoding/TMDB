@@ -1,0 +1,112 @@
+package org.techtown.diffuser.fragment.recommend.bottomsheet
+
+import android.app.Dialog
+import android.content.Context
+import android.content.Intent
+import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
+import org.techtown.diffuser.R
+import org.techtown.diffuser.activity.detailpage.PopularDetailActivity
+import org.techtown.diffuser.activity.moreview.comming.CommingMoreActivity
+import org.techtown.diffuser.activity.moreview.nowplay.NowplayMoreActivity
+import org.techtown.diffuser.activity.moreview.popular.PopularMoreActivity
+import org.techtown.diffuser.constants.Constants
+import org.techtown.diffuser.fragment.BaseFragment
+import org.techtown.diffuser.fragment.home.HomeAdapter
+import org.techtown.diffuser.fragment.home.TheMore
+import org.techtown.diffuser.fragment.recommend.RecommendAdapter
+import org.techtown.diffuser.fragment.recommend.RecommendViewModel
+import org.techtown.diffuser.model.Movie
+
+@AndroidEntryPoint
+class BottomSheetFragment() : BottomSheetDialogFragment() {
+
+    private lateinit var rv: RecyclerView
+    private val viewModel: BottomSheetViewModel by viewModels()
+    private lateinit var adapter: BottomSheetAdapter
+
+    private lateinit var tv: TextView
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val view = inflater.inflate(R.layout.bottom_sheet_layout, container, false)
+        rv = view.findViewById(R.id.rv_middle)
+        tv = view.findViewById(R.id.tvBottom)
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initView()
+        initObserver()
+        viewModel.fetch()
+
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog = BottomSheetDialog(requireContext(), theme).apply {
+            behavior.isFitToContents = false
+            behavior.peekHeight = 300
+            behavior.expandedOffset = 150
+        }
+        return dialog
+    }
+
+    private fun initView() {
+        val layoutManager = GridLayoutManager(context, 5)
+        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+
+                if(position > 55) {
+                    val size = 1
+                    return size
+                }
+                val gridposition: Int = position % 19
+                val size = if (gridposition == 1 || gridposition == 9 || gridposition == 12) {
+                    3
+                } else {
+                    1
+                }
+                return size
+            }
+        }
+        adapter = BottomSheetAdapter(
+            itemClickListener = { _, viewType, movie, theMore -> }
+        )
+
+        rv.adapter = adapter
+        rv.layoutManager = layoutManager
+        rv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                val layoutManager = recyclerView.layoutManager as GridLayoutManager
+                val totalItem = layoutManager.itemCount
+                val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
+                Log.e("kmh!!!" , "totalItem : ${totalItem.toString()} lastvisible: ${lastVisibleItem.toString()}")
+                if (lastVisibleItem == totalItem - 1) {
+                    viewModel.fetch()
+                }
+            }
+        })
+    }
+
+    private fun initObserver() {
+        viewModel.items.observe(viewLifecycleOwner) { items ->
+            adapter.submitList(items)
+        }
+    }
+
+}

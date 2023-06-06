@@ -5,11 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import com.bumptech.glide.manager.SupportRequestManagerFragment
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.internal.managers.FragmentComponentManager
 import org.techtown.diffuser.databinding.FragmentRecommendBinding
 import org.techtown.diffuser.fragment.BaseFragment
+import org.techtown.diffuser.fragment.recommend.bottomsheet.BottomSheetFragment
 
 @AndroidEntryPoint
 class RecommendFragment : BaseFragment<FragmentRecommendBinding>() {
@@ -24,7 +28,9 @@ class RecommendFragment : BaseFragment<FragmentRecommendBinding>() {
         super.onViewCreated(view, savedInstanceState)
         initView()
         initObserver()
+        initBottomSheet()
         viewModel.fetch()
+
     }
 
     private fun initView() {
@@ -53,6 +59,11 @@ class RecommendFragment : BaseFragment<FragmentRecommendBinding>() {
         viewModel.items.observe(viewLifecycleOwner) { items ->
             adapter.submitList(items)
         }
+    }
+
+    private fun initBottomSheet() {
+        val bottomSheetFragment = BottomSheetFragment()
+        bottomSheetFragment.show(childFragmentManager , tag)
     }
 
     companion object {

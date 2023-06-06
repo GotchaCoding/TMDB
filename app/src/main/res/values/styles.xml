@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="rippleEffect">
+    <style name="rippleEffect"/>
 
+    <style name="MyBottomSheet" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/bottom_shape_border</item>
     </style>
 </resources>

@@ -60,7 +60,7 @@ class SearchViewModel @Inject constructor(
 
     fun fetchTrend() {
         repository
-            .getTrend()
+            .getTrend(page)
             .onEach { result ->
                 when (result) {
                     is Resource.Loading -> {

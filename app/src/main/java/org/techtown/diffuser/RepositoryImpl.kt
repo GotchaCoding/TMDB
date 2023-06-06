@@ -14,15 +14,19 @@ import javax.inject.Inject
 class RepositoryImpl @Inject constructor(
     private val service: RetrofitService
 ) : BaseRepository(), Repository {  //Repository 메소드 오버라이드 하고  BaseRepository 클래스 메서드 사용.
-    override fun getPopular(page : Int): Flow<Resource<PopularMoviesResponse>> {
-       return callApi(   //callApi 메소드의 매개변수는 suspend 람다함수이고 리턴타입이 BaseResponse 타입임.
+    override fun getPopular(page: Int): Flow<Resource<PopularMoviesResponse>> {
+        return callApi(   //callApi 메소드의 매개변수는 suspend 람다함수이고 리턴타입이 BaseResponse 타입임.
             responseFunction = {  //람다함수를 매개변수로 가짐
-                service.getPopularMovie("ko", page, "KR")   //getPopularMovie suspend 함수의 리턴 타입은  BaseResponse
+                service.getPopularMovie(
+                    "ko",
+                    page,
+                    "KR"
+                )   //getPopularMovie suspend 함수의 리턴 타입은  BaseResponse
             }
         )
     }
 
-    override fun getNowPlay(page : Int): Flow<Resource<NowPlayingResponse>> = callApi {
+    override fun getNowPlay(page: Int): Flow<Resource<NowPlayingResponse>> = callApi {
         service.getNowPlayingMovie("ko", page, "KR")
     }
 
@@ -38,7 +42,7 @@ class RepositoryImpl @Inject constructor(
         service.getCast(movieId, "ko")
     }
 
-    override fun getUpComming(page : Int): Flow<Resource<Upcomming>> = callApi {
+    override fun getUpComming(page: Int): Flow<Resource<Upcomming>> = callApi {
         service.getUpcomming("ko", page, "KR")
     }
 
@@ -50,10 +54,10 @@ class RepositoryImpl @Inject constructor(
         )
     }
 
-    override fun getTrend(): Flow<Resource<TrendResponse>> {
+    override fun getTrend(page: Int): Flow<Resource<TrendResponse>> {
         return callApi(
             responseFunction = {
-                service.getTrend("ko")
+                service.getTrend("ko", page)
             }
         )
     }

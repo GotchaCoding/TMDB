@@ -4,7 +4,7 @@ package org.techtown.diffuser.model
     val title: String = "",
     val rank: String = "",
     val imagePoster: String? = "",
-    val imageDrop: String = "",
+    val imageDrop: String? = "",
     val overView : String = "",
     var isCheckedMark : Boolean = false,
     override val viewType: Int,
