@@ -16,9 +16,9 @@ import javax.inject.Inject
 @HiltViewModel
 class RecommendViewModel @Inject constructor(
     private val repository: Repository
-) : BaseViewModel(){
+) : BaseViewModel() {
 
-    init{
+    init {
         val defaultList = listOf<ItemModel>(
             TitleModel(
                 title = "추천영화",
@@ -29,9 +29,9 @@ class RecommendViewModel @Inject constructor(
         _items.value = defaultList
     }
 
-    fun fetch(){
+    fun fetch() {
         repository.getTrend(page).onEach { result ->
-            when(result){
+            when (result) {
                 is Resource.Loading -> {
 
                 }
@@ -53,5 +53,19 @@ class RecommendViewModel @Inject constructor(
             }
 
         }.launchIn(viewModelScope)
+    }
+
+    fun onFavorite(movie: Movie?) {
+        movie ?: return
+
+        _items.value = _items.value!!.map {
+            if (movie == it) {
+                movie.copy(
+                    isCheckedMark = movie.isCheckedMark.not()
+                )
+            } else {
+                it
+            }
+        }
     }
 }

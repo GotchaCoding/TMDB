@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <CheckBox
-        android:id="@+id/checkbox"
+        android:id="@+id/bookMarkCheckbox"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_margin="7dp"

@@ -1,5 +1,6 @@
 package org.techtown.diffuser.fragment.recommend
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -68,19 +69,19 @@ class RecommendAdapter(
         private val itemClickListener: (View, Int, Movie?, TheMore?) -> Unit
     ) : RecyclerView.ViewHolder(itemView) {
         private val image: ImageView = itemView.findViewById(R.id.imgGrid)
-        private val bookMark: CheckBox = itemView.findViewById(R.id.checkbox)
+        private val bookMarkCheckbox: CheckBox = itemView.findViewById(R.id.bookMarkCheckbox)
 
         fun setItem(item: Movie) {
             Glide.with(itemView).load("https://image.tmdb.org/t/p/w500" + item.imagePoster)
                 .into(image)
             image.clipToOutline = true // 이미지를 배경에 맞게 짜름
 
-            itemView.setOnClickListener {
+            image.setOnClickListener {
                 itemClickListener(it, item.viewType, item, null)
             }
-            bookMark.isChecked = item.isCheckedMark
-            bookMark.setOnClickListener {
-                item.isCheckedMark = bookMark.isChecked
+            bookMarkCheckbox.isChecked = item.isCheckedMark
+            bookMarkCheckbox.setOnClickListener {
+                itemClickListener(it, item.viewType, item, null)
             }
         }
     }

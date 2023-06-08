@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import org.techtown.diffuser.BaseAdapter
 import org.techtown.diffuser.R
 import org.techtown.diffuser.constants.Constants
@@ -52,7 +53,8 @@ class BottomSheetViewHolder(
     var image: ImageView = itemView.findViewById(R.id.imgBottomsheet)
 
     fun setItem(item: Movie) {
-        Glide.with(itemView).load("https://image.tmdb.org/t/p/w500" + item.imagePoster)
+        Glide.with(itemView)
+            .load("https://image.tmdb.org/t/p/w500" + item.imagePoster)
             .into(image)
         image.clipToOutline = true // 이미지를 배경에 맞게 짜름
 

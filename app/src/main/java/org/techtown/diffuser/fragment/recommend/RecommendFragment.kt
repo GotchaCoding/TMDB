@@ -10,9 +10,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.bumptech.glide.manager.SupportRequestManagerFragment
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.internal.managers.FragmentComponentManager
+import org.techtown.diffuser.R
 import org.techtown.diffuser.activity.detailpage.PopularDetailActivity
 import org.techtown.diffuser.constants.Constants
 import org.techtown.diffuser.databinding.FragmentRecommendBinding
@@ -34,7 +36,6 @@ class RecommendFragment : BaseFragment<FragmentRecommendBinding>() {
         initView()
         initObserver()
         viewModel.fetch()
-
     }
 
     private fun initView() {
@@ -57,12 +58,16 @@ class RecommendFragment : BaseFragment<FragmentRecommendBinding>() {
                             initBottomSheet()
                         }
                         Constants.VIEW_TYPE_RECOMMEND_ITEM -> {
-                            val intent = Intent(context, PopularDetailActivity::class.java)
-                            intent.putExtra(
-                                "movie_id",
-                                movie?.id
-                            )
-                            startActivity(intent)
+                            if (view.id == R.id.bookMarkCheckbox) {
+                                viewModel.onFavorite(movie)
+                            } else if (view.id == R.id.imgGrid){//id check
+                                val intent = Intent(context, PopularDetailActivity::class.java)
+                                intent.putExtra(
+                                    "movie_id",
+                                    movie?.id
+                                )
+                                startActivity(intent)
+                            }
                         }
                     }
                 }
@@ -70,6 +75,7 @@ class RecommendFragment : BaseFragment<FragmentRecommendBinding>() {
 
             rvMain.adapter = adapter
             rvMain.layoutManager = layoutManager
+            (rvMain.itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
         }
     }
 

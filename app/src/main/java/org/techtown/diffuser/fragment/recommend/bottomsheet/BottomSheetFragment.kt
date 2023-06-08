@@ -98,8 +98,6 @@ class BottomSheetFragment() : BottomSheetDialogFragment() {
             itemClickListener = { _, viewType, movie, theMore ->
                 tvTitle.text = movie?.title
                 tvStory.text = movie?.overView
-                Log.e("kmh", "title : ${tvTitle.text}")
-                Log.e("kmh", "story : ${tvStory.text}")
             }
         )
 
