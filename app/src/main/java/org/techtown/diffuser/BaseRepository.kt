@@ -9,14 +9,14 @@ import java.io.IOException
 open class BaseRepository {  //callApi 메서드는 매개변수로 suspend 람다 함수를 받으며  리턴타입으로 Flow Resource.Fail<Response> 등의 리턴을 받음. 케이스별로 분기처리.
     fun <Response : BaseResponse> callApi(responseFunction: suspend () -> Response): Flow<Resource<Response>> {
         return flow {
-            emit(Resource.Loading())  // 로딩뷰를 위해 Resource.Loading() emit. fetch와 로직 짜서 로딩뷰 구현가능.
+            emit(Resource.Loading())  // 로딩뷰를 위해 Resource.Loading() emit. fetch와 로직 짜서 로딩뷰 구현가능. //로딩 클래스 객체생성
             emit(
                 safeResult(responseFunction)    //detailpage_3
             )
         }
     }
 
-    suspend fun <Response : BaseResponse> safeResult(  // ㄹ
+    suspend fun <Response : BaseResponse> safeResult(
         responseFunction: suspend () -> Response,
     ): Resource<Response> {
         return try {
