@@ -20,7 +20,6 @@ abstract class BaseAdapter(
 ) : ListAdapter<ItemModel, RecyclerView.ViewHolder>(diffUtil9) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        Log.e("kmh!!!", "onCreateViewHolder : Base")
         return when (viewType) {
             Constants.VIEW_TYPE_BOTTOM_MODEL -> {
                 val inflater = LayoutInflater.from(parent.context)
@@ -51,9 +50,7 @@ abstract class BaseAdapter(
 
         fun setItem(item: FailModel) {
             if (item.viewType == Constants.VIEW_TYPE_FAIL) {
-                Log.e("kmh!!!", "setItem test ")
                 fail.setOnClickListener {
-                    Log.e("kmh!!!", "setItem test2 ")
                     itemClickListener(
                         it,
                         item.viewType,
@@ -82,6 +79,6 @@ val diffUtil9 =
             newItem: ItemModel
         ): Boolean {  //두 아이템이 동일한가 ?
             Log.e("kmh!!!", "areContentsTheSame : ${oldItem.equals(newItem)}")
-            return oldItem.equals(newItem)  // deep copy를 통해 새로운 공간을 확보해 완전히 복사하여 비교. (리스트 주소값이 동일하면 업데이트 x)
+            return oldItem.equals(newItem)
         }
     }

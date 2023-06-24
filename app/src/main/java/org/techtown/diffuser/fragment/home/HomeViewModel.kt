@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel  //뷰모델에서 hilt 주입을 사용하려면 어노테이션.
 class HomeViewModel @Inject constructor(
-    private val repository: Repository  // 생성자 주입은 RepositoryModule 부분에서 Repository  받아옴.
+    private val repository: Repository  // 생성자 주입은 RepositoryModule 부분에서 Repository  받아옴
 ) : BaseViewModel() {
 
     init {
@@ -93,7 +93,7 @@ class HomeViewModel @Inject constructor(
 
                         _items.value =
                             _items.value!!.mapIndexed { index, itemModel -> // 라이브 데이터 업데이트.   이경우 기존 defaultList 의  index 1 에다가 map 을통해 값을 변경해서 넣고 hash코드 변경
-                                if (index == 1 && itemModel is WrappingModel) { // 인덱스가 1이고, WrappingModel 타입이면
+                                if (index == 1 && itemModel is WrappingModel) { 3// 인덱스가 1이고, WrappingModel 타입이면
                                     itemModel.copy(  //데이터 클래스를 COPY 하여 깊은 복사(데이터까지 복사) 하여 새로운 인스턴스를 만드록 새로운 hashcode를 가지게하여 diffUtill 때  컨텐츠 비교를 가능하게 함.
                                         isLoading = false,  //로딩뷰 제거
                                         model = horizontalPopularModel,  // 디폴트는 HorizontalMovieModel null 이엇지만 List<Moive>를 넣은 HorizontalMovieModel를 넣어줌.

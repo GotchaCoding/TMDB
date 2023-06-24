@@ -16,7 +16,7 @@ open class BaseViewModel : ViewModel(){  // 뷰모델의 중복내용 base 모�
     fun pureItems(): List<ItemModel> {
         return _items.value!!.filterIsInstance<Movie>()
     }
-    fun isLoading() : Boolean { //BottomLoadingModel 객체가 Null 이면 false,  null이 아니면(객체가 잇으면) true
+    fun isLoading() : Boolean { //BottomLoadingModel 객체가 존재하면 true 아니면 false
         return _items.value!!.filterIsInstance<BottomLoadingModel>().isNotEmpty()
     }
 }

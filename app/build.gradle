@@ -10,7 +10,7 @@ android {
     compileSdk 33
 
     defaultConfig {
-        applicationId "org.techtown.diffuser"
+        applicationId "my_app.diffuser"
         minSdk 21
         targetSdk 33
         versionCode 1

@@ -11,7 +11,6 @@ import org.techtown.diffuser.Resource
 import org.techtown.diffuser.activity.BaseViewModel
 import org.techtown.diffuser.constants.Constants
 import org.techtown.diffuser.model.BottomLoadingModel
-import org.techtown.diffuser.fragment.home.HomeAdapter
 import org.techtown.diffuser.model.FailModel
 import org.techtown.diffuser.model.Movie
 import javax.inject.Inject

@@ -21,8 +21,6 @@ class MainActivity : AppCompatActivity(),
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val recyclerview = findViewById<RecyclerView>(R.id.recyclerview)
-
         //페이저에 어뎁터 연결
         binding.pager.adapter = MyViewPagerAdapter(this)
         binding.pager.isUserInputEnabled = false  // 뷰페이져의 스크롤 전환가능여부를 세팅

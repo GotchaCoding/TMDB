@@ -1,5 +1,6 @@
 package org.techtown.diffuser.fragment.recommend
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -59,7 +60,7 @@ class RecommendViewModel @Inject constructor(
         movie ?: return
 
         _items.value = _items.value!!.map {
-            if (movie == it) {  //_item.value 리스트에 defaultList로 타이틀도 들어가 있으니 movie 객체와 동일하지 않은 객체가 존재 할 수는 잇음. 근데 프래그먼트에서 이미 분기처리 함 .
+            if (movie == it) {
                 movie.copy(
                     isCheckedMark = movie.isCheckedMark.not()
                 )
