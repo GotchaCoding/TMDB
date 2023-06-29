@@ -2,9 +2,13 @@ package org.techtown.diffuser.fragment.recommend
 
 import android.util.Log
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.tasks.await
 import org.techtown.diffuser.Repository
 import org.techtown.diffuser.Resource
 import org.techtown.diffuser.activity.BaseViewModel
@@ -18,6 +22,8 @@ import javax.inject.Inject
 class RecommendViewModel @Inject constructor(
     private val repository: Repository
 ) : BaseViewModel() {
+    val database = Firebase.firestore
+    var idMovieBookmark: ArrayList<Long> = arrayListOf<Long>()
 
     init {
         val defaultList = listOf<ItemModel>(
@@ -30,7 +36,15 @@ class RecommendViewModel @Inject constructor(
         _items.value = defaultList
     }
 
+
     fun fetch() {
+        val job = GlobalScope.launch {
+            read()
+        }
+        runBlocking {
+            job.join()
+        }
+
         repository.getTrend(page).onEach { result ->
             when (result) {
                 is Resource.Loading -> {
@@ -38,7 +52,7 @@ class RecommendViewModel @Inject constructor(
                 }
                 is Resource.Success -> {
                     val model = result.model
-                    val list = model.results.map {
+                    var list = model.results.map {
                         Movie(
                             title = it.title,
                             rank = it.releaseDate,
@@ -47,6 +61,18 @@ class RecommendViewModel @Inject constructor(
                             id = it.id
                         )
                     }
+
+
+                    for (i in 0 until idMovieBookmark.size) {
+                        list = list.map {
+                            if (it.id == idMovieBookmark[i]) {
+                                it.copy(isCheckedMark = true)
+                            } else {
+                                it
+                            }
+                        }
+                    }
+
                     _items.value = _items.value!! + list
                 }
                 is Resource.Fail -> {
@@ -68,5 +94,21 @@ class RecommendViewModel @Inject constructor(
                 it
             }
         }
+        database.collection("movie").document("${movie.id}").set(movie)
+        database.collection("movie").document("${movie.id}")
+            .update("isCheckedMark", movie.isCheckedMark.not())
+    }
+
+
+    suspend fun read() {
+        database.collection("movie").whereEqualTo("isCheckedMark", true)
+            .get()
+            .addOnSuccessListener { it ->
+                for (i in 0 until it.documents.size) {
+                    idMovieBookmark.add(it.documents[i].id.toLong())
+                }
+            }
+            .addOnFailureListener { exception ->
+            }.await()
     }
 }

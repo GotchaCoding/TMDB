@@ -12,6 +12,8 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.bumptech.glide.manager.SupportRequestManagerFragment
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.internal.managers.FragmentComponentManager
 import org.techtown.diffuser.R
@@ -30,6 +32,7 @@ class RecommendFragment : BaseFragment<FragmentRecommendBinding>() {
 
     private val viewModel: RecommendViewModel by viewModels()
     private val bottomSheetFragment = BottomSheetFragment()
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
