@@ -1,11 +1,9 @@
 package org.techtown.diffuser.fragment.recommend
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.tasks.await
@@ -23,7 +21,6 @@ class RecommendViewModel @Inject constructor(
     private val repository: Repository
 ) : BaseViewModel() {
     val database = Firebase.firestore
-    var idMovieBookmark: ArrayList<Long> = arrayListOf<Long>()
 
     init {
         val defaultList = listOf<ItemModel>(
@@ -36,15 +33,7 @@ class RecommendViewModel @Inject constructor(
         _items.value = defaultList
     }
 
-
     fun fetch() {
-        val job = GlobalScope.launch {
-            read()
-        }
-        runBlocking {
-            job.join()
-        }
-
         repository.getTrend(page).onEach { result ->
             when (result) {
                 is Resource.Loading -> {
@@ -62,10 +51,11 @@ class RecommendViewModel @Inject constructor(
                         )
                     }
 
+                    val movieBookmarkIds = getMovieBookmarkIds()
 
-                    for (i in 0 until idMovieBookmark.size) {
+                    for (movieBookmarkId in movieBookmarkIds) {
                         list = list.map {
-                            if (it.id == idMovieBookmark[i]) {
+                            if (it.id == movieBookmarkId) {
                                 it.copy(isCheckedMark = true)
                             } else {
                                 it
@@ -94,21 +84,18 @@ class RecommendViewModel @Inject constructor(
                 it
             }
         }
-        database.collection("movie").document("${movie.id}").set(movie)
-        database.collection("movie").document("${movie.id}")
-            .update("isCheckedMark", movie.isCheckedMark.not())
+        database.collection("movie").document("${movie.id}").set(
+            movie.copy(
+                isCheckedMark = movie.isCheckedMark.not()
+            )
+        )
     }
 
-
-    suspend fun read() {
-        database.collection("movie").whereEqualTo("isCheckedMark", true)
+    private suspend fun getMovieBookmarkIds(): List<Long> =
+        database.collection("movie").whereEqualTo("checkedMark", true)
             .get()
-            .addOnSuccessListener { it ->
-                for (i in 0 until it.documents.size) {
-                    idMovieBookmark.add(it.documents[i].id.toLong())
-                }
+            .await().documents.map {
+                it.id.toLong()
             }
-            .addOnFailureListener { exception ->
-            }.await()
-    }
+
 }
