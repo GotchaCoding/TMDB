@@ -6,6 +6,8 @@
 
     <ImageView
         android:id="@+id/imgNow"
+        android:background="@drawable/imageshape"
+        android:scaleType="fitXY"
         android:layout_width="200dp"
         android:layout_height="111dp"
         android:layout_marginStart="16dp"

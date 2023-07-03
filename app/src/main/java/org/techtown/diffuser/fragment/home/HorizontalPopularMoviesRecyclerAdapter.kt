@@ -49,6 +49,7 @@ class HorizontalPopularMoviesRecyclerAdapter(private val itemClickListener: (Vie
             rank.text = item.rank
             Glide.with(itemView).load("https://image.tmdb.org/t/p/w500" + item.imagePoster)
                 .into(image)
+            image.clipToOutline = true
 
             itemView.setOnClickListener {
                 itemClickListener(it, item.viewType, item, TheMore.THEMORE_POPULAR)

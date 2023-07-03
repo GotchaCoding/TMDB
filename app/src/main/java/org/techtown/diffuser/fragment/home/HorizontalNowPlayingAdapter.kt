@@ -45,6 +45,7 @@ class NowMovieViewHolder(
         title.text = item.title
         rank.text = item.rank
         Glide.with(itemView).load("https://image.tmdb.org/t/p/w500" + item.imageDrop).into(image)
+        image.clipToOutline = true
 
         itemView.setOnClickListener {
             ItemClickListener(it, item.viewType, item, TheMore.THEMORE_NOW)

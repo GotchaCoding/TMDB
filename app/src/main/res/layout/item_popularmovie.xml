@@ -8,6 +8,8 @@
 
     <ImageView
         android:id="@+id/imagePopular"
+        android:background="@drawable/imageshape"
+        android:scaleType="fitXY"
         android:layout_width="103dp"
         android:layout_height="160dp"
         android:layout_marginTop="5dp"

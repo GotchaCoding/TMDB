@@ -1,8 +1,7 @@
 package org.techtown.diffuser.fragment.recommend
 
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -18,9 +17,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RecommendViewModel @Inject constructor(
-    private val repository: Repository
+    private val repository: Repository,
+    private val database : FirebaseFirestore
 ) : BaseViewModel() {
-    val database = Firebase.firestore
 
     init {
         val defaultList = listOf<ItemModel>(

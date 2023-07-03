@@ -22,6 +22,7 @@ class CommonMoreViewHolder(
         title.text = item.title
         Glide.with(itemView).load("https://image.tmdb.org/t/p/w500" + item.imagePoster)
             .into(image)
+        image.clipToOutline = true
         date.text = item.rank
         contents.text = item.overView
 

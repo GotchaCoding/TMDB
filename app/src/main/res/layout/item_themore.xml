@@ -16,6 +16,8 @@
 
     <ImageView
         android:id="@+id/imgMore"
+        android:background="@drawable/imageshape"
+        android:scaleType="fitXY"
         android:layout_width="100dp"
         android:layout_height="150dp"
         android:layout_margin="20dp"
