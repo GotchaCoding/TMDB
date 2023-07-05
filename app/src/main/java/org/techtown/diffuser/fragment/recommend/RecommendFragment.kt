@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.manager.SupportRequestManagerFragment
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -24,7 +25,7 @@ import org.techtown.diffuser.fragment.BaseFragment
 import org.techtown.diffuser.fragment.recommend.bottomsheet.BottomSheetFragment
 
 @AndroidEntryPoint
-class RecommendFragment : BaseFragment<FragmentRecommendBinding>() {
+class RecommendFragment : BaseFragment<FragmentRecommendBinding>(), SwipeRefreshLayout.OnRefreshListener {
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentRecommendBinding
         get() = FragmentRecommendBinding::inflate
 
@@ -43,6 +44,11 @@ class RecommendFragment : BaseFragment<FragmentRecommendBinding>() {
 
     private fun initView() {
         binding.apply {
+            swipe.setOnRefreshListener {
+                onRefresh()
+                swipe.isRefreshing = false
+            }
+
             val layoutManager = GridLayoutManager(context, 2)
             layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                 override fun getSpanSize(position: Int): Int {
@@ -96,6 +102,10 @@ class RecommendFragment : BaseFragment<FragmentRecommendBinding>() {
         fun newInstance(): Fragment {
             return RecommendFragment()
         }
+    }
+
+    override fun onRefresh() {
+        viewModel.fetch()
     }
 
 }
