@@ -1,8 +1,5 @@
 package org.techtown.diffuser.di
 
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
@@ -19,12 +16,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class HiltModule {
-
-    @Singleton
-    @Provides
-    fun provideFirebase() : FirebaseFirestore {
-        return Firebase.firestore
-    }
 
     @Singleton
     @Provides

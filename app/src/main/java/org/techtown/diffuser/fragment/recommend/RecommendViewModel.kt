@@ -1,11 +1,11 @@
 package org.techtown.diffuser.fragment.recommend
 
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.tasks.await
+import org.techtown.diffuser.FirestoreRepository
 import org.techtown.diffuser.Repository
 import org.techtown.diffuser.Resource
 import org.techtown.diffuser.activity.BaseViewModel
@@ -18,8 +18,9 @@ import javax.inject.Inject
 @HiltViewModel
 class RecommendViewModel @Inject constructor(
     private val repository: Repository,
-    private val database : FirebaseFirestore
+    fireRepository: FirestoreRepository
 ) : BaseViewModel() {
+    private val database = fireRepository.getFireStore()
 
     init {
         val defaultList = listOf<ItemModel>(
@@ -39,30 +40,34 @@ class RecommendViewModel @Inject constructor(
 
                 }
                 is Resource.Success -> {
-                    val model = result.model
-                    var list = model.results.map {
-                        Movie(
-                            title = it.title,
-                            rank = it.releaseDate,
-                            imagePoster = it.posterPath,
-                            viewType = Constants.VIEW_TYPE_RECOMMEND_ITEM,
-                            id = it.id
-                        )
-                    }
+                    if (items.value!!.size > 1) {
+                        _items.value = _items.value!!
+                    } else {
+                        val model = result.model
+                        var list = model.results.map {
+                            Movie(
+                                title = it.title,
+                                rank = it.releaseDate,
+                                imagePoster = it.posterPath,
+                                viewType = Constants.VIEW_TYPE_RECOMMEND_ITEM,
+                                id = it.id
+                            )
+                        }
 
-                    val movieBookmarkIds = getMovieBookmarkIds()
+                        val movieBookmarkIds = getMovieBookmarkIds()
 
-                    for (movieBookmarkId in movieBookmarkIds) {
-                        list = list.map {
-                            if (it.id == movieBookmarkId) {
-                                it.copy(isCheckedMark = true)
-                            } else {
-                                it
+                        for (movieBookmarkId in movieBookmarkIds) {
+                            list = list.map {
+                                if (it.id == movieBookmarkId) {
+                                    it.copy(isCheckedMark = true)
+                                } else {
+                                    it
+                                }
                             }
                         }
-                    }
 
-                    _items.value = _items.value!! + list
+                        _items.value = _items.value!! + list
+                    }
                 }
                 is Resource.Fail -> {
                 }
@@ -70,6 +75,7 @@ class RecommendViewModel @Inject constructor(
 
         }.launchIn(viewModelScope)
     }
+
 
     fun onFavorite(movie: Movie?) {
         movie ?: return
