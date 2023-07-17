@@ -3,11 +3,10 @@ package org.techtown.diffuser.fragment.home
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import org.techtown.diffuser.R
+import org.techtown.diffuser.databinding.ItemPopularmovieBinding
 import org.techtown.diffuser.model.Movie
 
 class HorizontalPopularMoviesRecyclerAdapter(private val itemClickListener: (View, Int, Movie?, TheMore) -> Unit) :
@@ -17,8 +16,14 @@ class HorizontalPopularMoviesRecyclerAdapter(private val itemClickListener: (Vie
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val itemView = inflater.inflate(R.layout.item_popularmovie, parent, false)
-        return MovieViewHolder(itemView, itemClickListener)
+        val binding: ItemPopularmovieBinding = DataBindingUtil.inflate(
+            inflater,
+            R.layout.item_popularmovie,
+            parent,
+            false
+        )  //Todo 리턴 타입 확인
+//        val itemView = inflater.inflate(R.layout.item_popularmovie, parent, false)
+        return MovieViewHolder(binding, itemClickListener)
     }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
@@ -35,22 +40,15 @@ class HorizontalPopularMoviesRecyclerAdapter(private val itemClickListener: (Vie
     }
 
     class MovieViewHolder(
-        itemView: View,
+        val binding: ItemPopularmovieBinding,
         private val itemClickListener: (View, Int, Movie?, TheMore) -> Unit
     ) :
-        RecyclerView.ViewHolder(itemView) {
-
-        var title: TextView = itemView.findViewById(R.id.tvPopularTitle)
-        var rank: TextView = itemView.findViewById(R.id.tvPopularRank)
-        var image: ImageView = itemView.findViewById(R.id.imagePopular)
-
+        RecyclerView.ViewHolder(binding.root) {
         fun setItem(item: Movie) {
-            title.text = item.title
-            rank.text = item.rank
-            Glide.with(itemView).load("https://image.tmdb.org/t/p/w500" + item.imagePoster)
-                .into(image)
-            image.clipToOutline = true
-
+            with(binding){
+                movieItem = item
+                executePendingBindings()
+            }
             itemView.setOnClickListener {
                 itemClickListener(it, item.viewType, item, TheMore.THEMORE_POPULAR)
             }

@@ -1,48 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    tools:ignore="MissingDefaultResource">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <ImageView
-        android:id="@+id/imagePopular"
-        android:background="@drawable/imageshape"
-        android:scaleType="fitXY"
-        android:layout_width="103dp"
-        android:layout_height="160dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginStart="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <data>
+        <variable
+            name="movieItem"
+            type="org.techtown.diffuser.model.Movie" />
+    </data>
 
-
-    <TextView
-        android:id="@+id/tvPopularTitle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:text="제목"
-        android:textSize="16sp"
-        android:textColor="@color/white"
-        android:layout_marginStart="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imagePopular" />
-
-    <TextView
-        android:id="@+id/tvPopularRank"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="평점"
-        android:textColor="#AFADAD"
-        android:textSize="12sp"
-        android:layout_marginStart="16dp"
-        app:layout_constraintTop_toBottomOf="@id/tvPopularTitle"
-        app:layout_constraintStart_toStartOf="parent"
-        />
+        tools:ignore="MissingDefaultResource">
+
+        <ImageView
+            android:id="@+id/imagePopular"
+            android:layout_width="103dp"
+            android:layout_height="160dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/imageshape"
+            android:scaleType="fitXY"
+            app:posterImageUrl="@{movieItem.imagePoster}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/tvPopularTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@{movieItem.title}"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imagePopular" />
+
+        <TextView
+            android:id="@+id/tvPopularRank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="@{movieItem.rank}"
+            android:textColor="#AFADAD"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvPopularTitle" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -9,10 +9,10 @@ import org.techtown.diffuser.Repository
 import org.techtown.diffuser.Resource
 import org.techtown.diffuser.activity.BaseViewModel
 import org.techtown.diffuser.constants.Constants
-import org.techtown.diffuser.constants.Constants.VIEW_TYPE_NOW_MOVIE
-import org.techtown.diffuser.constants.Constants.VIEW_TYPE_POPULAR_MOVIE
-import org.techtown.diffuser.constants.Constants.VIEW_TYPE_UPCOMMING
-import org.techtown.diffuser.model.*
+import org.techtown.diffuser.model.HorizontalMovieModel
+import org.techtown.diffuser.model.Movie
+import org.techtown.diffuser.model.TitleModel
+import org.techtown.diffuser.model.WrappingModel
 import javax.inject.Inject
 
 @HiltViewModel  //뷰모델에서 hilt 주입을 사용하려면 어노테이션.
@@ -32,7 +32,7 @@ class HomeViewModel @Inject constructor(
                 ),
                 WrappingModel( // 로딩뷰와  실패뷰, 그리고 호리즌탈무비모델을 생성자속성으로 가지고 있음.
                     true, null,   // 로딩 구현.  모델은 null
-                   Constants.VIEW_TYPE_POPULAR_MOVIE, id = Constants.KEY_RECYCLERVIEW_ID_POPULAR
+                    viewType = Constants.VIEW_TYPE_POPULAR_MOVIE, id = Constants.KEY_RECYCLERVIEW_ID_POPULAR
                 ),
                 TitleModel(
                     "상영중 영화",
@@ -42,18 +42,18 @@ class HomeViewModel @Inject constructor(
                 ),
                 WrappingModel(
                     true, null,
-                   Constants.VIEW_TYPE_NOW_MOVIE, id = Constants.KEY_RECYCLERVIEW_ID_NOW
+                    viewType = Constants.VIEW_TYPE_NOW_MOVIE, id = Constants.KEY_RECYCLERVIEW_ID_NOW
                 ),
                 TitleModel(
                     "개봉 예정",
                     TheMore.THEMORE_COMMING,
-                    Constants.VIEW_TYPE_TITLE,
+                    viewType = Constants.VIEW_TYPE_TITLE,
                     Constants.KEY_RECYCLERVIEW_ID_TITLE
                 ),
                 WrappingModel(
                     true,
                     null,
-                    Constants.VIEW_TYPE_UPCOMMING,
+                    viewType = Constants.VIEW_TYPE_UPCOMMING,
                     id = Constants.KEY_RECYCLERVIEW_ID_COMMING  // 지금단계에서는 VIEW_TYPE_UPCOMMING 을 쓰나 VIEW_TYPE_NOW_MOVIE 를 쓰나 크게 상관 없음. 어짜피 같은 레이아웃 사용.
                 ),
             )
@@ -63,14 +63,13 @@ class HomeViewModel @Inject constructor(
 
 
     fun fetch() {
-
-        val page = 1
         repository
             .getPopular(page) //이벤트가 발생하고 있는 부분.  // repository는 RopositoryModule 에서 repositoryImpl를 주입받   // 실제로는 impl 인데 인터페이스 제약 걸려잇음.
             .onEach { result ->  // 위의 이벤트 발생부분에 대한 처리부분.  이벤트 발생결과는 callApi 의 결과이므로 Resource seal 클래스타입으로 리턴받음.
                 when (result) {
                     is Resource.Loading -> {
                     }
+
                     is Resource.Success -> {
                         val response =
                             result.model  //Resource<out T> 이기 때문에  model = BaseResponse가 됨  이경우 PopularMoviesResponse .
@@ -93,7 +92,8 @@ class HomeViewModel @Inject constructor(
 
                         _items.value =
                             _items.value!!.mapIndexed { index, itemModel -> // 라이브 데이터 업데이트.   이경우 기존 defaultList 의  index 1 에다가 map 을통해 값을 변경해서 넣고 hash코드 변경
-                                if (index == 1 && itemModel is WrappingModel) { 3// 인덱스가 1이고, WrappingModel 타입이면
+                                if (index == 1 && itemModel is WrappingModel) {
+                                    3// 인덱스가 1이고, WrappingModel 타입이면
                                     itemModel.copy(  //데이터 클래스를 COPY 하여 깊은 복사(데이터까지 복사) 하여 새로운 인스턴스를 만드록 새로운 hashcode를 가지게하여 diffUtill 때  컨텐츠 비교를 가능하게 함.
                                         isLoading = false,  //로딩뷰 제거
                                         model = horizontalPopularModel,  // 디폴트는 HorizontalMovieModel null 이엇지만 List<Moive>를 넣은 HorizontalMovieModel를 넣어줌.
@@ -105,6 +105,7 @@ class HomeViewModel @Inject constructor(
                                 }
                             }
                     }
+
                     is Resource.Fail -> { // 레트로핏 통신 실패시  Resource.Fail 을 응답받게 됨( http or io exception)
                         Log.e("kmh!!!", "Resource.Fail1 : ${_items.value}")
                         _items.value =
@@ -134,6 +135,7 @@ class HomeViewModel @Inject constructor(
                 when (result) {
                     is Resource.Loading -> {
                     }
+
                     is Resource.Success -> {
                         val response = result.model
                         val list = response.results.map {
@@ -164,6 +166,7 @@ class HomeViewModel @Inject constructor(
                             }
                         }
                     }
+
                     is Resource.Fail -> {
                         _items.value = _items.value!!.mapIndexed { index, itemModel ->
                             if (index == 3 && itemModel is WrappingModel) {
@@ -190,6 +193,7 @@ class HomeViewModel @Inject constructor(
                 when (result) {
                     is Resource.Loading -> {
                     }
+
                     is Resource.Success -> {
                         val model = result.model
                         val list = model.results.map {
@@ -221,6 +225,7 @@ class HomeViewModel @Inject constructor(
                             }
                         }
                     }
+
                     is Resource.Fail -> {
                         _items.value = _items.value!!.mapIndexed { index, itemModel ->
                             if (index == 5 && itemModel is WrappingModel) {

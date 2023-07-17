@@ -33,8 +33,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), SwipeRefreshLayout.OnR
         initView()
         initObserver()
         fetchAll()
-
     }
+
 
     private fun initObserver() { //
         viewModel.items.observe(viewLifecycleOwner) { items ->  // 뷰모델의 items를 관찰 : LiveData<List<ItemModel>
@@ -48,7 +48,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), SwipeRefreshLayout.OnR
             swipe.isRefreshing = false   // 로딩화면 제거
         }
         val layoutManager = LinearLayoutManager(context)
-
         adapter = HomeAdapter(  //HomeAdapter 객체 만들때  생성자 부분의 인터페이스와 람다함수 초기화
             itemClickListener = { _, viewType, movie, theMore -> // 사용안하는 매개변수 '_' 처리.
                 Log.e("kmh!!!", "클릭 리스너 처음")
@@ -82,7 +81,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), SwipeRefreshLayout.OnR
                         else -> {}
                     }
                 } else {//클릭시 movie 정보는 반드시 필요.
-                    Log.e("kmh!!!", "클릭 리스너 처음")
+                    Log.e("kmh!!!", "클릭 리스너 movie 잇음 ")
                     val intent = Intent(context, PopularDetailActivity::class.java)
                     intent.putExtra(
                         "movie_id",

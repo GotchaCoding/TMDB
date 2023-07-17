@@ -3,13 +3,12 @@ package org.techtown.diffuser.fragment.home
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import org.techtown.diffuser.R
+import org.techtown.diffuser.databinding.ItemNowplayingBinding
 import org.techtown.diffuser.model.Movie
 
 class HorizontalNowPlayingAdapter(private val ItemClickListener: (View, Int, Movie?, TheMore?) -> Unit) :
@@ -17,8 +16,9 @@ class HorizontalNowPlayingAdapter(private val ItemClickListener: (View, Int, Mov
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NowMovieViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val itemView = inflater.inflate(R.layout.item_nowplaying, parent, false)
-        return NowMovieViewHolder(itemView, ItemClickListener)
+        val binding: ItemNowplayingBinding =
+            DataBindingUtil.inflate(inflater, R.layout.item_nowplaying, parent, false)
+        return NowMovieViewHolder(binding, ItemClickListener)
     }
 
     override fun onBindViewHolder(holder: NowMovieViewHolder, position: Int) {
@@ -32,21 +32,16 @@ class HorizontalNowPlayingAdapter(private val ItemClickListener: (View, Int, Mov
 }
 
 class NowMovieViewHolder(
-    itemView: View,
+    val binding: ItemNowplayingBinding,
     private val ItemClickListener: (View, Int, Movie?, TheMore?) -> Unit
 ) :
-    RecyclerView.ViewHolder(itemView) {
-
-    var title: TextView = itemView.findViewById(R.id.tvNowTitle)
-    var rank: TextView = itemView.findViewById(R.id.tvNowGenre)
-    var image: ImageView = itemView.findViewById(R.id.imgNow)
+    RecyclerView.ViewHolder(binding.root) {
 
     fun setItem(item: Movie) {
-        title.text = item.title
-        rank.text = item.rank
-        Glide.with(itemView).load("https://image.tmdb.org/t/p/w500" + item.imageDrop).into(image)
-        image.clipToOutline = true
-
+        with(binding){
+            movieItem = item
+            executePendingBindings()
+        }
         itemView.setOnClickListener {
             ItemClickListener(it, item.viewType, item, TheMore.THEMORE_NOW)
         }
