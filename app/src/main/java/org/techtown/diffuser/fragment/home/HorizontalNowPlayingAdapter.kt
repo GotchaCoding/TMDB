@@ -23,7 +23,10 @@ class HorizontalNowPlayingAdapter(private val ItemClickListener: (View, Int, Mov
 
     override fun onBindViewHolder(holder: NowMovieViewHolder, position: Int) {
         val movie = currentList[position]
-        holder.setItem(movie)
+        holder.apply {
+            setItem(movie)
+            binding.executePendingBindings()
+        }
     }
 
     override fun getItemCount(): Int {
@@ -38,10 +41,7 @@ class NowMovieViewHolder(
     RecyclerView.ViewHolder(binding.root) {
 
     fun setItem(item: Movie) {
-        with(binding){
-            movieItem = item
-            executePendingBindings()
-        }
+        binding.movieItem = item
         itemView.setOnClickListener {
             ItemClickListener(it, item.viewType, item, TheMore.THEMORE_NOW)
         }

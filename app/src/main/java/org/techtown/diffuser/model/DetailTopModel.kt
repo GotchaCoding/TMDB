@@ -7,5 +7,5 @@ data class DetailTopModel(
     val backDropUrl: String?,
     val isFailure: Boolean = false,
     val isLoading: Boolean = false,
-    val id : Long
+    val id: Long
 )

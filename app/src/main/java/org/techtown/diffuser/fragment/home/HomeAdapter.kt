@@ -87,19 +87,28 @@ class HomeAdapter(
 
             VIEW_TYPE_POPULAR_MOVIE -> { //스마트캐스트
                 if (holder is HorizontalPopularMoviesViewHolder && itemModel is WrappingModel) { //holder 와  itemModel  호환성 체크. & 자동캐스트 : 변수가 원하는 타입인지 is로 검사하고 나면 스마트캐스트 됨.
-                    holder.setItem(itemModel) //HorizontalPopularMoviesViewHolder.setItem 호출
+                    holder.apply {
+                    setItem(itemModel) //HorizontalPopularMoviesViewHolder.setItem 호출
+                    binding.executePendingBindings()
+                    }
                 }
             }
 
             VIEW_TYPE_NOW_MOVIE -> {
                 if (holder is NowMovieViewHolder && itemModel is WrappingModel) {
-                    holder.setItem(itemModel)
+                    holder.apply {
+                    setItem(itemModel)
+                    binding.executePendingBindings()
+                    }
                 }
             }
 
             VIEW_TYPE_UPCOMMING -> {
                 if (holder is HorizontalPopularMoviesViewHolder && itemModel is WrappingModel) {
-                    holder.setItem(itemModel)
+                    holder.apply{
+                        setItem(itemModel)
+                        binding.executePendingBindings()
+                    }
                 }
             }
 

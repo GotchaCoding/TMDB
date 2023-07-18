@@ -21,13 +21,15 @@ class HorizontalPopularMoviesRecyclerAdapter(private val itemClickListener: (Vie
             R.layout.item_popularmovie,
             parent,
             false
-        )  //Todo 리턴 타입 확인
-//        val itemView = inflater.inflate(R.layout.item_popularmovie, parent, false)
+        )
         return MovieViewHolder(binding, itemClickListener)
     }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
-        holder.setItem(items[position])
+        holder.apply {
+            setItem(items[position])
+            binding.executePendingBindings()
+        }
     }
 
     override fun getItemCount(): Int {
@@ -45,10 +47,8 @@ class HorizontalPopularMoviesRecyclerAdapter(private val itemClickListener: (Vie
     ) :
         RecyclerView.ViewHolder(binding.root) {
         fun setItem(item: Movie) {
-            with(binding){
-                movieItem = item
-                executePendingBindings()
-            }
+            binding.movieItem = item
+
             itemView.setOnClickListener {
                 itemClickListener(it, item.viewType, item, TheMore.THEMORE_POPULAR)
             }

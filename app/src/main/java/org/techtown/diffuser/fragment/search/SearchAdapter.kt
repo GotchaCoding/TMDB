@@ -4,11 +4,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import org.techtown.diffuser.BaseAdapter
 import org.techtown.diffuser.R
 import org.techtown.diffuser.activity.moreview.viewHolder.CommonMoreViewHolder
 import org.techtown.diffuser.constants.Constants.VIEW_TYPE_COMMON_MORE
+import org.techtown.diffuser.databinding.ItemThemoreBinding
 import org.techtown.diffuser.fragment.home.TheMore
 import org.techtown.diffuser.model.FailModel
 import org.techtown.diffuser.model.Movie
@@ -20,13 +22,14 @@ class SearchAdapter(itemClickListener: (View, Int, Movie?, TheMore?) -> Unit) :
         parent: ViewGroup,
         viewType: Int
     ): ViewHolder {
-        Log.e("kmh!!!", "onCreateViewHolder")
         val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
             VIEW_TYPE_COMMON_MORE -> {
-                val itemView = inflater.inflate(R.layout.item_themore, parent, false)
-                CommonMoreViewHolder(itemView, itemClickListener)
+                val binding: ItemThemoreBinding =
+                    DataBindingUtil.inflate(inflater, R.layout.item_themore, parent, false)
+                CommonMoreViewHolder(binding, itemClickListener)
             }
+
             else -> {
                 super.onCreateViewHolder(parent, viewType)
             }
@@ -38,9 +41,11 @@ class SearchAdapter(itemClickListener: (View, Int, Movie?, TheMore?) -> Unit) :
         val itemModel = currentList[position]
         if (holder is CommonMoreViewHolder) {
             holder.setItem(itemModel as Movie)
+            holder.binding.executePendingBindings()
         }
         if (holder is FailViewHolder) {
             holder.setItem(itemModel as FailModel)
+            holder.binding.executePendingBindings()
         }
     }
 }

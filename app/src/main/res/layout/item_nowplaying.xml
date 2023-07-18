@@ -20,7 +20,7 @@
             android:layout_height="111dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="5dp"
-            app:nowImageUrl="@{movieItem.imageDrop}"
+            app:dropImageUrl="@{movieItem.imageDrop}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/tvNowTitle"

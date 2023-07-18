@@ -1,18 +1,15 @@
 package org.techtown.diffuser.fragment.recommend
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
-import android.widget.ImageView
-import android.widget.TextView
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import org.techtown.diffuser.BaseAdapter
 import org.techtown.diffuser.R
-import org.techtown.diffuser.activity.detailpage.TitleViewHolder
 import org.techtown.diffuser.constants.Constants
+import org.techtown.diffuser.databinding.ItemRecommendBinding
+import org.techtown.diffuser.databinding.ItemTitlepopualrBinding
 import org.techtown.diffuser.fragment.home.TheMore
 import org.techtown.diffuser.model.Movie
 import org.techtown.diffuser.model.TitleModel
@@ -22,17 +19,20 @@ class RecommendAdapter(
 ) : BaseAdapter(itemClickListener) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
             Constants.VIEW_TYPE_RECOMMEND_TITLE -> {
-                val inflater = LayoutInflater.from(parent.context)
-                val itemView = inflater.inflate(R.layout.item_titlepopualr, parent, false)
-                RecommendTitleViewHolder(itemView, itemClickListener)
+                val binding: ItemTitlepopualrBinding =
+                    DataBindingUtil.inflate(inflater, R.layout.item_titlepopualr, parent, false)
+                RecommendTitleViewHolder(binding, itemClickListener)
             }
+
             Constants.VIEW_TYPE_RECOMMEND_ITEM -> {
-                val inflater = LayoutInflater.from(parent.context)
-                val itemView = inflater.inflate(R.layout.item_recommend, parent, false)
-                RecommendViewHolder(itemView, itemClickListener)
+                val binding: ItemRecommendBinding =
+                    DataBindingUtil.inflate(inflater, R.layout.item_recommend, parent, false)
+                RecommendViewHolder(binding, itemClickListener)
             }
+
             else -> {
                 super.onCreateViewHolder(parent, viewType)
             }
@@ -42,46 +42,47 @@ class RecommendAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = currentList[position]
         if (holder is RecommendViewHolder) {
-            holder.setItem(item as Movie)
+            holder.apply{
+                setItem(item as Movie)
+                binding.executePendingBindings()
+            }
         } else if (holder is RecommendTitleViewHolder) {
-            holder.setItem(item as TitleModel)
+            holder.apply{
+                setItem(item as TitleModel)
+                binding.executePendingBindings()
+            }
         }
     }
 
     class RecommendTitleViewHolder(
-        itemView: View,
+        val binding: ItemTitlepopualrBinding,
         private val itemClickListener: (View, Int, Movie?, TheMore?) -> Unit
-    ) : RecyclerView.ViewHolder(itemView) {
+    ) : RecyclerView.ViewHolder(binding.root) {
 
-        private val tvTitle: TextView = itemView.findViewById(R.id.tvTitle)
-        private val tvMoreview: TextView = itemView.findViewById(R.id.tvMoreview)
 
         fun setItem(item: TitleModel) {
-            tvTitle.text = item.title
-            tvMoreview.setOnClickListener {
-                itemClickListener(it, item.viewType, null, null)
+            with(binding) {
+                tvTitle.text = item.title
+                tvMoreview.setOnClickListener {
+                    itemClickListener(it, item.viewType, null, null)
+                }
             }
         }
     }
 
     class RecommendViewHolder(
-        itemView: View,
+        val binding: ItemRecommendBinding,
         private val itemClickListener: (View, Int, Movie?, TheMore?) -> Unit
-    ) : RecyclerView.ViewHolder(itemView) {
-        private val image: ImageView = itemView.findViewById(R.id.imgGrid)
-        private val bookMarkCheckbox: CheckBox = itemView.findViewById(R.id.bookMarkCheckbox)
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         fun setItem(item: Movie) {
-            Glide.with(itemView).load("https://image.tmdb.org/t/p/w500" + item.imagePoster)
-                .into(image)
-            image.clipToOutline = true // 이미지를 배경에 맞게 짜름
+            with(binding) {
+                movieItem = item
 
-            image.setOnClickListener {
-                itemClickListener(it, item.viewType, item, null)
-            }
-            bookMarkCheckbox.isChecked = item.isCheckedMark
-            bookMarkCheckbox.setOnClickListener {
-                itemClickListener(it, item.viewType, item, null)
+                bookMarkCheckbox.setOnClickListener {
+                    itemClickListener(it, item.viewType, item, null)
+
+                }
             }
         }
     }

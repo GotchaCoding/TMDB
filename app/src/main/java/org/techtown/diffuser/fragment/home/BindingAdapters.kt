@@ -7,7 +7,7 @@ import com.bumptech.glide.Glide
 object BindingAdapters {
 
     @JvmStatic
-    @BindingAdapter("nowImageUrl")
+    @BindingAdapter("dropImageUrl")
     fun bindNowImageUrl(imageView: ImageView, imageUrl: String) {
         Glide.with(imageView.context).load("https://image.tmdb.org/t/p/w500$imageUrl")
             .into(imageView)
@@ -17,6 +17,14 @@ object BindingAdapters {
     @JvmStatic
     @BindingAdapter("posterImageUrl")
     fun bindPosterImageUrl(imageView: ImageView, imageUrl: String) {
+        Glide.with(imageView.context).load("https://image.tmdb.org/t/p/w500$imageUrl")
+            .into(imageView)
+        imageView.clipToOutline = true
+    }
+
+    @JvmStatic
+    @BindingAdapter("castImageUrl")
+    fun bindCastImageUrl(imageView: ImageView, imageUrl: String) {
         Glide.with(imageView.context).load("https://image.tmdb.org/t/p/w500$imageUrl")
             .into(imageView)
         imageView.clipToOutline = true
