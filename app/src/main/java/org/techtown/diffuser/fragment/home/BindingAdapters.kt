@@ -8,26 +8,26 @@ object BindingAdapters {
 
     @JvmStatic
     @BindingAdapter("dropImageUrl")
-    fun bindNowImageUrl(imageView: ImageView, imageUrl: String) {
-        Glide.with(imageView.context).load("https://image.tmdb.org/t/p/w500$imageUrl")
-            .into(imageView)
-        imageView.clipToOutline = true
+    fun bindNowImageUrl(view: ImageView, imageUrl: String) {
+        Glide.with(view.context).load("https://image.tmdb.org/t/p/w500$imageUrl")
+            .into(view)
+        view.clipToOutline = true
     }
 
     @JvmStatic
     @BindingAdapter("posterImageUrl")
-    fun bindPosterImageUrl(imageView: ImageView, imageUrl: String) {
-        Glide.with(imageView.context).load("https://image.tmdb.org/t/p/w500$imageUrl")
-            .into(imageView)
-        imageView.clipToOutline = true
+    fun bindPosterImageUrl(view: ImageView, imageUrl: String) {
+        Glide.with(view.context).load("https://image.tmdb.org/t/p/w500$imageUrl")
+            .into(view)
+        view.clipToOutline = true
     }
 
     @JvmStatic
     @BindingAdapter("castImageUrl")
-    fun bindCastImageUrl(imageView: ImageView, imageUrl: String) {
-        Glide.with(imageView.context).load("https://image.tmdb.org/t/p/w500$imageUrl")
-            .into(imageView)
-        imageView.clipToOutline = true
+    fun bindCastImageUrl(view: ImageView, imageUrl: String) {
+        Glide.with(view.context).load("https://image.tmdb.org/t/p/w500$imageUrl")
+            .into(view)
+        view.clipToOutline = true
     }
 
 }
