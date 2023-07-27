@@ -2,21 +2,14 @@ package org.techtown.diffuser.fragment.recommend
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.bumptech.glide.manager.SupportRequestManagerFragment
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.internal.managers.FragmentComponentManager
 import org.techtown.diffuser.R
 import org.techtown.diffuser.activity.detailpage.PopularDetailActivity
 import org.techtown.diffuser.constants.Constants
@@ -25,7 +18,7 @@ import org.techtown.diffuser.fragment.BaseFragment
 import org.techtown.diffuser.fragment.recommend.bottomsheet.BottomSheetFragment
 
 @AndroidEntryPoint
-class RecommendFragment : BaseFragment<FragmentRecommendBinding>(), SwipeRefreshLayout.OnRefreshListener {
+class RecommendFragment : BaseFragment<FragmentRecommendBinding>() {
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentRecommendBinding
         get() = FragmentRecommendBinding::inflate
 
@@ -45,8 +38,8 @@ class RecommendFragment : BaseFragment<FragmentRecommendBinding>(), SwipeRefresh
     private fun initView() {
         binding.apply {
             swipe.setOnRefreshListener {
-                onRefresh()
-                swipe.isRefreshing = false
+                viewModel.onRefresh()
+                binding.swipe.isRefreshing = false
             }
 
             val layoutManager = GridLayoutManager(context, 2)
@@ -102,10 +95,6 @@ class RecommendFragment : BaseFragment<FragmentRecommendBinding>(), SwipeRefresh
         fun newInstance(): Fragment {
             return RecommendFragment()
         }
-    }
-
-    override fun onRefresh() {
-        viewModel.fetch()
     }
 
 }

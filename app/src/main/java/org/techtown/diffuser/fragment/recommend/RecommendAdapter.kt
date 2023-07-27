@@ -81,7 +81,9 @@ class RecommendAdapter(
 
                 bookMarkCheckbox.setOnClickListener {
                     itemClickListener(it, item.viewType, item, null)
-
+                }
+                imgGrid.setOnClickListener{
+                    itemClickListener(it, item.viewType, item, null)
                 }
             }
         }

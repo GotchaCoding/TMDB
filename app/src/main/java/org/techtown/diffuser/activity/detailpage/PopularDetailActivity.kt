@@ -3,9 +3,11 @@ package org.techtown.diffuser.activity.detailpage
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import dagger.hilt.android.AndroidEntryPoint
+import org.techtown.diffuser.R
 import org.techtown.diffuser.constants.Constants
 import org.techtown.diffuser.databinding.ActivityPopualrDetailBinding
 import org.techtown.diffuser.fragment.home.TheMore
@@ -22,8 +24,7 @@ class PopularDetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshL
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityPopualrDetailBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_popualr_detail)
         initView()
         viewModel.fetch()
         viewModel.fetchCast()

@@ -244,4 +244,10 @@ class HomeViewModel @Inject constructor(
                 }
             }.launchIn(viewModelScope)
     }
+
+    fun onRefresh(){
+        fetch()
+        fetchNowPlay()
+        fetchUpComming()
+    }
 }

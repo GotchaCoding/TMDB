@@ -21,9 +21,11 @@ class NowMoreAdapter(itemClickListener: (View, Int, Movie?, TheMore?) -> Unit) :
         return when (viewType) {
             Constants.VIEW_TYPE_NOW_MOVIE -> {
                 val inflater = LayoutInflater.from(parent.context)
-                val binding : ItemThemoreBinding = DataBindingUtil.inflate(inflater, R.layout.item_themore, parent, false)
+                val binding: ItemThemoreBinding =
+                    DataBindingUtil.inflate(inflater, R.layout.item_themore, parent, false)
                 CommonMoreViewHolder(binding, itemClickListener)
             }
+
             else -> {
                 super.onCreateViewHolder(parent, viewType)
             }
@@ -33,15 +35,15 @@ class NowMoreAdapter(itemClickListener: (View, Int, Movie?, TheMore?) -> Unit) :
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is CommonMoreViewHolder) {
             holder.apply {
-            setItem(currentList[position] as Movie)
-            binding.executePendingBindings()
+                setItem(currentList[position] as Movie)
+                binding.executePendingBindings()
             }
         }
 
         if (holder is FailViewHolder) {
             holder.apply {
-            setItem(currentList[position] as FailModel)
-            binding.executePendingBindings()
+                setItem(currentList[position] as FailModel)
+                binding.executePendingBindings()
             }
         }
     }

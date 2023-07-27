@@ -1,5 +1,6 @@
 package org.techtown.diffuser.fragment.home
 
+import android.view.View
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
@@ -28,6 +29,16 @@ object BindingAdapters {
         Glide.with(view.context).load("https://image.tmdb.org/t/p/w500$imageUrl")
             .into(view)
         view.clipToOutline = true
+    }
+
+    @JvmStatic
+    @BindingAdapter("visibility")
+    fun bindVisibility(view: View, isVisible: Boolean) {
+        if (isVisible) {
+            view.visibility = View.VISIBLE
+        } else {
+            view.visibility = View.GONE
+        }
     }
 
 }

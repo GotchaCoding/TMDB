@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import dagger.hilt.android.AndroidEntryPoint
 import org.techtown.diffuser.activity.detailpage.PopularDetailActivity
 import org.techtown.diffuser.activity.moreview.comming.CommingMoreActivity
@@ -20,7 +19,7 @@ import org.techtown.diffuser.databinding.FragmentHomeBinding
 import org.techtown.diffuser.fragment.BaseFragment
 
 @AndroidEntryPoint  //프래그먼트 힐트 주입 어노테이션
-class HomeFragment : BaseFragment<FragmentHomeBinding>(), SwipeRefreshLayout.OnRefreshListener {  //프래그먼트 상속, 스와이프리프레시 리스너 상속
+class HomeFragment : BaseFragment<FragmentHomeBinding>() {  //프래그먼트 상속, 스와이프리프레시 리스너 상속
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentHomeBinding
         get() = FragmentHomeBinding::inflate
 
@@ -44,7 +43,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), SwipeRefreshLayout.OnR
 
     private fun initView() = with(binding) {
         swipe.setOnRefreshListener {      //스와이프리프레시리스너
-            onRefresh()    // 스와이프리프레시리스너 동작시 실행할 내용.
+            viewModel.onRefresh()    // 스와이프리프레시리스너 동작시 실행할 내용.
             swipe.isRefreshing = false   // 로딩화면 제거
         }
         val layoutManager = LinearLayoutManager(context)
@@ -101,9 +100,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), SwipeRefreshLayout.OnR
         viewModel.fetchUpComming()
     }
 
-    override fun onRefresh() {
-        fetchAll()
-    }
 
     companion object {
         fun newInstance(): Fragment {

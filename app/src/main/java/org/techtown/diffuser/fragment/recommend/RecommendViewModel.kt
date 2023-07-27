@@ -21,55 +21,64 @@ class RecommendViewModel @Inject constructor(
     fireRepository: FirestoreRepository
 ) : BaseViewModel() {
     private val database = fireRepository.getFireStore()
+    private var isLoading = false
+    private val defaultList: List<ItemModel> = listOf(
+        TitleModel(
+            title = "추천영화",
+            viewType = Constants.VIEW_TYPE_RECOMMEND_TITLE,
+            id = Constants.KEY_RECOMMEND_TITLE_ID,
+        )
+    )
 
     init {
-        val defaultList = listOf<ItemModel>(
-            TitleModel(
-                title = "추천영화",
-                viewType = Constants.VIEW_TYPE_RECOMMEND_TITLE,
-                id = Constants.KEY_RECOMMEND_TITLE_ID,
-            )
-        )
         _items.value = defaultList
     }
 
+    fun onRefresh() {
+        fetch()
+    }
+
     fun fetch() {
+        if (isLoading) {
+            return
+        }
+
         repository.getTrend(page).onEach { result ->
             when (result) {
                 is Resource.Loading -> {
-
+                    isLoading = true
                 }
+
                 is Resource.Success -> {
-                    if (items.value!!.size > 1) {
-                        _items.value = _items.value!!
-                    } else {
-                        val model = result.model
-                        var list = model.results.map {
-                            Movie(
-                                title = it.title,
-                                rank = it.releaseDate,
-                                imagePoster = it.posterPath,
-                                viewType = Constants.VIEW_TYPE_RECOMMEND_ITEM,
-                                id = it.id
-                            )
-                        }
+                    isLoading = false
+                    val model = result.model
+                    var list = model.results.map {
+                        Movie(
+                            title = it.title,
+                            rank = it.releaseDate,
+                            imagePoster = it.posterPath,
+                            viewType = Constants.VIEW_TYPE_RECOMMEND_ITEM,
+                            id = it.id
+                        )
+                    }
 
-                        val movieBookmarkIds = getMovieBookmarkIds()
+                    val movieBookmarkIds = getMovieBookmarkIds()
 
-                        for (movieBookmarkId in movieBookmarkIds) {
-                            list = list.map {
-                                if (it.id == movieBookmarkId) {
-                                    it.copy(isCheckedMark = true)
-                                } else {
-                                    it
-                                }
+                    for (movieBookmarkId in movieBookmarkIds) {
+                        list = list.map {
+                            if (it.id == movieBookmarkId) {
+                                it.copy(isCheckedMark = true)
+                            } else {
+                                it
                             }
                         }
-
-                        _items.value = _items.value!! + list
                     }
+
+                    _items.value = defaultList + list
                 }
+
                 is Resource.Fail -> {
+                    isLoading = false
                 }
             }
 

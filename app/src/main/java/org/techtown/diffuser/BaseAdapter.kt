@@ -73,7 +73,6 @@ val diffUtil9 =
             oldItem: ItemModel,
             newItem: ItemModel
         ): Boolean {  // 두 객체가 동일한가?
-            Log.e("kyh!!!", "areItemsTheSame oldItem.id == newItem.id  ${oldItem.id == newItem.id}")
             return oldItem.id == newItem.id  //아이템 일치여부는 고유 id 값을 비교해서 판독
         }
 
@@ -81,10 +80,6 @@ val diffUtil9 =
             oldItem: ItemModel,
             newItem: ItemModel
         ): Boolean {  //두 아이템이 동일한가 ?
-            Log.e(
-                "kyh!!!",
-                "areContentsTheSame oldItem.equals(newItem)  ${oldItem.equals(newItem)}"
-            )
             return oldItem.equals(newItem)
         }
     }

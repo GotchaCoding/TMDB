@@ -1,10 +1,7 @@
 package org.techtown.diffuser.fragment.recommend.bottomsheet
 
 import android.app.Dialog
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,23 +9,11 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import org.techtown.diffuser.R
-import org.techtown.diffuser.activity.detailpage.PopularDetailActivity
-import org.techtown.diffuser.activity.moreview.comming.CommingMoreActivity
-import org.techtown.diffuser.activity.moreview.nowplay.NowplayMoreActivity
-import org.techtown.diffuser.activity.moreview.popular.PopularMoreActivity
-import org.techtown.diffuser.constants.Constants
-import org.techtown.diffuser.fragment.BaseFragment
-import org.techtown.diffuser.fragment.home.HomeAdapter
-import org.techtown.diffuser.fragment.home.TheMore
-import org.techtown.diffuser.fragment.recommend.RecommendAdapter
-import org.techtown.diffuser.fragment.recommend.RecommendViewModel
-import org.techtown.diffuser.model.Movie
 
 @AndroidEntryPoint
 class BottomSheetFragment() : BottomSheetDialogFragment() {
@@ -46,7 +31,7 @@ class BottomSheetFragment() : BottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.bottom_sheet_layout, container, false)
+        val view = inflater.inflate(R.layout.bottom_sheet_fragment, container, false)
         rv = view.findViewById(R.id.rv_middle)
         tvTitle = view.findViewById(R.id.tvBottomTitle)
         tvStory = view.findViewById(R.id.tvBottomStory)

@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    
+    <data>
+        <variable
+            name="item"
+            type="org.techtown.diffuser.model.WrappingModel" />
+    </data>
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -32,6 +38,7 @@
             android:layout_height="190dp"
             android:background="?attr/selectableItemBackground"
             android:gravity="center"
+            app:visibility="@{item.isFailure}"
             android:text="@string/error"
             android:textColor="@color/white"
             android:textSize="20sp"

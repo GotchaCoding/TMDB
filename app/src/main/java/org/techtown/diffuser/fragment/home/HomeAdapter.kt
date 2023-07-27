@@ -13,7 +13,7 @@ import org.techtown.diffuser.constants.Constants.VIEW_TYPE_NOW_MOVIE
 import org.techtown.diffuser.constants.Constants.VIEW_TYPE_POPULAR_MOVIE
 import org.techtown.diffuser.constants.Constants.VIEW_TYPE_TITLE
 import org.techtown.diffuser.constants.Constants.VIEW_TYPE_UPCOMMING
-import org.techtown.diffuser.databinding.ItemHorizontalbasemoviesBinding
+import org.techtown.diffuser.databinding.ItemHorizontalBaseMoviesBinding
 import org.techtown.diffuser.databinding.ItemTitlepopualrBinding
 import org.techtown.diffuser.model.Movie
 import org.techtown.diffuser.model.TitleModel
@@ -36,27 +36,27 @@ class HomeAdapter(
             }
 
             VIEW_TYPE_POPULAR_MOVIE -> {
-                val binding: ItemHorizontalbasemoviesBinding =
+                val binding: ItemHorizontalBaseMoviesBinding =
                     DataBindingUtil.inflate(
-                        inflater, R.layout.item_horizontalbasemovies, parent,
+                        inflater, R.layout.item_horizontal_base_movies, parent,
                         false
                     )
                 return HorizontalPopularMoviesViewHolder(binding, itemClickListener)
             }
 
             VIEW_TYPE_NOW_MOVIE -> {
-                val binding: ItemHorizontalbasemoviesBinding =
+                val binding: ItemHorizontalBaseMoviesBinding =
                     DataBindingUtil.inflate(
-                        inflater, R.layout.item_horizontalbasemovies, parent,
+                        inflater, R.layout.item_horizontal_base_movies, parent,
                         false
                     )
                 return NowMovieViewHolder(binding, itemClickListener)
             }
 
             VIEW_TYPE_UPCOMMING -> {
-                val binding: ItemHorizontalbasemoviesBinding =
+                val binding: ItemHorizontalBaseMoviesBinding =
                     DataBindingUtil.inflate(
-                        inflater, R.layout.item_horizontalbasemovies, parent,
+                        inflater, R.layout.item_horizontal_base_movies, parent,
                         false
                     )
                 return HorizontalPopularMoviesViewHolder(binding, itemClickListener)
@@ -88,8 +88,8 @@ class HomeAdapter(
             VIEW_TYPE_POPULAR_MOVIE -> { //스마트캐스트
                 if (holder is HorizontalPopularMoviesViewHolder && itemModel is WrappingModel) { //holder 와  itemModel  호환성 체크. & 자동캐스트 : 변수가 원하는 타입인지 is로 검사하고 나면 스마트캐스트 됨.
                     holder.apply {
-                    setItem(itemModel) //HorizontalPopularMoviesViewHolder.setItem 호출
-                    binding.executePendingBindings()
+                        setItem(itemModel) //HorizontalPopularMoviesViewHolder.setItem 호출
+                        binding.executePendingBindings()
                     }
                 }
             }
@@ -97,15 +97,15 @@ class HomeAdapter(
             VIEW_TYPE_NOW_MOVIE -> {
                 if (holder is NowMovieViewHolder && itemModel is WrappingModel) {
                     holder.apply {
-                    setItem(itemModel)
-                    binding.executePendingBindings()
+                        setItem(itemModel)
+                        binding.executePendingBindings()
                     }
                 }
             }
 
             VIEW_TYPE_UPCOMMING -> {
                 if (holder is HorizontalPopularMoviesViewHolder && itemModel is WrappingModel) {
-                    holder.apply{
+                    holder.apply {
                         setItem(itemModel)
                         binding.executePendingBindings()
                     }
@@ -117,7 +117,7 @@ class HomeAdapter(
 
 
     class HorizontalPopularMoviesViewHolder(
-        val binding: ItemHorizontalbasemoviesBinding,
+        val binding: ItemHorizontalBaseMoviesBinding,
         private val itemClickListener: (View, Int, Movie?, TheMore?) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
@@ -137,25 +137,26 @@ class HomeAdapter(
             }
         }
 
-        fun setItem(item: WrappingModel) {
+        fun setItem(wrappingModel: WrappingModel) {
             with(binding) {
-                if (item.isFailure) {  // 통신 실패시
+                item = wrappingModel
+                if (wrappingModel.isFailure) {  // 통신 실패시
                     onFailure.isVisible = true // 실패뷰 보이게 설정.
-                    vLoading.isVisible = item.isLoading  //이경우 로딩뷰 안보이게
+                    vLoading.isVisible = wrappingModel.isLoading  //이경우 로딩뷰 안보이게
 
                 } else {  //통신 성공시
                     onFailure.isVisible = false  //실패뷰 안보이게.
-                    vLoading.isVisible = item.isLoading   //이경우 로딩뷰 안보이게
+                    vLoading.isVisible = wrappingModel.isLoading   //이경우 로딩뷰 안보이게
 
-                    if (item.model != null) {
-                        adapter.setMovies(item.model.movies)  //어뎁터의 setMovies 메서드 호출 --> 어뎁터 내 관리하고있는 리스트 업데이트 후 갱신.
+                    wrappingModel.model?.let{
+                        adapter.setMovies(wrappingModel.model.movies)
                     }
                 }
 
                 onFailure.setOnClickListener {  //실패뷰  클릭리스너.  클릭시
                     itemClickListener(
                         it,
-                        item.viewType,
+                        wrappingModel.viewType,
                         null,
                         null
                     )
@@ -187,7 +188,7 @@ class HomeAdapter(
     }
 
     class NowMovieViewHolder(
-        val binding: ItemHorizontalbasemoviesBinding,
+        val binding: ItemHorizontalBaseMoviesBinding,
         private val itemClickListener: (View, Int, Movie?, TheMore?) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
@@ -204,22 +205,23 @@ class HomeAdapter(
             }
         }
 
-        fun setItem(item: WrappingModel) {
+        fun setItem(wrappingModel: WrappingModel) {
             with(binding) {
-                if (item.isFailure) {
+                item = wrappingModel
+                if (wrappingModel.isFailure) {
                     onFailure.isVisible = true
-                    vLoading.isVisible = item.isLoading
+                    vLoading.isVisible = wrappingModel.isLoading
                 } else {
                     onFailure.isVisible = false
-                    vLoading.isVisible = item.isLoading
+                    vLoading.isVisible = wrappingModel.isLoading
 
-                    if (item.model != null) {
-                        adapter.submitList(item.model.movies)
+                    wrappingModel.model?.let {
+                        adapter.submitList(it.movies)
                     }
                 }
 
                 onFailure.setOnClickListener {
-                    itemClickListener(it, item.viewType, null, null)
+                    itemClickListener(it, wrappingModel.viewType, null, null)
                 }
             }
         }

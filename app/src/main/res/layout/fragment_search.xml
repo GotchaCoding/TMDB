@@ -1,134 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/background"
-    tools:context=".fragment.search.SearchFragment">
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/viewConst"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent"
+        android:background="@color/background"
+        tools:context=".fragment.search.SearchFragment">
 
-        <EditText
-            android:id="@+id/edtSearch"
-            android:layout_width="300dp"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/viewConst"
+            android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:hint="영화 제목을 입력해 주세요"
-            android:imeOptions="actionDone"
-            android:inputType="text"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white"
-            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <Button
-            android:id="@+id/btnSearch"
-            android:layout_width="80dp"
-            android:layout_height="match_parent"
-            android:text="검색"
-            android:textColor="@color/white"
-            android:textSize="18sp"
+            <EditText
+                android:id="@+id/edtSearch"
+                android:layout_width="300dp"
+                android:layout_height="50dp"
+                android:hint="영화 제목을 입력해 주세요"
+                android:imeOptions="actionDone"
+                android:inputType="text"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/btnSearch"
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:text="검색"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/tvHint"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/viewConst">
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="Daily Trend 검색"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="35sp"
+                android:layout_marginTop="30dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvFirst"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:layout_marginTop="70dp"
+                android:textColor="#C2C0A6"
+                android:textSize="25sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+
+            <TextView
+                android:id="@+id/tvSecond"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:layout_marginTop="50dp"
+                android:textColor="#C2C0A6"
+                android:textSize="25sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvFirst" />
+
+            <TextView
+                android:id="@+id/tvThird"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:layout_marginTop="50dp"
+                android:textColor="#C2C0A6"
+                android:textSize="25sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvSecond" />
+
+            <TextView
+                android:id="@+id/tvFour"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:layout_marginTop="50dp"
+                android:textColor="#C2C0A6"
+                android:textSize="25sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvThird" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview_theMore"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/background"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/viewConst" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/tvHint"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="?attr/selectableItemBackground"
-        android:gravity="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/viewConst">
-
-        <TextView
-            android:id="@+id/tvTitle"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:text="Daily Trend 검색"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="35sp"
-            android:layout_marginTop="30dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tvFirst"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:ellipsize="end"
-            android:maxLines="2"
-            android:layout_marginTop="70dp"
-            android:textColor="#C2C0A6"
-            android:textSize="25sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvTitle" />
-
-        <TextView
-            android:id="@+id/tvSecond"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:ellipsize="end"
-            android:maxLines="2"
-            android:layout_marginTop="50dp"
-            android:textColor="#C2C0A6"
-            android:textSize="25sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvFirst" />
-
-        <TextView
-            android:id="@+id/tvThird"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:ellipsize="end"
-            android:maxLines="2"
-            android:layout_marginTop="50dp"
-            android:textColor="#C2C0A6"
-            android:textSize="25sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvSecond" />
-
-        <TextView
-            android:id="@+id/tvFour"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:ellipsize="end"
-            android:maxLines="2"
-            android:layout_marginTop="50dp"
-            android:textColor="#C2C0A6"
-            android:textSize="25sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvThird" />
-
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview_theMore"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@color/background"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/viewConst" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
