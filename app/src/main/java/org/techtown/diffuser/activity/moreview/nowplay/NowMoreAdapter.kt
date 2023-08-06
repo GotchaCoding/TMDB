@@ -1,7 +1,6 @@
 package org.techtown.diffuser.activity.moreview.nowplay
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -10,11 +9,11 @@ import org.techtown.diffuser.R
 import org.techtown.diffuser.activity.moreview.viewHolder.CommonMoreViewHolder
 import org.techtown.diffuser.constants.Constants
 import org.techtown.diffuser.databinding.ItemThemoreBinding
-import org.techtown.diffuser.fragment.home.TheMore
+import org.techtown.diffuser.fragment.ItemClickListener
 import org.techtown.diffuser.model.FailModel
 import org.techtown.diffuser.model.Movie
 
-class NowMoreAdapter(itemClickListener: (View, Int, Movie?, TheMore?) -> Unit) :
+class NowMoreAdapter(itemClickListener: ItemClickListener) :
     BaseAdapter(itemClickListener) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {

@@ -1,7 +1,6 @@
 package org.techtown.diffuser.fragment.recommend
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -10,12 +9,12 @@ import org.techtown.diffuser.R
 import org.techtown.diffuser.constants.Constants
 import org.techtown.diffuser.databinding.ItemRecommendBinding
 import org.techtown.diffuser.databinding.ItemTitlepopualrBinding
-import org.techtown.diffuser.fragment.home.TheMore
+import org.techtown.diffuser.fragment.ItemClickListener
 import org.techtown.diffuser.model.Movie
 import org.techtown.diffuser.model.TitleModel
 
 class RecommendAdapter(
-    itemClickListener: (View, Int, Movie?, TheMore?) -> Unit
+    itemClickListener: ItemClickListener
 ) : BaseAdapter(itemClickListener) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -42,12 +41,12 @@ class RecommendAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = currentList[position]
         if (holder is RecommendViewHolder) {
-            holder.apply{
+            holder.apply {
                 setItem(item as Movie)
                 binding.executePendingBindings()
             }
         } else if (holder is RecommendTitleViewHolder) {
-            holder.apply{
+            holder.apply {
                 setItem(item as TitleModel)
                 binding.executePendingBindings()
             }
@@ -56,7 +55,7 @@ class RecommendAdapter(
 
     class RecommendTitleViewHolder(
         val binding: ItemTitlepopualrBinding,
-        private val itemClickListener: (View, Int, Movie?, TheMore?) -> Unit
+        private val itemClickListener: ItemClickListener
     ) : RecyclerView.ViewHolder(binding.root) {
 
 
@@ -64,7 +63,7 @@ class RecommendAdapter(
             with(binding) {
                 tvTitle.text = item.title
                 tvMoreview.setOnClickListener {
-                    itemClickListener(it, item.viewType, null, null)
+                    itemClickListener.onItemClick(it, item.viewType, null, null)
                 }
             }
         }
@@ -72,20 +71,12 @@ class RecommendAdapter(
 
     class RecommendViewHolder(
         val binding: ItemRecommendBinding,
-        private val itemClickListener: (View, Int, Movie?, TheMore?) -> Unit
+        private val itemClickListener: ItemClickListener
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun setItem(item: Movie) {
-            with(binding) {
-                movieItem = item
-
-                bookMarkCheckbox.setOnClickListener {
-                    itemClickListener(it, item.viewType, item, null)
-                }
-                imgGrid.setOnClickListener{
-                    itemClickListener(it, item.viewType, item, null)
-                }
-            }
+            binding.item = item
+            binding.itemClickListener = itemClickListener
         }
     }
 

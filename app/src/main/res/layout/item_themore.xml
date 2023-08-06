@@ -3,14 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
+        <import type="org.techtown.diffuser.fragment.home.TheMore" />
+
         <variable
-            name="movieItem"
+            name="item"
             type="org.techtown.diffuser.model.Movie" />
+
+        <variable
+            name="itemClickListener"
+            type="org.techtown.diffuser.fragment.ItemClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:onClick="@{(view)->itemClickListener.onItemClick(view, item.viewType, item, TheMore.THEMORE_POPULAR)}">
 
         <View
             android:id="@+id/viewMore"
@@ -24,14 +32,14 @@
 
         <ImageView
             android:id="@+id/imgMore"
-            android:background="@drawable/imageshape"
-            android:scaleType="fitXY"
             android:layout_width="100dp"
             android:layout_height="150dp"
             android:layout_margin="20dp"
-            app:posterImageUrl="@{movieItem.imagePoster}"
+            android:background="@drawable/imageshape"
+            android:scaleType="fitXY"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:posterImageUrl="@{item.imagePoster}" />
 
         <TextView
             android:id="@+id/tvMoreTitle"
@@ -40,9 +48,9 @@
             android:layout_marginStart="30dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
+            android:text="@{item.title}"
             android:textColor="@color/white"
             android:textSize="15sp"
-            android:text="@{movieItem.title}"
             app:layout_constraintBottom_toBottomOf="@+id/imgMore"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.26"
@@ -54,10 +62,10 @@
             android:id="@+id/tvMoreDate"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@{item.rank}"
             android:textColor="@color/white"
             android:textSize="15sp"
-            android:layout_marginTop="10dp"
-            android:text="@{movieItem.rank}"
             app:layout_constraintEnd_toEndOf="@+id/tvMoreTitle"
             app:layout_constraintStart_toStartOf="@+id/tvMoreTitle"
             app:layout_constraintTop_toBottomOf="@+id/tvMoreTitle" />
@@ -67,12 +75,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:layout_marginEnd="15dp"
             android:ellipsize="end"
             android:maxLines="4"
+            android:text="@{item.overView}"
             android:textColor="@color/white"
             android:textSize="15sp"
-            android:layout_marginEnd="15dp"
-            android:text="@{movieItem.overView}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/tvMoreTitle"
@@ -82,9 +90,9 @@
             android:id="@+id/vLoading"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
 

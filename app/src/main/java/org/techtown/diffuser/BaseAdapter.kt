@@ -2,7 +2,6 @@ package org.techtown.diffuser
 
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
@@ -11,13 +10,12 @@ import androidx.recyclerview.widget.RecyclerView
 import org.techtown.diffuser.activity.moreview.BottomLoadingViewHolder
 import org.techtown.diffuser.constants.Constants
 import org.techtown.diffuser.databinding.ItemFailureBinding
-import org.techtown.diffuser.fragment.home.TheMore
+import org.techtown.diffuser.fragment.ItemClickListener
 import org.techtown.diffuser.model.FailModel
 import org.techtown.diffuser.model.ItemModel
-import org.techtown.diffuser.model.Movie
 
 abstract class BaseAdapter(
-    protected val itemClickListener: (View, Int, Movie?, TheMore?) -> Unit
+    protected val itemClickListener: ItemClickListener
 ) : ListAdapter<ItemModel, RecyclerView.ViewHolder>(diffUtil9) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -46,14 +44,14 @@ abstract class BaseAdapter(
 
     class FailViewHolder(
         val binding: ItemFailureBinding,
-        private val itemClickListener: (View, Int, Movie?, TheMore?) -> Unit
+        private val itemClickListener: ItemClickListener
     ) : RecyclerView.ViewHolder(binding.root) {
         fun setItem(item: FailModel) {
             with(binding) {
                 if (item.viewType == Constants.VIEW_TYPE_FAIL) {
                     tvFail.setOnClickListener {
                         Log.e("kmh!!!", "FailViewHolder setItem : fail.setOnclickListner")
-                        itemClickListener(
+                        itemClickListener.onItemClick(
                             it,
                             item.viewType,
                             null,

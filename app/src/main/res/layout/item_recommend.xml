@@ -3,9 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
+        <import type="org.techtown.diffuser.fragment.home.TheMore" />
+
         <variable
-            name="movieItem"
+            name="itemClickListener"
+            type="org.techtown.diffuser.fragment.ItemClickListener" />
+
+        <variable
+            name="item"
             type="org.techtown.diffuser.model.Movie" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -19,11 +27,12 @@
             android:layout_marginBottom="15dp"
             android:background="@drawable/imageshape"
             android:scaleType="fitXY"
-            app:posterImageUrl="@{movieItem.imagePoster}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:posterImageUrl="@{item.imagePoster}"
+            android:onClick="@{(view)->itemClickListener.onItemClick(view, item.viewType, item, (TheMore)null )}"/>
 
         <CheckBox
             android:id="@+id/bookMarkCheckbox"
@@ -32,9 +41,10 @@
             android:layout_margin="7dp"
             android:background="@drawable/checkedbox_selector"
             android:button="@android:color/transparent"
+            android:checked="@{item.checkedMark}"
             app:layout_constraintEnd_toEndOf="@id/imgGrid"
             app:layout_constraintTop_toTopOf="@id/imgGrid"
-            android:checked="@{movieItem.checkedMark}"/>
+            android:onClick="@{(view)->itemClickListener.onItemClick(view, item.viewType, item, (TheMore) null )}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -1,7 +1,6 @@
 package org.techtown.diffuser.fragment.home
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
@@ -15,12 +14,12 @@ import org.techtown.diffuser.constants.Constants.VIEW_TYPE_TITLE
 import org.techtown.diffuser.constants.Constants.VIEW_TYPE_UPCOMMING
 import org.techtown.diffuser.databinding.ItemHorizontalBaseMoviesBinding
 import org.techtown.diffuser.databinding.ItemTitlepopualrBinding
-import org.techtown.diffuser.model.Movie
+import org.techtown.diffuser.fragment.ItemClickListener
 import org.techtown.diffuser.model.TitleModel
 import org.techtown.diffuser.model.WrappingModel
 
 class HomeAdapter(
-    itemClickListener: (View, Int, Movie?, TheMore?) -> Unit, // MoreViewClick 인터페이스 속성 생성자 포함 : (View, Int, Movie?) 매개변수로 람다함수를 실행
+    itemClickListener: ItemClickListener, // MoreViewClick 인터페이스 속성 생성자 포함 : (View, Int, Movie?) 매개변수로 람다함수를 실행
 ) : BaseAdapter(itemClickListener) {
 
     override fun onCreateViewHolder(
@@ -118,7 +117,7 @@ class HomeAdapter(
 
     class HorizontalPopularMoviesViewHolder(
         val binding: ItemHorizontalBaseMoviesBinding,
-        private val itemClickListener: (View, Int, Movie?, TheMore?) -> Unit
+        private val itemClickListener: ItemClickListener
     ) : RecyclerView.ViewHolder(binding.root) {
 
         var adapter = HorizontalPopularMoviesRecyclerAdapter(itemClickListener)  // 멀티리사이클러뷰 어뎁터 설정.
@@ -154,7 +153,7 @@ class HomeAdapter(
                 }
 
                 onFailure.setOnClickListener {  //실패뷰  클릭리스너.  클릭시
-                    itemClickListener(
+                    itemClickListener.onItemClick(
                         it,
                         wrappingModel.viewType,
                         null,
@@ -169,14 +168,14 @@ class HomeAdapter(
 
     class TitleViewHolder(
         val binding: ItemTitlepopualrBinding,
-        private val itemClickListener: (View, Int, Movie?, TheMore?) -> Unit
+        private val itemClickListener: ItemClickListener
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun setItem(titleModel: TitleModel) {
             binding.tvTitle.text = titleModel.title
             binding.tvMoreview.setOnClickListener { view ->    //  더보기 클릭리스너.  매개변수를 사용하고 싶지 않을 경우 ' _ ' 로 대체.
                 titleModel.theMore?.let {     // null이 아닐때 실행.
-                    itemClickListener(
+                    itemClickListener.onItemClick(
                         view,
                         titleModel.viewType,
                         null,
@@ -189,7 +188,7 @@ class HomeAdapter(
 
     class NowMovieViewHolder(
         val binding: ItemHorizontalBaseMoviesBinding,
-        private val itemClickListener: (View, Int, Movie?, TheMore?) -> Unit
+        private val itemClickListener: ItemClickListener
     ) : RecyclerView.ViewHolder(binding.root) {
 
         var adapter = HorizontalNowPlayingAdapter(itemClickListener)
@@ -221,7 +220,7 @@ class HomeAdapter(
                 }
 
                 onFailure.setOnClickListener {
-                    itemClickListener(it, wrappingModel.viewType, null, null)
+                    itemClickListener.onItemClick(it, wrappingModel.viewType, null, null)
                 }
             }
         }

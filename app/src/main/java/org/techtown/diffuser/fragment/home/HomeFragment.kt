@@ -17,6 +17,8 @@ import org.techtown.diffuser.activity.moreview.popular.PopularMoreActivity
 import org.techtown.diffuser.constants.Constants
 import org.techtown.diffuser.databinding.FragmentHomeBinding
 import org.techtown.diffuser.fragment.BaseFragment
+import org.techtown.diffuser.fragment.ItemClickListener
+import org.techtown.diffuser.model.Movie
 
 @AndroidEntryPoint  //프래그먼트 힐트 주입 어노테이션
 class HomeFragment : BaseFragment<FragmentHomeBinding>() {  //프래그먼트 상속, 스와이프리프레시 리스너 상속
@@ -48,45 +50,57 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {  //프래그먼트 �
         }
         val layoutManager = LinearLayoutManager(context)
         adapter = HomeAdapter(  //HomeAdapter 객체 만들때  생성자 부분의 인터페이스와 람다함수 초기화
-            itemClickListener = { _, viewType, movie, theMore -> // 사용안하는 매개변수 '_' 처리.
-                Log.e("kmh!!!", "클릭 리스너 처음")
-                if (movie == null) {
-                    Log.e("kmh!!!", "클릭 리스너 if 문")
-                    when (viewType) {  // 실패뷰 떳을때 클릭시 뷰타입별로 패치
-                        Constants.VIEW_TYPE_POPULAR_MOVIE -> {
-                            viewModel.fetch()
-                        }
-                        Constants.VIEW_TYPE_NOW_MOVIE -> {
-                            viewModel.fetchNowPlay()
-                        }
-                        Constants.VIEW_TYPE_UPCOMMING -> {
-                            viewModel.fetchUpComming()
-                        }
-                    }
+            itemClickListener = object : ItemClickListener {
+                override fun onItemClick(
+                    view: View,
+                    viewType: Int,
+                    movie: Movie?,
+                    theMore: TheMore?
+                ) {
+                    Log.e("kmh!!!", "클릭 리스너 처음")
+                    if (movie == null) {
+                        Log.e("kmh!!!", "클릭 리스너 if 문")
+                        when (viewType) {  // 실패뷰 떳을때 클릭시 뷰타입별로 패치
+                            Constants.VIEW_TYPE_POPULAR_MOVIE -> {
+                                viewModel.fetch()
+                            }
 
-                    when (theMore) {
-                        TheMore.THEMORE_POPULAR -> {  //enum class TheMore 패턴매칭으로 알맞은 엑티비티 실행.
-                            val intent = Intent(context, PopularMoreActivity::class.java)
-                            startActivity(intent)
+                            Constants.VIEW_TYPE_NOW_MOVIE -> {
+                                viewModel.fetchNowPlay()
+                            }
+
+                            Constants.VIEW_TYPE_UPCOMMING -> {
+                                viewModel.fetchUpComming()
+                            }
                         }
-                        TheMore.THEMORE_NOW -> {
-                            val intent = Intent(context, NowplayMoreActivity::class.java)
-                            startActivity(intent)
+
+                        when (theMore) {
+                            TheMore.THEMORE_POPULAR -> {  //enum class TheMore 패턴매칭으로 알맞은 엑티비티 실행.
+                                val intent = Intent(context, PopularMoreActivity::class.java)
+                                startActivity(intent)
+                            }
+
+                            TheMore.THEMORE_NOW -> {
+                                val intent = Intent(context, NowplayMoreActivity::class.java)
+                                startActivity(intent)
+                            }
+
+                            TheMore.THEMORE_COMMING -> {
+                                val intent = Intent(context, CommingMoreActivity::class.java)
+                                startActivity(intent)
+                            }
+
+                            else -> {}
                         }
-                        TheMore.THEMORE_COMMING -> {
-                            val intent = Intent(context, CommingMoreActivity::class.java)
-                            startActivity(intent)
-                        }
-                        else -> {}
+                    } else {//클릭시 movie 정보는 반드시 필요.
+                        Log.e("kmh!!!", "클릭 리스너 movie 잇음 ")
+                        val intent = Intent(context, PopularDetailActivity::class.java)
+                        intent.putExtra(
+                            "movie_id",
+                            movie.id
+                        )  //movie.id 인텐트로 송부하고 PopularDetailActivity 엑티비티 실행.
+                        startActivity(intent)
                     }
-                } else {//클릭시 movie 정보는 반드시 필요.
-                    Log.e("kmh!!!", "클릭 리스너 movie 잇음 ")
-                    val intent = Intent(context, PopularDetailActivity::class.java)
-                    intent.putExtra(
-                        "movie_id",
-                        movie.id
-                    )  //movie.id 인텐트로 송부하고 PopularDetailActivity 엑티비티 실행.
-                    startActivity(intent)
                 }
             }
         )

@@ -20,6 +20,9 @@ import org.techtown.diffuser.activity.detailpage.PopularDetailActivity
 import org.techtown.diffuser.constants.Constants
 import org.techtown.diffuser.databinding.FragmentSearchBinding
 import org.techtown.diffuser.fragment.BaseFragment
+import org.techtown.diffuser.fragment.ItemClickListener
+import org.techtown.diffuser.fragment.home.TheMore
+import org.techtown.diffuser.model.Movie
 
 @AndroidEntryPoint
 class SearchFragment : BaseFragment<FragmentSearchBinding>() {
@@ -88,19 +91,27 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
         with(binding) {
             val layoutManager = LinearLayoutManager(context)
             adapter = SearchAdapter(
-                itemClickListener = { _, viewType, movie, _ ->
-                    when (viewType) {
-                        Constants.VIEW_TYPE_FAIL -> {
-                            viewModel.fetch("")
-                        }
-                        else -> {
-                            movie?.let {
-                                val intent = Intent(context, PopularDetailActivity::class.java)
-                                intent.putExtra(
-                                    "movie_id",
-                                    movie.id
-                                )
-                                startActivity(intent)
+                itemClickListener = object : ItemClickListener {
+                    override fun onItemClick(
+                        view: View,
+                        viewType: Int,
+                        movie: Movie?,
+                        theMore: TheMore?
+                    ) {
+                        when (viewType) {
+                            Constants.VIEW_TYPE_FAIL -> {
+                                viewModel.fetch("")
+                            }
+
+                            else -> {
+                                movie?.let {
+                                    val intent = Intent(context, PopularDetailActivity::class.java)
+                                    intent.putExtra(
+                                        "movie_id",
+                                        movie.id
+                                    )
+                                    startActivity(intent)
+                                }
                             }
                         }
                     }

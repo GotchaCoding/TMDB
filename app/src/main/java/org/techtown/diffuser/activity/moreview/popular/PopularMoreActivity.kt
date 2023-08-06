@@ -2,6 +2,7 @@ package org.techtown.diffuser.activity.moreview.popular
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -9,8 +10,11 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import dagger.hilt.android.AndroidEntryPoint
 import org.techtown.diffuser.activity.detailpage.PopularDetailActivity
-import org.techtown.diffuser.constants.Constants.VIEW_TYPE_FAIL
+import org.techtown.diffuser.constants.Constants
 import org.techtown.diffuser.databinding.ActivityPopularMoreViewBinding
+import org.techtown.diffuser.fragment.ItemClickListener
+import org.techtown.diffuser.fragment.home.TheMore
+import org.techtown.diffuser.model.Movie
 
 
 @AndroidEntryPoint
@@ -46,19 +50,27 @@ class PopularMoreActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshLis
     private fun initView() {
         val layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         adapter = PopularMoreAdapter(
-            itemClickListener = { _, viewType, movie, _ ->
-                when (viewType) {
-                    VIEW_TYPE_FAIL -> {
-                        viewModel.fetch()
-                    }
-                    else -> {
-                        movie?.let {
-                            val intent = Intent(this, PopularDetailActivity::class.java)
-                            intent.putExtra(
-                                "movie_id",
-                                movie.id
-                            )
-                            startActivity(intent)
+            itemClickListener = object : ItemClickListener {
+                override fun onItemClick(
+                    view: View,
+                    viewType: Int,
+                    movie: Movie?,
+                    theMore: TheMore?
+                ) {
+                    when (viewType) {
+                        Constants.VIEW_TYPE_FAIL -> {
+                            viewModel.fetch()
+                        }
+
+                        else -> {
+                            movie?.let {
+                                val intent = Intent(applicationContext, PopularDetailActivity::class.java)
+                                intent.putExtra(
+                                    "movie_id",
+                                    movie.id
+                                )
+                                startActivity(intent)
+                            }
                         }
                     }
                 }

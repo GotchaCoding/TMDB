@@ -2,7 +2,6 @@ package org.techtown.diffuser.fragment.search
 
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
@@ -11,11 +10,11 @@ import org.techtown.diffuser.R
 import org.techtown.diffuser.activity.moreview.viewHolder.CommonMoreViewHolder
 import org.techtown.diffuser.constants.Constants.VIEW_TYPE_COMMON_MORE
 import org.techtown.diffuser.databinding.ItemThemoreBinding
-import org.techtown.diffuser.fragment.home.TheMore
+import org.techtown.diffuser.fragment.ItemClickListener
 import org.techtown.diffuser.model.FailModel
 import org.techtown.diffuser.model.Movie
 
-class SearchAdapter(itemClickListener: (View, Int, Movie?, TheMore?) -> Unit) :
+class SearchAdapter(itemClickListener: ItemClickListener) :
     BaseAdapter(itemClickListener) {
 
     override fun onCreateViewHolder(

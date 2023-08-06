@@ -2,6 +2,7 @@ package org.techtown.diffuser.activity.moreview.nowplay
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,6 +12,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.techtown.diffuser.activity.detailpage.PopularDetailActivity
 import org.techtown.diffuser.constants.Constants
 import org.techtown.diffuser.databinding.ActivityNowplayMoreViewBinding
+import org.techtown.diffuser.fragment.ItemClickListener
+import org.techtown.diffuser.fragment.home.TheMore
+import org.techtown.diffuser.model.Movie
 
 @AndroidEntryPoint
 class NowplayMoreActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
@@ -37,19 +41,28 @@ class NowplayMoreActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshLis
     private fun initView() {
         val layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         adapter = NowMoreAdapter(
-            itemClickListener = { _, viewType, movie, _ ->
-                when (viewType) {
-                    Constants.VIEW_TYPE_FAIL -> {
-                        viewModel.fetch()
-                    }
-                    else -> {
-                        movie?.let {
-                            val intent = Intent(this, PopularDetailActivity::class.java)
-                            intent.putExtra(
-                                "movie_id",
-                                movie.id
-                            )
-                            startActivity(intent)
+            itemClickListener = object : ItemClickListener {
+                override fun onItemClick(
+                    view: View,
+                    viewType: Int,
+                    movie: Movie?,
+                    theMore: TheMore?
+                ) {
+
+                    when (viewType) {
+                        Constants.VIEW_TYPE_FAIL -> {
+                            viewModel.fetch()
+                        }
+
+                        else -> {
+                            movie?.let {
+                                val intent = Intent(applicationContext, PopularDetailActivity::class.java)
+                                intent.putExtra(
+                                    "movie_id",
+                                    movie.id
+                                )
+                                startActivity(intent)
+                            }
                         }
                     }
                 }

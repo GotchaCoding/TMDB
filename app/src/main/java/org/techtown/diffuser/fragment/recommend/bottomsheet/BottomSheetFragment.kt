@@ -14,6 +14,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import org.techtown.diffuser.R
+import org.techtown.diffuser.fragment.ItemClickListener
+import org.techtown.diffuser.fragment.home.TheMore
+import org.techtown.diffuser.model.Movie
 
 @AndroidEntryPoint
 class BottomSheetFragment() : BottomSheetDialogFragment() {
@@ -80,9 +83,16 @@ class BottomSheetFragment() : BottomSheetDialogFragment() {
             }
         }
         adapter = BottomSheetAdapter(
-            itemClickListener = { _, viewType, movie, theMore ->
-                tvTitle.text = movie?.title
-                tvStory.text = movie?.overView
+            itemClickListener = object : ItemClickListener {
+                override fun onItemClick(
+                    view: View,
+                    viewType: Int,
+                    movie: Movie?,
+                    theMore: TheMore?
+                ) {
+                    tvTitle.text = movie?.title
+                    tvStory.text = movie?.overView
+                }
             }
         )
 

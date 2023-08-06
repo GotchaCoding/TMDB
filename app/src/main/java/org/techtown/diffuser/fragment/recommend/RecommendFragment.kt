@@ -15,7 +15,10 @@ import org.techtown.diffuser.activity.detailpage.PopularDetailActivity
 import org.techtown.diffuser.constants.Constants
 import org.techtown.diffuser.databinding.FragmentRecommendBinding
 import org.techtown.diffuser.fragment.BaseFragment
+import org.techtown.diffuser.fragment.ItemClickListener
+import org.techtown.diffuser.fragment.home.TheMore
 import org.techtown.diffuser.fragment.recommend.bottomsheet.BottomSheetFragment
+import org.techtown.diffuser.model.Movie
 
 @AndroidEntryPoint
 class RecommendFragment : BaseFragment<FragmentRecommendBinding>() {
@@ -54,23 +57,32 @@ class RecommendFragment : BaseFragment<FragmentRecommendBinding>() {
                 }
             }
             adapter = RecommendAdapter(
-                itemClickListener = { view, viewType, movie, theMore ->
-                    when (viewType) {
-                        Constants.VIEW_TYPE_RECOMMEND_TITLE -> {
-                            initBottomSheet()
-                        }
-                        Constants.VIEW_TYPE_RECOMMEND_ITEM -> {
-                            if (view.id == R.id.bookMarkCheckbox) {
-                                viewModel.onFavorite(movie)
-                            } else if (view.id == R.id.imgGrid){//id check
-                                val intent = Intent(context, PopularDetailActivity::class.java)
-                                intent.putExtra(
-                                    "movie_id",
-                                    movie?.id
-                                )
-                                startActivity(intent)
+                itemClickListener = object : ItemClickListener {
+                    override fun onItemClick(
+                        view: View,
+                        viewType: Int,
+                        movie: Movie?,
+                        theMore: TheMore?
+                    ) {
+                        when (viewType) {
+                            Constants.VIEW_TYPE_RECOMMEND_TITLE -> {
+                                initBottomSheet()
+                            }
+
+                            Constants.VIEW_TYPE_RECOMMEND_ITEM -> {
+                                if (view.id == R.id.bookMarkCheckbox) {
+                                    viewModel.onFavorite(movie)
+                                } else if (view.id == R.id.imgGrid) {//id check
+                                    val intent = Intent(context, PopularDetailActivity::class.java)
+                                    intent.putExtra(
+                                        "movie_id",
+                                        movie?.id
+                                    )
+                                    startActivity(intent)
+                                }
                             }
                         }
+
                     }
                 }
             )

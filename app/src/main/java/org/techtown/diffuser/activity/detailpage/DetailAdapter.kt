@@ -1,7 +1,6 @@
 package org.techtown.diffuser.activity.detailpage
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
@@ -14,12 +13,11 @@ import org.techtown.diffuser.constants.Constants.VIEW_TYPE_DETAIL_BACKGROND
 import org.techtown.diffuser.databinding.ItemDetailCastBinding
 import org.techtown.diffuser.databinding.ItemDetailImageBinding
 import org.techtown.diffuser.databinding.ItemTitlepopualrBinding
-import org.techtown.diffuser.fragment.home.TheMore
-import org.techtown.diffuser.model.Movie
+import org.techtown.diffuser.fragment.ItemClickListener
 import org.techtown.diffuser.model.TitleModel
 import org.techtown.diffuser.model.WrappingDetailModel
 
-class DetailAdapter(itemClickListener: (View, Int, Movie?, TheMore?) -> Unit) :
+class DetailAdapter(itemClickListener: ItemClickListener) :
     BaseAdapter(itemClickListener) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -83,7 +81,7 @@ class DetailAdapter(itemClickListener: (View, Int, Movie?, TheMore?) -> Unit) :
 
     class BackImageViewHolder(
         val binding: ItemDetailImageBinding,
-        val ItemClickListener: (View, Int, Movie?, TheMore?) -> Unit
+        val itemClickListener:ItemClickListener
     ) :
         RecyclerView.ViewHolder(binding.root) {
         init {
@@ -108,7 +106,12 @@ class DetailAdapter(itemClickListener: (View, Int, Movie?, TheMore?) -> Unit) :
                     viewFailure.isVisible = true
                     vLoading.isVisible = false
                     viewFailure.setOnClickListener {
-                        ItemClickListener(it, VIEW_TYPE_DETAIL_BACKGROND, null, null)
+                        itemClickListener.onItemClick(
+                            it,
+                            VIEW_TYPE_DETAIL_BACKGROND,
+                            null,
+                            null
+                        )
                     }
                 }
             }
@@ -117,12 +120,12 @@ class DetailAdapter(itemClickListener: (View, Int, Movie?, TheMore?) -> Unit) :
 
     class CastViewHolder(
         val binding: ItemDetailCastBinding,
-        val ItemClickListener: (View, Int, Movie?, TheMore?) -> Unit
+        val itemClickListener:ItemClickListener
     ) :
         RecyclerView.ViewHolder(binding.root) {
 
         var adapter =
-            CastAdapter(itemClickListener = { _, _, _, _ -> })
+            CastAdapter(itemClickListener)
 
         init {
             with(binding) {
@@ -148,10 +151,11 @@ class DetailAdapter(itemClickListener: (View, Int, Movie?, TheMore?) -> Unit) :
                         adapter.submitList(item.castModel.castList)
                     }
                 }
-                onFailure.setOnClickListener {
-                    ItemClickListener(it, item.viewType, null, null)
-                }
+//                onFailure.setOnClickListener {
+//                    itemClickListener.onItemClick(it, item.viewType, null, null)
+//                }
             }
+            binding.itemClickListener = itemClickListener
         }
     }
 

@@ -6,15 +6,14 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import org.techtown.diffuser.BaseAdapter
 import org.techtown.diffuser.R
 import org.techtown.diffuser.constants.Constants
-import org.techtown.diffuser.fragment.home.TheMore
+import org.techtown.diffuser.fragment.ItemClickListener
 import org.techtown.diffuser.model.Movie
 
 class BottomSheetAdapter(
-    itemClickListener: (View, Int, Movie?, TheMore?) -> Unit
+    itemClickListener: ItemClickListener
 ) : BaseAdapter(itemClickListener) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -48,7 +47,7 @@ class BottomSheetAdapter(
 
 
 class BottomSheetViewHolder(
-    itemView: View, private val itemClickListener: (View, Int, Movie?, TheMore?) -> Unit
+    itemView: View, private val itemClickListener: ItemClickListener
 ) : RecyclerView.ViewHolder(itemView) {
     var image: ImageView = itemView.findViewById(R.id.imgBottomsheet)
 
@@ -59,13 +58,13 @@ class BottomSheetViewHolder(
         image.clipToOutline = true // 이미지를 배경에 맞게 짜름
 
         itemView.setOnClickListener {
-            itemClickListener(it, item.viewType, item, null)
+            itemClickListener.onItemClick(it, item.viewType, item, null)
         }
     }
 }
 
 class BottomSheetBigViewHolder(
-    itemView: View, private val itemClickListener: (View, Int, Movie?, TheMore?) -> Unit
+    itemView: View, private val itemClickListener: ItemClickListener
 ) :RecyclerView.ViewHolder(itemView) {
     var image: ImageView = itemView.findViewById(R.id.imgBottomsheetBig)
 
@@ -75,7 +74,7 @@ class BottomSheetBigViewHolder(
         image.clipToOutline = true // 이미지를 배경에 맞게 짜름
 
         itemView.setOnClickListener {
-            itemClickListener(it, item.viewType, item, null)
+            itemClickListener.onItemClick(it, item.viewType, item, null)
         }
     }
 }

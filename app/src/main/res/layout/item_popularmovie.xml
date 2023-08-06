@@ -4,15 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="org.techtown.diffuser.fragment.home.TheMore"/>
+
         <variable
-            name="movieItem"
+            name="itemClickListener"
+            type="org.techtown.diffuser.fragment.ItemClickListener" />
+
+        <variable
+            name="item"
             type="org.techtown.diffuser.model.Movie" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:ignore="MissingDefaultResource">
+        tools:ignore="MissingDefaultResource"
+        android:onClick="@{(view)-> itemClickListener.onItemClick(view, item.viewType, item, TheMore.THEMORE_POPULAR)}">
 
         <ImageView
             android:id="@+id/imagePopular"
@@ -22,7 +29,7 @@
             android:layout_marginTop="5dp"
             android:background="@drawable/imageshape"
             android:scaleType="fitXY"
-            app:posterImageUrl="@{movieItem.imagePoster}"
+            app:posterImageUrl="@{item.imagePoster}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -34,7 +41,7 @@
             android:layout_marginStart="16dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="@{movieItem.title}"
+            android:text="@{item.title}"
             android:textColor="@color/white"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -46,7 +53,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:text="@{movieItem.rank}"
+            android:text="@{item.rank}"
             android:textColor="#AFADAD"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"

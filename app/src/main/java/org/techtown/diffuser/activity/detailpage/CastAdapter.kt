@@ -1,18 +1,16 @@
 package org.techtown.diffuser.activity.detailpage
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import org.techtown.diffuser.BaseAdapter
 import org.techtown.diffuser.R
 import org.techtown.diffuser.databinding.ItemCastBinding
-import org.techtown.diffuser.fragment.home.TheMore
+import org.techtown.diffuser.fragment.ItemClickListener
 import org.techtown.diffuser.model.CastRv
-import org.techtown.diffuser.model.Movie
 
-class CastAdapter(itemClickListener: (View, Int, Movie?, TheMore?) -> Unit) :
+class CastAdapter(itemClickListener: ItemClickListener) :
     BaseAdapter(itemClickListener) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CastingViewHolder {
