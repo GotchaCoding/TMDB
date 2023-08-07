@@ -147,7 +147,7 @@ class HomeAdapter(
                     onFailure.isVisible = false  //실패뷰 안보이게.
                     vLoading.isVisible = wrappingModel.isLoading   //이경우 로딩뷰 안보이게
 
-                    wrappingModel.model?.let{
+                    wrappingModel.model?.let {
                         adapter.setMovies(wrappingModel.model.movies)
                     }
                 }
@@ -173,16 +173,8 @@ class HomeAdapter(
 
         fun setItem(titleModel: TitleModel) {
             binding.tvTitle.text = titleModel.title
-            binding.tvMoreview.setOnClickListener { view ->    //  더보기 클릭리스너.  매개변수를 사용하고 싶지 않을 경우 ' _ ' 로 대체.
-                titleModel.theMore?.let {     // null이 아닐때 실행.
-                    itemClickListener.onItemClick(
-                        view,
-                        titleModel.viewType,
-                        null,
-                        it
-                    )   //매개변수로 TheMore를 받아오며 , 행동은 위임.
-                }
-            }
+                binding.itemClickListener = itemClickListener
+            binding.titleModel = titleModel
         }
     }
 

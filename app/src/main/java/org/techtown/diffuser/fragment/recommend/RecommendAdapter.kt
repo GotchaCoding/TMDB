@@ -62,10 +62,9 @@ class RecommendAdapter(
         fun setItem(item: TitleModel) {
             with(binding) {
                 tvTitle.text = item.title
-                tvMoreview.setOnClickListener {
-                    itemClickListener.onItemClick(it, item.viewType, null, null)
-                }
             }
+                binding.itemClickListener= itemClickListener
+                binding.titleModel = item
         }
     }
 

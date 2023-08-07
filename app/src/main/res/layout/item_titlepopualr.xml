@@ -4,7 +4,15 @@
     <data>
 
         <import type="org.techtown.diffuser.fragment.home.TheMore" />
+        <import type="org.techtown.diffuser.model.Movie" />
 
+        <variable
+            name="itemClickListener"
+            type="org.techtown.diffuser.fragment.ItemClickListener" />
+
+        <variable
+            name="titleModel"
+            type="org.techtown.diffuser.model.TitleModel" />
 
     </data>
 
@@ -40,7 +48,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/tvTitle"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:onClick="@{(view)->itemClickListener.onItemClick(view, titleModel.viewType, (Movie)null, titleModel.theMore )}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
