@@ -5,10 +5,11 @@
     <data>
 
         <import type="org.techtown.diffuser.fragment.home.TheMore" />
+        <import type="org.techtown.diffuser.model.Movie" />
 
-<!--        <variable-->
-<!--            name="item"-->
-<!--            type="org.techtown.diffuser.model.WrappingDetailModel" />-->
+        <variable
+            name="item"
+            type="org.techtown.diffuser.model.WrappingDetailModel" />
 
         <variable
             name="itemClickListener"
@@ -51,6 +52,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            android:onClick="@{(view)->itemClickListener.onItemClick(view, item.viewType, (Movie)null, (TheMore)null)}"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,9 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
+        <import type="org.techtown.diffuser.fragment.home.TheMore" />
+
+        <import type="org.techtown.diffuser.model.Movie" />
+
         <variable
             name="detailTopModelItem"
             type="org.techtown.diffuser.model.DetailTopModel" />
+
+        <variable
+            name="wrappingDetailModel"
+            type="org.techtown.diffuser.model.WrappingDetailModel" />
+
+        <variable
+            name="itemClickListener"
+            type="org.techtown.diffuser.fragment.ItemClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -37,9 +50,9 @@
             android:layout_height="170dp"
             android:layout_marginStart="7dp"
             android:adjustViewBounds="true"
-            app:posterImageUrl="@{detailTopModelItem.postUrl}"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/img_background" />
+            app:layout_constraintTop_toBottomOf="@id/img_background"
+            app:posterImageUrl="@{detailTopModelItem.postUrl}" />
 
         <TextView
             android:id="@+id/tvTitle_detail"
@@ -48,10 +61,10 @@
             android:layout_margin="5dp"
             android:ellipsize="end"
             android:maxLines="2"
+            android:text="@{detailTopModelItem.title}"
             android:textColor="@color/white"
             android:textSize="23sp"
             android:textStyle="bold"
-            android:text="@{detailTopModelItem.title}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/img_poster"
             app:layout_constraintTop_toBottomOf="@id/img_background" />
@@ -61,9 +74,9 @@
             android:layout_width="289dp"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
+            android:text="@{detailTopModelItem.overview}"
             android:textColor="@color/white"
             android:textSize="13sp"
-            android:text="@{detailTopModelItem.overview}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/img_poster"
             app:layout_constraintTop_toBottomOf="@+id/tvTitle_detail" />
@@ -73,14 +86,15 @@
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:background="?attr/selectableItemBackground"
+            android:gravity="center"
             android:text="@string/error"
             android:textColor="@color/white"
             android:textSize="20sp"
-            android:gravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:onClick="@{(view)->itemClickListener.onItemClick(view, wrappingDetailModel.viewType, (Movie)null, (TheMore)null)}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    
+
     <data>
+
+        <import type="org.techtown.diffuser.fragment.home.TheMore" />
+
+        <import type="org.techtown.diffuser.model.Movie" />
+
         <variable
             name="item"
             type="org.techtown.diffuser.model.WrappingModel" />
+
+        <variable
+            name="itemClickListener"
+            type="org.techtown.diffuser.fragment.ItemClickListener" />
     </data>
 
 
@@ -27,9 +36,9 @@
             android:id="@+id/vLoading"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -38,14 +47,15 @@
             android:layout_height="190dp"
             android:background="?attr/selectableItemBackground"
             android:gravity="center"
-            app:visibility="@{item.isFailure}"
+            android:onClick="@{(view)->itemClickListener.onItemClick(view, item.viewType, (Movie)null, (TheMore)null)}"
             android:text="@string/error"
             android:textColor="@color/white"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:visibility="@{item.isFailure}" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,14 +1,14 @@
 package org.techtown.diffuser.fragment.recommend.bottomsheet
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import org.techtown.diffuser.BaseAdapter
 import org.techtown.diffuser.R
 import org.techtown.diffuser.constants.Constants
+import org.techtown.diffuser.databinding.ItemBottomsheetBigRecyclerBinding
+import org.techtown.diffuser.databinding.ItemBottomsheetRecyclerBinding
 import org.techtown.diffuser.fragment.ItemClickListener
 import org.techtown.diffuser.model.Movie
 
@@ -17,17 +17,28 @@ class BottomSheetAdapter(
 ) : BaseAdapter(itemClickListener) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
             Constants.VIEW_TYPE_BOTTOMSHEET -> {
-                val inflater = LayoutInflater.from(parent.context)
-                val itemView = inflater.inflate(R.layout.item_bottomsheet_recycler, parent, false)
-                BottomSheetViewHolder(itemView, itemClickListener)
+                val binding: ItemBottomsheetRecyclerBinding = DataBindingUtil.inflate(
+                    inflater,
+                    R.layout.item_bottomsheet_recycler,
+                    parent,
+                    false
+                )
+                BottomSheetViewHolder(binding, itemClickListener)
             }
+
             Constants.VIEW_TYPE_BOTTOM_BIGPIC -> {
-                val inflater = LayoutInflater.from(parent.context)
-                val itemView = inflater.inflate(R.layout.item_bottomsheet_big_recycler, parent, false)
-                BottomSheetBigViewHolder(itemView, itemClickListener)
+                val binding: ItemBottomsheetBigRecyclerBinding = DataBindingUtil.inflate(
+                    inflater,
+                    R.layout.item_bottomsheet_big_recycler,
+                    parent,
+                    false
+                )
+                BottomSheetBigViewHolder(binding, itemClickListener)
             }
+
             else -> {
                 super.onCreateViewHolder(parent, viewType)
             }
@@ -47,34 +58,22 @@ class BottomSheetAdapter(
 
 
 class BottomSheetViewHolder(
-    itemView: View, private val itemClickListener: ItemClickListener
-) : RecyclerView.ViewHolder(itemView) {
-    var image: ImageView = itemView.findViewById(R.id.imgBottomsheet)
+    val binding: ItemBottomsheetRecyclerBinding,
+    private val itemClickListener: ItemClickListener
+) : RecyclerView.ViewHolder(binding.root) {
 
     fun setItem(item: Movie) {
-        Glide.with(itemView)
-            .load("https://image.tmdb.org/t/p/w500" + item.imagePoster)
-            .into(image)
-        image.clipToOutline = true // 이미지를 배경에 맞게 짜름
-
-        itemView.setOnClickListener {
-            itemClickListener.onItemClick(it, item.viewType, item, null)
-        }
+        binding.item = item
+        binding.itemClickListener = itemClickListener
     }
 }
 
 class BottomSheetBigViewHolder(
-    itemView: View, private val itemClickListener: ItemClickListener
-) :RecyclerView.ViewHolder(itemView) {
-    var image: ImageView = itemView.findViewById(R.id.imgBottomsheetBig)
+    val binding: ItemBottomsheetBigRecyclerBinding, private val itemClickListener: ItemClickListener
+) : RecyclerView.ViewHolder(binding.root) {
 
     fun setItem(item: Movie) {
-        Glide.with(itemView).load("https://image.tmdb.org/t/p/w500" + item.imageDrop)
-            .into(image)
-        image.clipToOutline = true // 이미지를 배경에 맞게 짜름
-
-        itemView.setOnClickListener {
-            itemClickListener.onItemClick(it, item.viewType, item, null)
-        }
+        binding.item = item
+        binding.itemClickListener = itemClickListener
     }
 }

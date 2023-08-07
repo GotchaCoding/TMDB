@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import org.techtown.diffuser.BaseAdapter
 import org.techtown.diffuser.R
 import org.techtown.diffuser.constants.Constants
-import org.techtown.diffuser.constants.Constants.VIEW_TYPE_DETAIL_BACKGROND
 import org.techtown.diffuser.databinding.ItemDetailCastBinding
 import org.techtown.diffuser.databinding.ItemDetailImageBinding
 import org.techtown.diffuser.databinding.ItemTitlepopualrBinding
@@ -93,6 +92,8 @@ class DetailAdapter(itemClickListener: ItemClickListener) :
         }
 
         fun setItem(item: WrappingDetailModel) {
+            binding.itemClickListener = itemClickListener
+            binding.wrappingDetailModel = item
             with(binding) {
                 detailTopModelItem = item.detailTopModel
 
@@ -105,14 +106,6 @@ class DetailAdapter(itemClickListener: ItemClickListener) :
                 } else {//실패
                     viewFailure.isVisible = true
                     vLoading.isVisible = false
-                    viewFailure.setOnClickListener {
-                        itemClickListener.onItemClick(
-                            it,
-                            VIEW_TYPE_DETAIL_BACKGROND,
-                            null,
-                            null
-                        )
-                    }
                 }
             }
         }
@@ -139,6 +132,8 @@ class DetailAdapter(itemClickListener: ItemClickListener) :
         }
 
         fun setItem(item: WrappingDetailModel) {
+            binding.itemClickListener = itemClickListener
+            binding.item = item
             with(binding) {
                 if (item.isFailure) {
                     onFailure.isVisible = true
@@ -151,11 +146,8 @@ class DetailAdapter(itemClickListener: ItemClickListener) :
                         adapter.submitList(item.castModel.castList)
                     }
                 }
-//                onFailure.setOnClickListener {
-//                    itemClickListener.onItemClick(it, item.viewType, null, null)
-//                }
             }
-            binding.itemClickListener = itemClickListener
+
         }
     }
 

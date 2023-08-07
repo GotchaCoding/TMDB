@@ -4,6 +4,7 @@
     <data>
 
         <import type="org.techtown.diffuser.fragment.home.TheMore" />
+
         <import type="org.techtown.diffuser.model.Movie" />
 
         <variable

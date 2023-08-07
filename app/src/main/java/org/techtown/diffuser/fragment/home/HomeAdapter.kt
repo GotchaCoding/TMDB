@@ -137,8 +137,10 @@ class HomeAdapter(
         }
 
         fun setItem(wrappingModel: WrappingModel) {
+            binding.itemClickListener = itemClickListener
             with(binding) {
                 item = wrappingModel
+
                 if (wrappingModel.isFailure) {  // 통신 실패시
                     onFailure.isVisible = true // 실패뷰 보이게 설정.
                     vLoading.isVisible = wrappingModel.isLoading  //이경우 로딩뷰 안보이게
@@ -151,16 +153,6 @@ class HomeAdapter(
                         adapter.setMovies(wrappingModel.model.movies)
                     }
                 }
-
-                onFailure.setOnClickListener {  //실패뷰  클릭리스너.  클릭시
-                    itemClickListener.onItemClick(
-                        it,
-                        wrappingModel.viewType,
-                        null,
-                        null
-                    )
-                }
-
             }
         }
 
@@ -173,7 +165,7 @@ class HomeAdapter(
 
         fun setItem(titleModel: TitleModel) {
             binding.tvTitle.text = titleModel.title
-                binding.itemClickListener = itemClickListener
+            binding.itemClickListener = itemClickListener
             binding.titleModel = titleModel
         }
     }
@@ -197,6 +189,7 @@ class HomeAdapter(
         }
 
         fun setItem(wrappingModel: WrappingModel) {
+            binding.itemClickListener = itemClickListener
             with(binding) {
                 item = wrappingModel
                 if (wrappingModel.isFailure) {
@@ -209,10 +202,6 @@ class HomeAdapter(
                     wrappingModel.model?.let {
                         adapter.submitList(it.movies)
                     }
-                }
-
-                onFailure.setOnClickListener {
-                    itemClickListener.onItemClick(it, wrappingModel.viewType, null, null)
                 }
             }
         }
