@@ -38,44 +38,41 @@ class RecommendAdapter(
         }
     }
 
+
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = currentList[position]
         if (holder is RecommendViewHolder) {
             holder.apply {
                 setItem(item as Movie)
-                binding.executePendingBindings()
             }
         } else if (holder is RecommendTitleViewHolder) {
             holder.apply {
                 setItem(item as TitleModel)
-                binding.executePendingBindings()
             }
         }
     }
 
     class RecommendTitleViewHolder(
-        val binding: ItemTitlepopualrBinding,
+        private val binding: ItemTitlepopualrBinding,
         private val itemClickListener: ItemClickListener
     ) : RecyclerView.ViewHolder(binding.root) {
 
-
         fun setItem(item: TitleModel) {
-            with(binding) {
-                tvTitle.text = item.title
-            }
-                binding.itemClickListener= itemClickListener
-                binding.titleModel = item
+            binding.itemClickListener = itemClickListener
+            binding.titleModel = item
+            binding.executePendingBindings()
         }
     }
 
     class RecommendViewHolder(
-        val binding: ItemRecommendBinding,
+        private val binding: ItemRecommendBinding,
         private val itemClickListener: ItemClickListener
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun setItem(item: Movie) {
             binding.item = item
             binding.itemClickListener = itemClickListener
+            binding.executePendingBindings()
         }
     }
 

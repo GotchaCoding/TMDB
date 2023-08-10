@@ -29,7 +29,76 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
     override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentSearchBinding
         get() = FragmentSearchBinding::inflate
 
-    private fun titleClick() = with(binding) {
+    private val viewModel: SearchViewModel by viewModels()
+
+    private lateinit var adapter: SearchAdapter
+
+    private var oneTitle: String = ""
+    private var twoTitle: String = ""
+    private var threeTitle: String = ""
+    private var fourTitle: String = ""
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initView()
+        initObserver()
+        viewModel.fetchTrend()
+    }
+
+    private fun initView() = with(binding) {
+        val layoutManager = LinearLayoutManager(context)
+        adapter = SearchAdapter(
+            itemClickListener = object : ItemClickListener {
+                override fun onItemClick(
+                    view: View,
+                    viewType: Int,
+                    movie: Movie?,
+                    theMore: TheMore?
+                ) {
+                    when (viewType) {
+                        Constants.VIEW_TYPE_FAIL -> {
+                            viewModel.fetch("")
+                        }
+
+                        else -> {
+                            movie?.let {
+                                val intent = Intent(context, PopularDetailActivity::class.java)
+                                intent.putExtra(
+                                    "movie_id",
+                                    movie.id
+                                )
+                                startActivity(intent)
+                            }
+                        }
+                    }
+                }
+            })
+        recyclerviewTheMore.adapter = adapter
+        recyclerviewTheMore.layoutManager = layoutManager
+
+        edtSearch.setOnEditorActionListener(object : TextView.OnEditorActionListener {
+            override fun onEditorAction(p0: TextView?, p1: Int, p2: KeyEvent?): Boolean {
+                if (p1 == EditorInfo.IME_ACTION_DONE) {
+                    val title: String = edtSearch.text.toString()
+                    viewModel.fetch(title)
+                    tvHint.isVisible = false
+                    clearEdt()
+                    return true
+                }
+                return false
+            }
+        })
+        btnSearch.setOnClickListener {
+            val title: String = edtSearch.text.toString()
+            viewModel.fetch(title)
+            tvHint.isVisible = false
+            clearEdt()
+            Log.d("kmh!!!", "버튼recyclerviewSize : ${adapter.itemCount}")
+        }
+        tvHint.bringToFront()
+        animation()
+        Log.d("kmh!!!", "recyclerviewSize : ${adapter.itemCount}")
+
         tvFirst.setOnClickListener {
             edtSearch.setText(oneTitle)
         }
@@ -44,34 +113,13 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
         }
     }
 
-
     private fun clearEdt() = binding.edtSearch.setText("")
-    private lateinit var adapter: SearchAdapter
-
-    private val viewModel: SearchViewModel by viewModels()
-
-    var oneTitle: String = ""
-    var twoTitle: String = ""
-    var threeTitle: String = ""
-    var fourTitle: String = ""
-
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initView()
-        initObserver()
-        initTrendObserver()
-        viewModel.fetchTrend()
-        titleClick()
-    }
 
     private fun initObserver() {
         viewModel.items.observe(viewLifecycleOwner) { items ->
             adapter.submitList(items)
         }
-    }
 
-    private fun initTrendObserver() {
         viewModel.trendItems.observe(viewLifecycleOwner) { titles ->
             if (titles.isNotEmpty()) {
                 binding.tvHint.isVisible = true
@@ -84,63 +132,6 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
                 binding.tvThird.text = threeTitle
                 binding.tvFour.text = fourTitle
             } else binding.tvHint.isVisible = false
-        }
-    }
-
-    fun initView() {
-        with(binding) {
-            val layoutManager = LinearLayoutManager(context)
-            adapter = SearchAdapter(
-                itemClickListener = object : ItemClickListener {
-                    override fun onItemClick(
-                        view: View,
-                        viewType: Int,
-                        movie: Movie?,
-                        theMore: TheMore?
-                    ) {
-                        when (viewType) {
-                            Constants.VIEW_TYPE_FAIL -> {
-                                viewModel.fetch("")
-                            }
-
-                            else -> {
-                                movie?.let {
-                                    val intent = Intent(context, PopularDetailActivity::class.java)
-                                    intent.putExtra(
-                                        "movie_id",
-                                        movie.id
-                                    )
-                                    startActivity(intent)
-                                }
-                            }
-                        }
-                    }
-                })
-            recyclerviewTheMore.adapter = adapter
-            recyclerviewTheMore.layoutManager = layoutManager
-
-            edtSearch.setOnEditorActionListener(object : TextView.OnEditorActionListener {
-                override fun onEditorAction(p0: TextView?, p1: Int, p2: KeyEvent?): Boolean {
-                    if (p1 == EditorInfo.IME_ACTION_DONE) {
-                        val title: String = edtSearch.text.toString()
-                        viewModel.fetch(title)
-                        tvHint.isVisible = false
-                        clearEdt()
-                        return true
-                    }
-                    return false
-                }
-            })
-            btnSearch.setOnClickListener {
-                val title: String = edtSearch.text.toString()
-                viewModel.fetch(title)
-                tvHint.isVisible = false
-                clearEdt()
-                Log.d("kmh!!!", "버튼recyclerviewSize : ${adapter.itemCount}")
-            }
-            tvHint.bringToFront()
-            animation()
-            Log.d("kmh!!!", "recyclerviewSize : ${adapter.itemCount}")
         }
     }
 

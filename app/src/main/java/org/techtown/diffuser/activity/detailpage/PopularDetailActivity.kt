@@ -29,12 +29,8 @@ class PopularDetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshL
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_popualr_detail)
         initView()
-        viewModel.fetch()
-        viewModel.fetchCast()
-//        viewModel.items.observe(this, Observer<List<ItemModel>> {test:List<ItemModel> -> adapter.submitList(test) })
-        viewModel.items.observe(this@PopularDetailActivity) { items ->
-            adapter.submitList(items)
-        }
+        initObserver()
+        fetchAll()
     }
 
     private fun initView() {
@@ -63,7 +59,13 @@ class PopularDetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshL
         }
     }
 
-    fun fetchAll() {
+    private fun initObserver() {
+        viewModel.items.observe(this@PopularDetailActivity) { items ->
+            adapter.submitList(items)
+        }
+    }
+
+    private fun fetchAll() {
         viewModel.fetch()
         viewModel.fetchCast()
     }
