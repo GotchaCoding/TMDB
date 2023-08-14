@@ -1,6 +1,5 @@
 package org.techtown.diffuser
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -47,19 +46,8 @@ abstract class BaseAdapter(
         private val itemClickListener: ItemClickListener
     ) : RecyclerView.ViewHolder(binding.root) {
         fun setItem(item: FailModel) {
-            with(binding) {
-                if (item.viewType == Constants.VIEW_TYPE_FAIL) {
-                    tvFail.setOnClickListener {
-                        Log.e("kmh!!!", "FailViewHolder setItem : fail.setOnclickListner")
-                        itemClickListener.onItemClick(
-                            it,
-                            item.viewType,
-                            null,
-                            null
-                        )
-                    }
-                }
-            }
+            binding.itemClickListener = itemClickListener
+            binding.item = item
         }
     }
 

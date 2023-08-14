@@ -8,6 +8,7 @@ import org.techtown.diffuser.response.pupular.PopularMoviesResponse
 import org.techtown.diffuser.response.search.SearchResponse
 import org.techtown.diffuser.response.trend.TrendResponse
 import org.techtown.diffuser.response.upcomming.Upcomming
+import org.techtown.diffuser.response.video.VideoResponse
 import org.techtown.diffuser.retrofit.RetrofitService
 import javax.inject.Inject
 
@@ -60,5 +61,9 @@ class RepositoryImpl @Inject constructor(
                 service.getTrend("ko", page)
             }
         )
+    }
+
+    override fun getVideo(movieId: Long): Flow<Resource<VideoResponse>> = callApi {
+        service.getVideo(movieId, "ko")
     }
 }

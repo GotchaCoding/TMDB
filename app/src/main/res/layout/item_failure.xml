@@ -4,6 +4,17 @@
 
     <data>
 
+        <import type="org.techtown.diffuser.fragment.home.TheMore" />
+
+        <import type="org.techtown.diffuser.model.Movie" />
+
+        <variable
+            name="item"
+            type="org.techtown.diffuser.model.FailModel" />
+
+        <variable
+            name="itemClickListener"
+            type="org.techtown.diffuser.fragment.ItemClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,15 +26,16 @@
             android:id="@+id/tvFail"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center"
+            android:onClick="@{(view)->itemClickListener.onItemClick(view, item.viewType,(Movie)null, (TheMore)null)}"
             android:text="@string/error"
             android:textColor="@color/white"
-            android:background="?attr/selectableItemBackground"
             android:textSize="25dp"
-            android:gravity="center"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -1,6 +1,7 @@
 package org.techtown.diffuser.activity.detailpage
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -46,6 +47,10 @@ class PopularDetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshL
                     Constants.VIEW_TYPE_DETAIL_CASTING -> {
                         viewModel.fetchCast()
                     }
+                    Constants.VIEW_TYPE_WEBVIEW -> {
+                        Log.e("kmh!!!" , " clicklistener test :Constants.VIEW_TYPE_WEBVIEW ")
+                        viewModel.fetchVideo()
+                    }
                 }
             }
         })
@@ -57,6 +62,8 @@ class PopularDetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshL
             onRefresh()
             swipe.isRefreshing = false
         }
+
+
     }
 
     private fun initObserver() {
@@ -68,6 +75,7 @@ class PopularDetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshL
     private fun fetchAll() {
         viewModel.fetch()
         viewModel.fetchCast()
+        viewModel.fetchVideo()
     }
 
     override fun onRefresh() {

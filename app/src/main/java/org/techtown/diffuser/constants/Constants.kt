@@ -11,6 +11,7 @@ object Constants {
     const val KEY_RECYCLERVIEW_ID_TOP_IN_TOP = -5L
     const val KEY_RECYCLERVIEW_ID_TOP = -6L
     const val KEY_RECYCLERVIEW_ID_CAST = -7L
+    const val KEY_RECYCLERVIEW_ID_WEBVIEW = -8L
 
 
 
@@ -29,4 +30,5 @@ object Constants {
     const val VIEW_TYPE_DETAIL_TITLE = -6
     const val VIEW_TYPE_BOTTOMSHEET = -7
     const val VIEW_TYPE_BOTTOM_BIGPIC = -8
+    const val VIEW_TYPE_WEBVIEW = -9
 }

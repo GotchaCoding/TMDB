@@ -2,6 +2,8 @@ package org.techtown.diffuser.activity.detailpage
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.webkit.WebChromeClient
+import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,6 +14,7 @@ import org.techtown.diffuser.constants.Constants
 import org.techtown.diffuser.databinding.ItemDetailCastBinding
 import org.techtown.diffuser.databinding.ItemDetailImageBinding
 import org.techtown.diffuser.databinding.ItemTitlepopualrBinding
+import org.techtown.diffuser.databinding.ItemWebviewBinding
 import org.techtown.diffuser.fragment.ItemClickListener
 import org.techtown.diffuser.model.TitleModel
 import org.techtown.diffuser.model.WrappingDetailModel
@@ -35,8 +38,15 @@ class DetailAdapter(itemClickListener: ItemClickListener) :
             }
 
             Constants.VIEW_TYPE_DETAIL_TITLE -> {
-                val binding : ItemTitlepopualrBinding = DataBindingUtil.inflate(inflater,  R.layout.item_titlepopualr, parent, false)
+                val binding: ItemTitlepopualrBinding =
+                    DataBindingUtil.inflate(inflater, R.layout.item_titlepopualr, parent, false)
                 return TitleViewHolder(binding)
+            }
+
+            Constants.VIEW_TYPE_WEBVIEW -> {
+                val binding: ItemWebviewBinding =
+                    DataBindingUtil.inflate(inflater, R.layout.item_webview, parent, false)
+                return WebViewHolder(binding, itemClickListener)
             }
 
             else -> {
@@ -60,8 +70,8 @@ class DetailAdapter(itemClickListener: ItemClickListener) :
             Constants.VIEW_TYPE_DETAIL_CASTING -> {
                 if (itemModel is WrappingDetailModel) {
                     (holder as CastViewHolder).apply {
-                    setItem(itemModel)
-                    binding.executePendingBindings()
+                        setItem(itemModel)
+                        binding.executePendingBindings()
                     }
                 }
             }
@@ -69,8 +79,17 @@ class DetailAdapter(itemClickListener: ItemClickListener) :
             Constants.VIEW_TYPE_DETAIL_TITLE -> {
                 if (itemModel is TitleModel) {
                     (holder as TitleViewHolder).apply {
-                    setItem(itemModel)
-                    binding.executePendingBindings()
+                        setItem(itemModel)
+                        binding.executePendingBindings()
+                    }
+                }
+            }
+
+            Constants.VIEW_TYPE_WEBVIEW -> {
+                if (itemModel is WrappingDetailModel) {
+                    (holder as WebViewHolder).apply {
+                        setItem(itemModel)
+                        binding.executePendingBindings()
                     }
                 }
             }
@@ -80,7 +99,7 @@ class DetailAdapter(itemClickListener: ItemClickListener) :
 
     class BackImageViewHolder(
         val binding: ItemDetailImageBinding,
-        val itemClickListener:ItemClickListener
+        val itemClickListener: ItemClickListener
     ) :
         RecyclerView.ViewHolder(binding.root) {
         init {
@@ -113,7 +132,7 @@ class DetailAdapter(itemClickListener: ItemClickListener) :
 
     class CastViewHolder(
         val binding: ItemDetailCastBinding,
-        val itemClickListener:ItemClickListener
+        val itemClickListener: ItemClickListener
     ) :
         RecyclerView.ViewHolder(binding.root) {
 
@@ -150,5 +169,26 @@ class DetailAdapter(itemClickListener: ItemClickListener) :
 
         }
     }
+
+    class WebViewHolder(val binding: ItemWebviewBinding, val itemClickListener: ItemClickListener) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun setItem(item: WrappingDetailModel) {
+            binding.item = item
+            binding.itemClickListener = itemClickListener
+            binding.onFailure.isVisible = item.isFailure
+            
+            val urlKey = item.webModel?.webData?.key
+            val videoUrl =
+                "<iframe width=\"100%\" height=\"100%\" src=\"https://www.youtube.com/embed/${urlKey}\"</iframe>"
+
+            urlKey?.let {
+                binding.wvWebView.isGone = false
+                binding.wvWebView.loadData(videoUrl, "text/html", "utf-8")
+                binding.wvWebView.settings.javaScriptEnabled = true
+                binding.wvWebView.webChromeClient = WebChromeClient()
+            } ?: run { binding.wvWebView.isGone = true }
+        }
+    }
+
 
 }

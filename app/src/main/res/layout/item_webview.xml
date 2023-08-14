@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -12,6 +13,7 @@
             name="item"
             type="org.techtown.diffuser.model.WrappingDetailModel" />
 
+
         <variable
             name="itemClickListener"
             type="org.techtown.diffuser.fragment.ItemClickListener" />
@@ -19,26 +21,19 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/background">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvCast"
+        <WebView
+            android:id="@+id/wv_webView"
             android:layout_width="match_parent"
             android:layout_height="250dp"
-            android:background="#042326"
+            android:background="@color/background"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/vLoading"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="WebViewLayout" />
 
         <TextView
             android:id="@+id/onFailure"
@@ -54,7 +49,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:visibility="@{item.isFailure}" />
+            app:visibility="@{item.isFailure}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
