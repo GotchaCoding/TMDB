@@ -1,5 +1,6 @@
 package org.techtown.diffuser.fragment.search
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -9,7 +10,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -76,6 +79,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
         recyclerviewTheMore.adapter = adapter
         recyclerviewTheMore.layoutManager = layoutManager
 
+
         edtSearch.setOnEditorActionListener(object : TextView.OnEditorActionListener {
             override fun onEditorAction(p0: TextView?, p1: Int, p2: KeyEvent?): Boolean {
                 if (p1 == EditorInfo.IME_ACTION_DONE) {
@@ -93,7 +97,6 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
             viewModel.fetch(title)
             tvHint.isVisible = false
             clearEdt()
-            Log.d("kmh!!!", "버튼recyclerviewSize : ${adapter.itemCount}")
         }
         tvHint.bringToFront()
         animation()
@@ -118,6 +121,12 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
     private fun initObserver() {
         viewModel.items.observe(viewLifecycleOwner) { items ->
             adapter.submitList(items)
+
+            if (items.isNotEmpty()) {
+                hideKeyboard()
+            } else {
+                toastMessage()
+            }
         }
 
         viewModel.trendItems.observe(viewLifecycleOwner) { titles ->
@@ -138,6 +147,22 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
     private fun animation() {
         val animation = AnimationUtils.loadAnimation(context, R.anim.alpha)
         binding.tvHint.startAnimation(animation)
+    }
+
+    private fun hideKeyboard() {
+        if (activity != null && requireActivity().currentFocus != null) {
+            val inputManager: InputMethodManager =
+                requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputManager.hideSoftInputFromWindow(
+                requireActivity().currentFocus?.windowToken,
+                InputMethodManager.HIDE_NOT_ALWAYS
+            )
+        }
+    }
+
+    private fun toastMessage() {
+        val message: String = "검색 결과가 없습니다."
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
     companion object {
