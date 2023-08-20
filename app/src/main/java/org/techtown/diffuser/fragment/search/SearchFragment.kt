@@ -14,10 +14,18 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import org.techtown.diffuser.R
 import org.techtown.diffuser.activity.detailpage.PopularDetailActivity
 import org.techtown.diffuser.constants.Constants
@@ -40,6 +48,9 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
     private var twoTitle: String = ""
     private var threeTitle: String = ""
     private var fourTitle: String = ""
+
+    private var searchJob: Job? = null
+    private val searchDelayMillis: Long = 1000
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -93,6 +104,22 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
                 return false
             }
         })
+        
+        edtSearch.addTextChangedListener { editable ->
+            searchJob?.cancel() // 기존 검색작업 취소: 널이 아니면 실행(작업중이면 캔슬)
+
+            searchJob = CoroutineScope(Dispatchers.Main).launch {
+                delay(searchDelayMillis)
+
+                val keyWord: String = editable.toString()
+                if (keyWord == "" && isActive) {
+                    searchJob?.cancelAndJoin()
+                }
+                viewModel.fetch(keyWord)
+                tvHint.isVisible = false
+            }
+        }
+
         btnSearch.setOnClickListener {
             val title: String = edtSearch.text.toString()
             viewModel.fetch(title)
@@ -100,6 +127,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
             clearEdt()
             hideKeyboard()
         }
+
         tvHint.bringToFront()
         animation()
         Log.d("kmh!!!", "recyclerviewSize : ${adapter.itemCount}")
@@ -162,6 +190,10 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
 
     private fun toastMessage(message: String) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun autoSearch() {
+
     }
 
     companion object {
