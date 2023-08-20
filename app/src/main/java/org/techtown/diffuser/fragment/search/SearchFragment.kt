@@ -87,6 +87,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
                     viewModel.fetch(title)
                     tvHint.isVisible = false
                     clearEdt()
+                    hideKeyboard()
                     return true
                 }
                 return false
@@ -97,6 +98,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
             viewModel.fetch(title)
             tvHint.isVisible = false
             clearEdt()
+            hideKeyboard()
         }
         tvHint.bringToFront()
         animation()
@@ -121,12 +123,10 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
     private fun initObserver() {
         viewModel.items.observe(viewLifecycleOwner) { items ->
             adapter.submitList(items)
+        }
 
-            if (items.isNotEmpty()) {
-                hideKeyboard()
-            } else {
-                toastMessage()
-            }
+        viewModel.toast.observe(viewLifecycleOwner) {
+            toastMessage(it)
         }
 
         viewModel.trendItems.observe(viewLifecycleOwner) { titles ->
@@ -160,8 +160,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
         }
     }
 
-    private fun toastMessage() {
-        val message: String = "검색 결과가 없습니다."
+    private fun toastMessage(message: String) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 

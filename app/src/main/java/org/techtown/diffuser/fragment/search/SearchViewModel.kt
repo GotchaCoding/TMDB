@@ -22,6 +22,8 @@ class SearchViewModel @Inject constructor(
     private val _trendItems: MutableLiveData<List<String>> = MutableLiveData(listOf())
     val trendItems: LiveData<List<String>> = _trendItems
 
+    private val _toast: MutableLiveData<String> = MutableLiveData()
+    val toast: LiveData<String> = _toast
 
     fun fetch(title: String) {
         repository
@@ -31,6 +33,7 @@ class SearchViewModel @Inject constructor(
                     is Resource.Loading -> {
 
                     }
+
                     is Resource.Success -> {
                         val response = result.model
 
@@ -47,8 +50,13 @@ class SearchViewModel @Inject constructor(
                             it.imagePoster != null
                         }
                         _items.value = list
+
+                        if (list.isEmpty()) {
+                            _toast.value = "검색 결과가 없습니다."
+                        }
                         Log.e("kmh!!!", "Resource.Success : ${_items.value}")
                     }
+
                     is Resource.Fail -> {
                         Log.e("kmh!!!", "Resource.Fail3 : ${_items.value}")
                         _items.value = listOf(FailModel)
@@ -65,6 +73,7 @@ class SearchViewModel @Inject constructor(
                 when (result) {
                     is Resource.Loading -> {
                     }
+
                     is Resource.Success -> {
                         val response = result.model
 
@@ -73,6 +82,7 @@ class SearchViewModel @Inject constructor(
                         }
                         _trendItems.value = _trendItems.value!! + titles
                     }
+
                     is Resource.Fail -> {
                     }
                 }

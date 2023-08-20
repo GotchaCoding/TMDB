@@ -45,10 +45,18 @@ object BindingAdapters {
 
     @JvmStatic
     @BindingAdapter("videoUrl")
-    fun bindVideoUrl(view: WebView, videoUrl: String){  //todo 데이터바인딩
-        view.loadData(  "<iframe width=\"100%\" height=\"100%\" src=\"https://www.youtube.com/embed/${videoUrl}\"</iframe>", "text/html", "utf-8")
-        view.settings.javaScriptEnabled = true
-        view.webChromeClient = WebChromeClient()
+    fun bindVideoUrl(view: WebView, videoUrl: String?) {  //todo 데이터바인딩
+        if (videoUrl == null) {
+            view.visibility = View.GONE
+        } else {
+            view.loadData(
+                "<iframe width=\"100%\" height=\"100%\" src=\"https://www.youtube.com/embed/${videoUrl}\"</iframe>",
+                "text/html",
+                "utf-8"
+            )
+            view.settings.javaScriptEnabled = true
+            view.webChromeClient = WebChromeClient()
+        }
     }
 
 }

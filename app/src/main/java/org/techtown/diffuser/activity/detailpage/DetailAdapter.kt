@@ -2,8 +2,6 @@ package org.techtown.diffuser.activity.detailpage
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.webkit.WebChromeClient
-import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -176,17 +174,6 @@ class DetailAdapter(itemClickListener: ItemClickListener) :
             binding.item = item
             binding.itemClickListener = itemClickListener
             binding.onFailure.isVisible = item.isFailure
-            
-            val urlKey = item.webModel?.webData?.key
-            val videoUrl =
-                "<iframe width=\"100%\" height=\"100%\" src=\"https://www.youtube.com/embed/${urlKey}\"</iframe>"
-
-            urlKey?.let {
-                binding.wvWebView.isGone = false
-                binding.wvWebView.loadData(videoUrl, "text/html", "utf-8")
-                binding.wvWebView.settings.javaScriptEnabled = true
-                binding.wvWebView.webChromeClient = WebChromeClient()
-            } ?: run { binding.wvWebView.isGone = true }
         }
     }
 
