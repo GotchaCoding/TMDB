@@ -2,13 +2,16 @@ package org.techtown.diffuser.fragment.search
 
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import org.techtown.diffuser.BaseAdapter
 import org.techtown.diffuser.R
 import org.techtown.diffuser.activity.moreview.viewHolder.CommonMoreViewHolder
 import org.techtown.diffuser.constants.Constants.VIEW_TYPE_COMMON_MORE
+import org.techtown.diffuser.constants.Constants.VIEW_TYPE_EMPTY
 import org.techtown.diffuser.databinding.ItemThemoreBinding
 import org.techtown.diffuser.fragment.ItemClickListener
 import org.techtown.diffuser.model.FailModel
@@ -29,6 +32,11 @@ class SearchAdapter(itemClickListener: ItemClickListener) :
                 CommonMoreViewHolder(binding, itemClickListener)
             }
 
+            VIEW_TYPE_EMPTY -> {
+                val itemView = inflater.inflate(R.layout.item_empty, parent, false)
+                EmptyViewholder(itemView)
+            }
+
             else -> {
                 super.onCreateViewHolder(parent, viewType)
             }
@@ -46,5 +54,8 @@ class SearchAdapter(itemClickListener: ItemClickListener) :
             holder.setItem(itemModel as FailModel)
             holder.binding.executePendingBindings()
         }
+
     }
+
+    class EmptyViewholder(itemView: View) : RecyclerView.ViewHolder(itemView)
 }

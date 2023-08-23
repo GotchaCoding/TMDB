@@ -17,10 +17,9 @@ import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.delay
@@ -104,11 +103,11 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
                 return false
             }
         })
-        
+
         edtSearch.addTextChangedListener { editable ->
             searchJob?.cancel() // 기존 검색작업 취소: 널이 아니면 실행(작업중이면 캔슬)
 
-            searchJob = CoroutineScope(Dispatchers.Main).launch {
+            searchJob = viewModel.viewModelScope.launch {
                 delay(searchDelayMillis)
 
                 val keyWord: String = editable.toString()

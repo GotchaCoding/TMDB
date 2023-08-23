@@ -11,6 +11,7 @@ import org.techtown.diffuser.Repository
 import org.techtown.diffuser.Resource
 import org.techtown.diffuser.activity.BaseViewModel
 import org.techtown.diffuser.constants.Constants.VIEW_TYPE_COMMON_MORE
+import org.techtown.diffuser.model.EmptyModel
 import org.techtown.diffuser.model.FailModel
 import org.techtown.diffuser.model.Movie
 import javax.inject.Inject
@@ -53,6 +54,7 @@ class SearchViewModel @Inject constructor(
 
                         if (list.isEmpty()) {
                             _toast.value = "검색 결과가 없습니다."
+                            _items.value = listOf(EmptyModel)
                         }
                         Log.e("kmh!!!", "Resource.Success : ${_items.value}")
                     }

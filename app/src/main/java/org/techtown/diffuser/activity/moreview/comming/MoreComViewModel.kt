@@ -39,6 +39,8 @@ class MoreComViewModel @Inject constructor(
                                 viewType = Constants.VIEW_TYPE_UPCOMMING,
                                 id = it.id
                             )
+                        }.filter {
+                            it.imagePoster != null
                         }
                         page++
                         _items.value = pureItems() + list
