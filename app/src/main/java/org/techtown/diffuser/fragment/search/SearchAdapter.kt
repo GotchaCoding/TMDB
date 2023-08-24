@@ -1,12 +1,10 @@
 package org.techtown.diffuser.fragment.search
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import org.techtown.diffuser.BaseAdapter
 import org.techtown.diffuser.R
 import org.techtown.diffuser.activity.moreview.viewHolder.CommonMoreViewHolder
@@ -23,7 +21,7 @@ class SearchAdapter(itemClickListener: ItemClickListener) :
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): ViewHolder {
+    ): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
             VIEW_TYPE_COMMON_MORE -> {
@@ -43,8 +41,7 @@ class SearchAdapter(itemClickListener: ItemClickListener) :
         }
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        Log.e("kmh!!!", "onBindViewHolder")
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val itemModel = currentList[position]
         if (holder is CommonMoreViewHolder) {
             holder.setItem(itemModel as Movie)
@@ -54,7 +51,6 @@ class SearchAdapter(itemClickListener: ItemClickListener) :
             holder.setItem(itemModel as FailModel)
             holder.binding.executePendingBindings()
         }
-
     }
 
     class EmptyViewholder(itemView: View) : RecyclerView.ViewHolder(itemView)
