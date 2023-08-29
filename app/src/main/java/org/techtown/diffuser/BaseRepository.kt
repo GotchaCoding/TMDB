@@ -28,6 +28,7 @@ open class BaseRepository {  //callApi 메서드는 매개변수로 suspend 람�
             Log.e("kmh!!!"  ,  "IOException")
             Resource.Fail(ApiException.NetworkException)
         } catch (e: Exception) {  // 그 이외 에러
+            Log.e("kmh!!!"  ,  "Exception : ${e.message}", e)
             Resource.Fail(ApiException.UnknownException)
         }
     }
