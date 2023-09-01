@@ -6,11 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.techtown.diffuser.Repository
 import org.techtown.diffuser.Resource
@@ -107,13 +105,13 @@ class SearchViewModel @Inject constructor(
 
     fun onSearch(keyWord: String) {
         searchJob?.cancel() // 기존 검색작업 취소: 널이 아니면 실행(작업중이면 캔슬)
+        if (keyWord.isEmpty()) {
+            return
+        }
         searchJob = viewModelScope.launch {
             delay(searchDelayMillis)
 
-            if (keyWord == "" && isActive){  //에딧텍스트 clear 이후에도 TextWatcher 작동 되어 검색결과 없는 상태를 방지하기위해 잡 취소
-                searchJob?.cancelAndJoin()
-            }
-                fetch(keyWord)
+            fetch(keyWord)
         }
     }
 
