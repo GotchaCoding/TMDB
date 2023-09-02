@@ -20,4 +20,4 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--keep class org.techtown.diffuser.response.video.** { *; }
+#-keep class org.techtown.diffuser.response.video.** { *; }
