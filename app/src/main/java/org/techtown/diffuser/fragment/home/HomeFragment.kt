@@ -30,6 +30,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {  //프래그먼트 �
     private val viewModel: HomeViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        Log.e("kmh!!!", "onViewCreated")
         super.onViewCreated(view, savedInstanceState)
         initView()
         initObserver()

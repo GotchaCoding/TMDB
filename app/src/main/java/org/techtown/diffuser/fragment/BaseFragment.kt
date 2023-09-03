@@ -1,6 +1,7 @@
 package org.techtown.diffuser.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +23,7 @@ abstract class BaseFragment<T : ViewDataBinding> : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        Log.e("kmh!!!", "onCreateView")
         _binding = bindingInflater(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
         return _binding!!.root
