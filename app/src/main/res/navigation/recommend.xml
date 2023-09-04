@@ -8,6 +8,23 @@
     <fragment
         android:id="@+id/recommendScreen"
         android:name="org.techtown.diffuser.fragment.recommend.RecommendFragment"
-        tools:layout="@layout/fragment_recommend" />
+        tools:layout="@layout/fragment_recommend" >
+        <action
+            android:id="@+id/action_home_to_detail"
+            app:destination="@+id/detailScreen">
+            <argument
+                android:name="movie_id"
+                app:argType="long" />
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/detailScreen"
+        android:name="org.techtown.diffuser.fragment.detail.DetailFragment"
+        tools:layout="@layout/fragment_detail" >
+        <argument
+            android:name="movie_id"
+            app:argType="long"/>
+    </fragment>
 
 </navigation>

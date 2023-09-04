@@ -8,9 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
-import org.techtown.diffuser.activity.detailpage.PopularDetailActivity
 import org.techtown.diffuser.activity.moreview.comming.CommingMoreActivity
 import org.techtown.diffuser.activity.moreview.nowplay.NowplayMoreActivity
 import org.techtown.diffuser.activity.moreview.popular.PopularMoreActivity
@@ -95,12 +95,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {  //프래그먼트 �
                         }
                     } else {//클릭시 movie 정보는 반드시 필요.
                         Log.e("kmh!!!", "클릭 리스너 movie 잇음 ")
-                        val intent = Intent(context, PopularDetailActivity::class.java)
-                        intent.putExtra(
-                            "movie_id",
-                            movie.id
-                        )  //movie.id 인텐트로 송부하고 PopularDetailActivity 엑티비티 실행.
-                        startActivity(intent)
+                        findNavController().navigate(HomeFragmentDirections.actionHomeToDetail(movie.id))
                     }
                 }
             }

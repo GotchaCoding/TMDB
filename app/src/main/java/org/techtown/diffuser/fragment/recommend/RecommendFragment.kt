@@ -1,21 +1,21 @@
 package org.techtown.diffuser.fragment.recommend
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import dagger.hilt.android.AndroidEntryPoint
 import org.techtown.diffuser.R
-import org.techtown.diffuser.activity.detailpage.PopularDetailActivity
 import org.techtown.diffuser.constants.Constants
 import org.techtown.diffuser.databinding.FragmentRecommendBinding
 import org.techtown.diffuser.fragment.BaseFragment
 import org.techtown.diffuser.fragment.ItemClickListener
+import org.techtown.diffuser.fragment.home.HomeFragmentDirections
 import org.techtown.diffuser.fragment.home.TheMore
 import org.techtown.diffuser.fragment.recommend.bottomsheet.BottomSheetFragment
 import org.techtown.diffuser.model.Movie
@@ -73,12 +73,7 @@ class RecommendFragment : BaseFragment<FragmentRecommendBinding>() {
                                 if (view.id == R.id.bookMarkCheckbox) {
                                     viewModel.onFavorite(movie)
                                 } else if (view.id == R.id.imgGrid) {//id check
-                                    val intent = Intent(context, PopularDetailActivity::class.java)
-                                    intent.putExtra(
-                                        "movie_id",
-                                        movie?.id
-                                    )
-                                    startActivity(intent)
+                                    findNavController().navigate(HomeFragmentDirections.actionHomeToDetail(movie!!.id))
                                 }
                             }
                         }

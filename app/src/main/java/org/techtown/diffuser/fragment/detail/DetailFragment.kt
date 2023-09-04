@@ -1,43 +1,44 @@
-package org.techtown.diffuser.activity.detailpage
+package org.techtown.diffuser.fragment.detail
 
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
-import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
+import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import dagger.hilt.android.AndroidEntryPoint
-import org.techtown.diffuser.R
 import org.techtown.diffuser.constants.Constants
-import org.techtown.diffuser.databinding.ActivityPopualrDetailBinding
+import org.techtown.diffuser.databinding.FragmentDetailBinding
+import org.techtown.diffuser.fragment.BaseFragment
 import org.techtown.diffuser.fragment.ItemClickListener
-import org.techtown.diffuser.fragment.detail.DetailAdapter
-import org.techtown.diffuser.fragment.detail.DetailViewModel
 import org.techtown.diffuser.fragment.home.TheMore
 import org.techtown.diffuser.model.Movie
 
 @AndroidEntryPoint
-class PopularDetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
-    lateinit var binding: ActivityPopualrDetailBinding
+class DetailFragment : BaseFragment<FragmentDetailBinding>(), SwipeRefreshLayout.OnRefreshListener {
+    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentDetailBinding
+        get() = FragmentDetailBinding::inflate
 
     private lateinit var adapter: DetailAdapter
-
     lateinit var swipe: SwipeRefreshLayout
-
     private val viewModel: DetailViewModel by viewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_popualr_detail)
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         initView()
         initObserver()
         fetchAll()
     }
 
     private fun initView() {
-        val layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+
+
+        val layoutManager = LinearLayoutManager(context)
+
 
         adapter = DetailAdapter(itemClickListener = object : ItemClickListener {
             override fun onItemClick(view: View, viewType: Int, movie: Movie?, theMore: TheMore?) {
@@ -56,6 +57,7 @@ class PopularDetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshL
                 }
             }
         })
+
         binding.recyclerviewDetail.adapter = adapter
         binding.recyclerviewDetail.layoutManager = layoutManager
 
@@ -69,7 +71,7 @@ class PopularDetailActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshL
     }
 
     private fun initObserver() {
-        viewModel.items.observe(this@PopularDetailActivity) { items ->
+        viewModel.items.observe(viewLifecycleOwner) { items ->
             adapter.submitList(items)
         }
     }

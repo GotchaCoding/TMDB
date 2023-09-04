@@ -1,4 +1,4 @@
-package org.techtown.diffuser.activity.detailpage
+package org.techtown.diffuser.fragment.detail
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

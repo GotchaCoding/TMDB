@@ -1,4 +1,4 @@
-package org.techtown.diffuser.activity.detailpage
+package org.techtown.diffuser.fragment.detail
 
 import androidx.recyclerview.widget.RecyclerView
 import org.techtown.diffuser.databinding.ItemTitlepopualrBinding

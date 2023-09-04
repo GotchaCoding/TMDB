@@ -8,7 +8,24 @@
     <fragment
         android:id="@+id/searchScreen"
         android:name="org.techtown.diffuser.fragment.search.SearchFragment"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_home_to_detail"
+            app:destination="@+id/detailScreen">
+            <argument
+                android:name="movie_id"
+                app:argType="long" />
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/detailScreen"
+        android:name="org.techtown.diffuser.fragment.detail.DetailFragment"
+        tools:layout="@layout/fragment_detail" >
+        <argument
+            android:name="movie_id"
+            app:argType="long"/>
+    </fragment>
 
 
 </navigation>

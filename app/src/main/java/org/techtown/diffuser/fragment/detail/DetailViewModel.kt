@@ -1,4 +1,4 @@
-package org.techtown.diffuser.activity.detailpage
+package org.techtown.diffuser.fragment.detail
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -23,7 +23,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailViewModel @Inject constructor(
-
     savedStateHandle: SavedStateHandle,
     private val repository: Repository
 ) : ViewModel() {
