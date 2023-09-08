@@ -32,6 +32,10 @@ class SearchViewModel @Inject constructor(
     private val _isHintVisible: MutableLiveData<Boolean> = MutableLiveData()
     val isHintVisible: LiveData<Boolean> = _isHintVisible
 
+//    private val _isEditText: MutableLiveData<Boolean> = MutableLiveData()
+//    val isEditText: MutableLiveData<Boolean> = _isEditText
+
+
     private var searchJob: Job? = null
     private val searchDelayMillis: Long = 1000
 
@@ -104,15 +108,14 @@ class SearchViewModel @Inject constructor(
     }
 
     fun onSearch(keyWord: String) {
-        searchJob?.cancel() // 기존 검색작업 취소: 널이 아니면 실행(작업중이면 캔슬)
         if (keyWord.isEmpty()) {
             return
         }
+        searchJob?.cancel() // 기존 검색작업 취소: 널이 아니면 실행(작업중이면 캔슬)
         searchJob = viewModelScope.launch {
             delay(searchDelayMillis)
             fetch(keyWord)
         }
     }
-
 
 }

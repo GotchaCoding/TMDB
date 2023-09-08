@@ -13,7 +13,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -77,18 +76,20 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
             override fun onEditorAction(p0: TextView?, p1: Int, p2: KeyEvent?): Boolean {
                 if (p1 == EditorInfo.IME_ACTION_DONE) {
                     onSearch(edtSearch.text.toString())
+                    edtSearch.text.clear()
                     return true
                 }
                 return false
             }
         })
 
-        edtSearch.addTextChangedListener { editable ->
+        edtSearch. addTextChangedListener { editable ->
             viewModel.onSearch(editable.toString())
         }
 
         btnSearch.setOnClickListener {
             onSearch(edtSearch.text.toString())
+            edtSearch.text.clear()
         }
 
         tvHint.bringToFront()
@@ -110,11 +111,9 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
 
     private fun onSearch(keyword: String) {
         viewModel.onSearch(keyword)
-        clearEdt()
         hideKeyboard()
     }
 
-    private fun clearEdt() = binding.edtSearch.setText("")
 
     private fun initObserver() {
         viewModel.items.observe(viewLifecycleOwner) { items ->
@@ -161,11 +160,5 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
 
     private fun toastMessage(message: String) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-    }
-
-    companion object {
-        fun newInstance(): Fragment {
-            return SearchFragment()
-        }
     }
 }
