@@ -110,7 +110,6 @@ class SearchViewModel @Inject constructor(
         }
         searchJob = viewModelScope.launch {
             delay(searchDelayMillis)
-
             fetch(keyWord)
         }
     }
