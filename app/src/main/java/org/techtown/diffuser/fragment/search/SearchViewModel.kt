@@ -11,21 +11,21 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.techtown.diffuser.Repository
+import org.techtown.diffuser.RepositoryRoom
 import org.techtown.diffuser.Resource
 import org.techtown.diffuser.activity.BaseViewModel
 import org.techtown.diffuser.constants.Constants.VIEW_TYPE_COMMON_MORE
 import org.techtown.diffuser.model.EmptyModel
 import org.techtown.diffuser.model.FailModel
 import org.techtown.diffuser.model.Movie
+import org.techtown.diffuser.room.Word
 import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     private val repository: Repository,
+    private val repositoryRoom: RepositoryRoom
 ) : BaseViewModel() {
-    private val _trendItems: MutableLiveData<List<String>> = MutableLiveData(listOf())
-    val trendItems: LiveData<List<String>> = _trendItems
-
     private val _toast: MutableLiveData<String> = MutableLiveData()
     val toast: LiveData<String> = _toast
 
@@ -39,6 +39,8 @@ class SearchViewModel @Inject constructor(
     private var searchJob: Job? = null
     private val searchDelayMillis: Long = 1000
 
+    val allWords: LiveData<List<Word>> = repositoryRoom.allWord
+
     fun fetch(title: String) {
         repository
             .getSearch(title)
@@ -46,6 +48,7 @@ class SearchViewModel @Inject constructor(
                 when (result) {
                     is Resource.Loading -> {
                         _isHintVisible.value = false
+                        Log.e("kmh", "allWords 값 확인 : ${allWords.value.toString()}")
                     }
 
                     is Resource.Success -> {
@@ -80,32 +83,36 @@ class SearchViewModel @Inject constructor(
             }.launchIn(viewModelScope)
     }
 
-
-    fun fetchTrend() {
-        repository
-            .getTrend(page)
-            .onEach { result ->
-                when (result) {
-                    is Resource.Loading -> {
-                    }
-
-                    is Resource.Success -> {
-                        val response = result.model
-
-                        val titles = response.results.map {
-                            it.title
-                        }
-
-                        _trendItems.value = _trendItems.value!! + titles
-                    }
-
-                    is Resource.Fail -> {
-                        val changedTrendItems = _trendItems.value!!
-                        _isHintVisible.value = changedTrendItems.isNotEmpty()
-                    }
-                }
-            }.launchIn(viewModelScope)
-    }
+         fun test(word: Word) {
+            viewModelScope.launch {
+            repositoryRoom.insert(word)
+            }
+        }
+//    fun fetchTrend() {
+//        repository
+//            .getTrend(page)
+//            .onEach { result ->
+//                when (result) {
+//                    is Resource.Loading -> {
+//                    }
+//
+//                    is Resource.Success -> {
+//                        val response = result.model
+//
+//                        val titles = response.results.map {
+//                            it.title
+//                        }
+//
+//                        _trendItems.value = _trendItems.value!! + titles
+//                    }
+//
+//                    is Resource.Fail -> {
+//                        val changedTrendItems = _trendItems.value!!
+//                        _isHintVisible.value = changedTrendItems.isNotEmpty()
+//                    }
+//                }
+//            }.launchIn(viewModelScope)
+//    }
 
     fun onSearch(keyWord: String) {
         if (keyWord.isEmpty()) {

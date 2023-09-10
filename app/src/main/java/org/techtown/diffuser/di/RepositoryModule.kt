@@ -8,6 +8,7 @@ import org.techtown.diffuser.FirestoreRepository
 import org.techtown.diffuser.FirestoreRepositoryImpl
 import org.techtown.diffuser.Repository
 import org.techtown.diffuser.RepositoryImpl
+import org.techtown.diffuser.RepositoryRoom
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -18,4 +19,8 @@ abstract class RepositoryModule {
 
     @Binds
     abstract fun provideFireStoreRepository(firestoreRepositoryImpl: FirestoreRepositoryImpl) : FirestoreRepository
+
+    @Binds
+    abstract fun bindsRepositoryRoom(repositoryImpl: RepositoryImpl) :RepositoryRoom
+
 }

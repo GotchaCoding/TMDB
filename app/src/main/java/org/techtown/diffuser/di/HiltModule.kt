@@ -1,14 +1,19 @@
 package org.techtown.diffuser.di
 
+import android.app.Application
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.techtown.diffuser.intercepter.ApiKeyIntercepter
 import org.techtown.diffuser.retrofit.RetrofitService
+import org.techtown.diffuser.room.WordDao
+import org.techtown.diffuser.room.WordRoomDatabase
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -16,6 +21,20 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class HiltModule {
+
+
+    @Singleton
+    @Provides
+    fun provideWordDao(database: WordRoomDatabase): WordDao {
+        return database.wordDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideWordDatabase(application: Application): WordRoomDatabase {
+        return WordRoomDatabase.getDatabase(application, scope = CoroutineScope(SupervisorJob()))
+    }
+
 
     @Singleton
     @Provides

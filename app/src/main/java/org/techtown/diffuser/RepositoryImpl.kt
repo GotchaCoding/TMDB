@@ -1,5 +1,7 @@
 package org.techtown.diffuser
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.asLiveData
 import kotlinx.coroutines.flow.Flow
 import org.techtown.diffuser.response.detail.cast.CastResult
 import org.techtown.diffuser.response.detail.detailmovie.DetailPage_3
@@ -10,11 +12,21 @@ import org.techtown.diffuser.response.trend.TrendResponse
 import org.techtown.diffuser.response.upcomming.Upcomming
 import org.techtown.diffuser.response.video.VideoResponse
 import org.techtown.diffuser.retrofit.RetrofitService
+import org.techtown.diffuser.room.Word
+import org.techtown.diffuser.room.WordDao
 import javax.inject.Inject
 
 class RepositoryImpl @Inject constructor(
-    private val service: RetrofitService
-) : BaseRepository(), Repository {  //Repository 메소드 오버라이드 하고  BaseRepository 클래스 메서드 사용.
+    private val service: RetrofitService,
+    private val wordDao: WordDao
+) : BaseRepository(), Repository,
+    RepositoryRoom { //Repository 메소드 오버라이드 하고  BaseRepository 클래스 메서드 사용.
+
+    override val allWord: LiveData<List<Word>> = wordDao.getRecodedWord().asLiveData()
+
+    override suspend fun insert(word: Word) = wordDao.insert(word)
+
+
     override fun getPopular(page: Int): Flow<Resource<PopularMoviesResponse>> {
         return callApi(   //callApi 메소드의 매개변수는 suspend 람다함수이고 리턴타입이 BaseResponse 타입임.
             responseFunction = {  //람다함수를 매개변수로 가짐
@@ -66,4 +78,6 @@ class RepositoryImpl @Inject constructor(
     override fun getVideo(movieId: Long): Flow<Resource<VideoResponse>> = callApi {
         service.getVideo(movieId, "ko")
     }
+
+
 }
