@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="org.techtown.diffuser.fragment.home.TheMore" />
+        <import type="org.techtown.diffuser.model.Movie"/>
+
+        <variable
+            name="item"
+            type="org.techtown.diffuser.room.Word" />
+
+        <variable
+            name="itemClickListener"
+            type="org.techtown.diffuser.fragment.ItemClickListenerWord" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/WordEditStyle">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:background="@color/tvWord"
+            style="@style/WordEditStyle"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/imgWatch"
+                android:layout_width="27dp"
+                android:layout_height="27dp"
+                android:foregroundGravity="center"
+                android:background="@drawable/baseline_watch_later_24"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <TextView
+                android:id="@+id/tvWord"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:gravity="center_vertical"
+                android:hint="@string/search"
+                android:paddingStart="10dp"
+                android:text="@{item.word}"
+                android:textColor="@color/white"
+                android:textSize="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/btnCancle"
+                app:layout_constraintStart_toEndOf="@id/imgWatch"
+                app:layout_constraintTop_toTopOf="parent"
+                android:onClick="@{(view) -> itemClickListener.onItemClickWord(view, item)}"
+                />
+
+            <View
+                android:id="@+id/btnCancle"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/baseline_cancel_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:onClick="@{(view) -> itemClickListener.onItemClickWord(view, item)}"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

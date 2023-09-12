@@ -49,6 +49,14 @@
 
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview_word"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/viewConst" />
+
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview_theMore"
             android:layout_width="0dp"
             android:layout_height="0dp"

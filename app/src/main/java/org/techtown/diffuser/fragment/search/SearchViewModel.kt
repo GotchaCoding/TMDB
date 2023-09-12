@@ -28,18 +28,10 @@ class SearchViewModel @Inject constructor(
 ) : BaseViewModel() {
     private val _toast: MutableLiveData<String> = MutableLiveData()
     val toast: LiveData<String> = _toast
-
-    private val _isHintVisible: MutableLiveData<Boolean> = MutableLiveData()
-    val isHintVisible: LiveData<Boolean> = _isHintVisible
-
-//    private val _isEditText: MutableLiveData<Boolean> = MutableLiveData()
-//    val isEditText: MutableLiveData<Boolean> = _isEditText
-
+    val recentWords: LiveData<List<Word>> = repositoryRoom.recentWords
 
     private var searchJob: Job? = null
     private val searchDelayMillis: Long = 1000
-
-    val allWords: LiveData<List<Word>> = repositoryRoom.allWord
 
     fun fetch(title: String) {
         repository
@@ -47,8 +39,7 @@ class SearchViewModel @Inject constructor(
             .onEach { result ->
                 when (result) {
                     is Resource.Loading -> {
-                        _isHintVisible.value = false
-                        Log.e("kmh", "allWords 값 확인 : ${allWords.value.toString()}")
+                        Log.e("kmh", "allWords 값 확인 : ${recentWords.value.toString()}")
                     }
 
                     is Resource.Success -> {
@@ -83,36 +74,29 @@ class SearchViewModel @Inject constructor(
             }.launchIn(viewModelScope)
     }
 
-         fun test(word: Word) {
-            viewModelScope.launch {
-            repositoryRoom.insert(word)
+
+    fun insertWord(word: Word) {
+        viewModelScope.launch {
+            //최근 검색어 목록을 가져옴.    recentWords 객체의 값을 가변리스트로 변환
+            val recentList = recentWords.value.orEmpty().toMutableList()
+
+            //새로운 검색어를 추가
+            recentList.add(0, word)
+
+            //최대 5개의 검색어만 유지
+            if (recentList.size > 5) {
+                val oldestWord = recentList.removeAt(recentList.size - 1)
+                repositoryRoom.deleteWord(oldestWord)
             }
+            repositoryRoom.insert(word)
         }
-//    fun fetchTrend() {
-//        repository
-//            .getTrend(page)
-//            .onEach { result ->
-//                when (result) {
-//                    is Resource.Loading -> {
-//                    }
-//
-//                    is Resource.Success -> {
-//                        val response = result.model
-//
-//                        val titles = response.results.map {
-//                            it.title
-//                        }
-//
-//                        _trendItems.value = _trendItems.value!! + titles
-//                    }
-//
-//                    is Resource.Fail -> {
-//                        val changedTrendItems = _trendItems.value!!
-//                        _isHintVisible.value = changedTrendItems.isNotEmpty()
-//                    }
-//                }
-//            }.launchIn(viewModelScope)
-//    }
+    }
+
+    fun deleteSelectedWord(word: Word) {
+        viewModelScope.launch {
+            repositoryRoom.deleteWord(word = word)
+        }
+    }
 
     fun onSearch(keyWord: String) {
         if (keyWord.isEmpty()) {

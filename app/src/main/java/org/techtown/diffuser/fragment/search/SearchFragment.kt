@@ -16,10 +16,14 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
+import org.techtown.diffuser.R
 import org.techtown.diffuser.constants.Constants
+import org.techtown.diffuser.constants.Constants.KEY_RECYCLERVIEW_ID_WORD_RECORD
+import org.techtown.diffuser.constants.Constants.VIEW_TYPE_WORD_RECORD
 import org.techtown.diffuser.databinding.FragmentSearchBinding
 import org.techtown.diffuser.fragment.BaseFragment
 import org.techtown.diffuser.fragment.ItemClickListener
+import org.techtown.diffuser.fragment.ItemClickListenerWord
 import org.techtown.diffuser.fragment.home.HomeFragmentDirections
 import org.techtown.diffuser.fragment.home.TheMore
 import org.techtown.diffuser.model.Movie
@@ -33,6 +37,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
     private val viewModel: SearchViewModel by viewModels()
 
     private lateinit var adapter: SearchAdapter
+    private lateinit var adapterWord: WordAdapter
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -57,7 +62,11 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
 
                         else -> {
                             movie?.let {
-                                findNavController().navigate(HomeFragmentDirections.actionHomeToDetail(movie.id))
+                                findNavController().navigate(
+                                    HomeFragmentDirections.actionHomeToDetail(
+                                        movie.id
+                                    )
+                                )
                             }
                         }
                     }
@@ -66,37 +75,82 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
         recyclerviewTheMore.adapter = adapter
         recyclerviewTheMore.layoutManager = LinearLayoutManager(context)
 
+
+        adapterWord = WordAdapter(itemClickListener = object : ItemClickListenerWord {
+            override fun onItemClickWord(view: View, word: Word) {
+                when (view.id) {
+                    R.id.btnCancle -> {
+                        Log.e("kmh", "btnCancle click")
+                        viewModel.deleteSelectedWord(word)
+                    }
+
+                    R.id.tvWord -> {
+                        Log.e("kmh", "tvWord click")
+                        edtSearch.setText(word.word)
+                    }
+
+                }
+            }
+
+        })
+        recyclerviewWord.adapter = adapterWord
+        recyclerviewWord.layoutManager = LinearLayoutManager(context)
+        recyclerviewWord.bringToFront()
+        recyclerviewWord.visibility = View.GONE
+
+
         edtSearch.setOnEditorActionListener(object : TextView.OnEditorActionListener {
             override fun onEditorAction(p0: TextView?, p1: Int, p2: KeyEvent?): Boolean {
                 if (p1 == EditorInfo.IME_ACTION_DONE) {
+                    if (edtSearch.text.toString().isNotEmpty()) {
+                        val word = Word(
+                            word = edtSearch.text.toString(),
+                            viewType = VIEW_TYPE_WORD_RECORD,
+                            id = KEY_RECYCLERVIEW_ID_WORD_RECORD
+                        )
+                        viewModel.insertWord(word)
+                    }
                     onSearch(edtSearch.text.toString())
                     edtSearch.text.clear()
+                    edtSearch.clearFocus()
                     return true
                 }
                 return false
             }
         })
 
-        edtSearch. addTextChangedListener { editable ->
+        edtSearch.addTextChangedListener { editable ->
             viewModel.onSearch(editable.toString())
-
         }
+
 
         btnSearch.setOnClickListener {
+            if (edtSearch.text.toString().isNotEmpty()) {
+                val word = Word(
+                    word = edtSearch.text.toString(),
+                    viewType = VIEW_TYPE_WORD_RECORD,
+                    id = KEY_RECYCLERVIEW_ID_WORD_RECORD
+                )
+                viewModel.insertWord(word)
+            }
             onSearch(edtSearch.text.toString())
             edtSearch.text.clear()
-            val word= Word("ㅈㅈj")
-            viewModel.test(word)
+            edtSearch.clearFocus()
         }
 
-
+        edtSearch.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                recyclerviewWord.visibility = View.GONE
+            } else {
+                recyclerviewWord.visibility = View.VISIBLE
+            }
+        }
     }
 
     private fun onSearch(keyword: String) {
         viewModel.onSearch(keyword)
         hideKeyboard()
     }
-
 
     private fun initObserver() {
         viewModel.items.observe(viewLifecycleOwner) { items ->
@@ -106,12 +160,11 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
         viewModel.toast.observe(viewLifecycleOwner) {
             toastMessage(it)
         }
-        viewModel.allWords.observe(viewLifecycleOwner){
-            Log.e("kmh" ,  "SearchFragment allWords: ${viewModel.allWords.value}")
+        viewModel.recentWords.observe(viewLifecycleOwner) {
+            adapterWord.submitList(it)
         }
 
     }
-
 
     private fun hideKeyboard() {
         if (activity != null && requireActivity().currentFocus != null) {

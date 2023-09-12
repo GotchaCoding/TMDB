@@ -13,6 +13,7 @@ object Constants {
     const val KEY_RECYCLERVIEW_ID_CAST = -7L
     const val KEY_RECYCLERVIEW_ID_WEBVIEW = -8L
     const val KEY_EMPTY_MODEL_ID = -9L
+    const val KEY_RECYCLERVIEW_ID_WORD_RECORD = -10L
 
 
 
@@ -33,4 +34,5 @@ object Constants {
     const val VIEW_TYPE_BOTTOM_BIGPIC = -8
     const val VIEW_TYPE_WEBVIEW = -9
     const val VIEW_TYPE_EMPTY = -10
+    const val VIEW_TYPE_WORD_RECORD = -11
 }

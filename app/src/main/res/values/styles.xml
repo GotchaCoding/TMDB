@@ -5,4 +5,8 @@
     <style name="MyBottomSheet" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@drawable/bottom_shape_border</item>
     </style>
+
+    <style name="WordEditStyle" >
+        <item name="android:background">@drawable/bottom_shape_border2</item>
+    </style>
 </resources>

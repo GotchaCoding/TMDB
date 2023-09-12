@@ -22,9 +22,13 @@ class RepositoryImpl @Inject constructor(
 ) : BaseRepository(), Repository,
     RepositoryRoom { //Repository 메소드 오버라이드 하고  BaseRepository 클래스 메서드 사용.
 
-    override val allWord: LiveData<List<Word>> = wordDao.getRecodedWord().asLiveData()
+    override val recentWords: LiveData<List<Word>> = wordDao.getRecentWords().asLiveData()
 
     override suspend fun insert(word: Word) = wordDao.insert(word)
+    override suspend fun delete() = wordDao.deleteAllData()
+    override suspend fun update(word: Word) = wordDao.updateWord(word)
+    override suspend fun deleteWord(word: Word) = wordDao.deleteSelectedWord(word)
+
 
 
     override fun getPopular(page: Int): Flow<Resource<PopularMoviesResponse>> {

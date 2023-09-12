@@ -55,3 +55,4 @@ class SearchAdapter(itemClickListener: ItemClickListener) :
 
     class EmptyViewholder(itemView: View) : RecyclerView.ViewHolder(itemView)
 }
+

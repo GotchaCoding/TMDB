@@ -10,4 +10,5 @@
 
     <color name="background">#042326</color>
     <color name="bottomStory">#090909</color>
+    <color name="tvWord">#707070</color>
 </resources>
