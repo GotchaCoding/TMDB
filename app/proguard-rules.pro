@@ -23,3 +23,5 @@
 #-keep class org.techtown.diffuser.response.video.** { *; }
 -keepattributes SourceFile,LineNumberTable        # Keep file names and line numbers.
 -keep public class * extends java.lang.Exception  # Optional: Keep custom exceptions.
+
+-keep class org.techtown.diffuser.room.WordRoomDatabase.** { *; }
