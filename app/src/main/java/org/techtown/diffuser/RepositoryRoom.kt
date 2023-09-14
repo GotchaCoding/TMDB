@@ -1,17 +1,17 @@
 package org.techtown.diffuser
 
 import androidx.lifecycle.LiveData
-import org.techtown.diffuser.room.Word
+import org.techtown.diffuser.room.WordDaoModel
 
 interface RepositoryRoom {
 
-    val recentWords: LiveData<List<Word>>
-    suspend fun insert(word: Word)
+    val recentWords: LiveData<List<WordDaoModel>>
+    suspend fun insert(word: WordDaoModel)
 
     suspend fun delete()
 
-    suspend fun update(word: Word)
+    suspend fun update(word: WordDaoModel)
 
-    suspend fun deleteWord(word: Word)
+    suspend fun deleteWord(word: WordDaoModel)
 }
 

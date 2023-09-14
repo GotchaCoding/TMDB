@@ -3,6 +3,7 @@ package org.techtown.diffuser.fragment.search
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -13,12 +14,15 @@ import kotlinx.coroutines.launch
 import org.techtown.diffuser.Repository
 import org.techtown.diffuser.RepositoryRoom
 import org.techtown.diffuser.Resource
+import org.techtown.diffuser.SingleLiveEvent
 import org.techtown.diffuser.activity.BaseViewModel
+import org.techtown.diffuser.constants.Constants
 import org.techtown.diffuser.constants.Constants.VIEW_TYPE_COMMON_MORE
 import org.techtown.diffuser.model.EmptyModel
 import org.techtown.diffuser.model.FailModel
 import org.techtown.diffuser.model.Movie
 import org.techtown.diffuser.room.Word
+import org.techtown.diffuser.room.WordDaoModel
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,7 +32,16 @@ class SearchViewModel @Inject constructor(
 ) : BaseViewModel() {
     private val _toast: MutableLiveData<String> = MutableLiveData()
     val toast: LiveData<String> = _toast
-    val recentWords: LiveData<List<Word>> = repositoryRoom.recentWords
+
+    val recentWords: LiveData<List<Word>> = repositoryRoom.recentWords.switchMap {
+        MutableLiveData(
+            it.map {
+                Word.of(it)
+            }
+        )
+    }
+
+    val clearKeywordEvent: SingleLiveEvent<Void> = SingleLiveEvent()
 
     private var searchJob: Job? = null
     private val searchDelayMillis: Long = 1000
@@ -86,15 +99,15 @@ class SearchViewModel @Inject constructor(
             //최대 5개의 검색어만 유지
             if (recentList.size > 5) {
                 val oldestWord = recentList.removeAt(recentList.size - 1)
-                repositoryRoom.deleteWord(oldestWord)
+                repositoryRoom.deleteWord(WordDaoModel.of(oldestWord))
             }
-            repositoryRoom.insert(word)
+            repositoryRoom.insert(WordDaoModel.of(word))
         }
     }
 
     fun deleteSelectedWord(word: Word) {
         viewModelScope.launch {
-            repositoryRoom.deleteWord(word = word)
+            repositoryRoom.deleteWord(word = WordDaoModel.of(word))
         }
     }
 
@@ -102,6 +115,15 @@ class SearchViewModel @Inject constructor(
         if (keyWord.isEmpty()) {
             return
         }
+
+        val word = Word(
+            word = keyWord,
+            viewType = Constants.VIEW_TYPE_WORD_RECORD,
+            id = Constants.KEY_RECYCLERVIEW_ID_WORD_RECORD
+        )
+        insertWord(word)
+        clearKeywordEvent.call()
+
         searchJob?.cancel() // 기존 검색작업 취소: 널이 아니면 실행(작업중이면 캔슬)
         searchJob = viewModelScope.launch {
             delay(searchDelayMillis)

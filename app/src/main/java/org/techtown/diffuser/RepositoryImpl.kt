@@ -12,8 +12,8 @@ import org.techtown.diffuser.response.trend.TrendResponse
 import org.techtown.diffuser.response.upcomming.Upcomming
 import org.techtown.diffuser.response.video.VideoResponse
 import org.techtown.diffuser.retrofit.RetrofitService
-import org.techtown.diffuser.room.Word
 import org.techtown.diffuser.room.WordDao
+import org.techtown.diffuser.room.WordDaoModel
 import javax.inject.Inject
 
 class RepositoryImpl @Inject constructor(
@@ -22,12 +22,12 @@ class RepositoryImpl @Inject constructor(
 ) : BaseRepository(), Repository,
     RepositoryRoom { //Repository 메소드 오버라이드 하고  BaseRepository 클래스 메서드 사용.
 
-    override val recentWords: LiveData<List<Word>> = wordDao.getRecentWords().asLiveData()
+    override val recentWords: LiveData<List<WordDaoModel>> = wordDao.getRecentWords().asLiveData()
 
-    override suspend fun insert(word: Word) = wordDao.insert(word)
+    override suspend fun insert(word: WordDaoModel) = wordDao.insert(word)
     override suspend fun delete() = wordDao.deleteAllData()
-    override suspend fun update(word: Word) = wordDao.updateWord(word)
-    override suspend fun deleteWord(word: Word) = wordDao.deleteSelectedWord(word)
+    override suspend fun update(word: WordDaoModel) = wordDao.updateWord(word)
+    override suspend fun deleteWord(word: WordDaoModel) = wordDao.deleteSelectedWord(word)
 
 
 

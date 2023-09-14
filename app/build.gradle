@@ -37,9 +37,15 @@ android {
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             buildConfigField 'String', 'TMDB_API_KEY', "\"${System.getenv('TMDB_API_KEY')}\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled true
+            }
         }
         debug {
             buildConfigField 'String', 'TMDB_API_KEY', "\"${System.getenv('TMDB_API_KEY')}\""
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
         }
     }
     lint {

@@ -102,17 +102,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
         edtSearch.setOnEditorActionListener(object : TextView.OnEditorActionListener {
             override fun onEditorAction(p0: TextView?, p1: Int, p2: KeyEvent?): Boolean {
                 if (p1 == EditorInfo.IME_ACTION_DONE) {
-                    if (edtSearch.text.toString().isNotEmpty()) {
-                        val word = Word(
-                            word = edtSearch.text.toString(),
-                            viewType = VIEW_TYPE_WORD_RECORD,
-                            id = KEY_RECYCLERVIEW_ID_WORD_RECORD
-                        )
-                        viewModel.insertWord(word)
-                    }
-                    onSearch(edtSearch.text.toString())
-                    edtSearch.text.clear()
-                    edtSearch.clearFocus()
+                    viewModel.onSearch(edtSearch.text.toString())
                     return true
                 }
                 return false
@@ -125,6 +115,20 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
 
 
         btnSearch.setOnClickListener {
+            /*
+            * if(editText.isNotEmpty()){
+            *   save the word to database
+            * }
+            *
+            * search keyword by tmdb api
+            * search keyword clear
+            * search focus clear
+            *
+            * viewModel.onSearch()
+            *
+            *
+            * */
+
             if (edtSearch.text.toString().isNotEmpty()) {
                 val word = Word(
                     word = edtSearch.text.toString(),
@@ -160,8 +164,14 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
         viewModel.toast.observe(viewLifecycleOwner) {
             toastMessage(it)
         }
+
         viewModel.recentWords.observe(viewLifecycleOwner) {
             adapterWord.submitList(it)
+        }
+
+        viewModel.clearKeywordEvent.observe(viewLifecycleOwner) {
+            binding.edtSearch.text.clear()
+            binding.edtSearch.clearFocus()
         }
 
     }

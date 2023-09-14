@@ -10,18 +10,18 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface WordDao {
-    @Query("Select * From RecodedWord ORDER BY iddao DESC LIMIT 5")
-    fun getRecentWords(): Flow<List<Word>>
+    @Query("Select * From RecodedWord ORDER BY id DESC LIMIT 5")
+    fun getRecentWords(): Flow<List<WordDaoModel>>
 
     @Delete
-    suspend fun deleteSelectedWord(word: Word)
+    suspend fun deleteSelectedWord(word: WordDaoModel)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(word: Word)
+    suspend fun insert(word: WordDaoModel)
 
     @Query("DELETE FROM RecodedWord")
     suspend fun deleteAllData()
 
     @Update
-    suspend fun updateWord(word: Word)
+    suspend fun updateWord(word: WordDaoModel)
 }
