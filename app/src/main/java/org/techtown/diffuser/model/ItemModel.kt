@@ -1,4 +1,6 @@
 package org.techtown.diffuser.model
 
-open class ItemModel(open val id: Long, open val viewType : Int)
+import java.io.Serializable
+
+open class ItemModel(open val id: Long, open val viewType : Int) : Serializable
 

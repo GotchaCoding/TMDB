@@ -25,4 +25,5 @@
 -keep public class * extends java.lang.Exception  # Optional: Keep custom exceptions.
 
 #-keep class org.techtown.diffuser.room.WordRoomDatabase.** { *; }
--keep class org.techtown.diffuser.model.Movie { *; }
+
+-keep class * implements java.io.Serializable { *; }

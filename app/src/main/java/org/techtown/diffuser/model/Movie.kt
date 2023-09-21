@@ -1,5 +1,6 @@
 package org.techtown.diffuser.model
 
+
 data class Movie(
     val title: String = "",
     val rank: String = "",
