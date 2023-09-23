@@ -89,6 +89,9 @@ class SearchViewModel @Inject constructor(
 
 
     fun insertWord(keyWord: String) {
+        if(keyWord.isEmpty()) {
+            return
+        }
         viewModelScope.launch {
             //최근 검색어 목록을 가져옴.    recentWords 객체의 값을 가변리스트로 변환
             val recentList = recentWords.value.orEmpty().toMutableList()
