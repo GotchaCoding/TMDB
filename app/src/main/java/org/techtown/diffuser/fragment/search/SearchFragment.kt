@@ -102,7 +102,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
         edtSearch.setOnEditorActionListener(object : TextView.OnEditorActionListener {
             override fun onEditorAction(p0: TextView?, p1: Int, p2: KeyEvent?): Boolean {
                 if (p1 == EditorInfo.IME_ACTION_DONE) {
-                    viewModel.onSearch(edtSearch.text.toString())
+                    onSearch(edtSearch.text.toString())
                     return true
                 }
                 return false
@@ -115,31 +115,8 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
 
 
         btnSearch.setOnClickListener {
-            /*
-            * if(editText.isNotEmpty()){
-            *   save the word to database
-            * }
-            *
-            * search keyword by tmdb api
-            * search keyword clear
-            * search focus clear
-            *
-            * viewModel.onSearch()
-            *
-            *
-            * */
-
-            if (edtSearch.text.toString().isNotEmpty()) {
-                val word = Word(
-                    word = edtSearch.text.toString(),
-                    viewType = VIEW_TYPE_WORD_RECORD,
-                    id = KEY_RECYCLERVIEW_ID_WORD_RECORD
-                )
-                viewModel.insertWord(word)
-            }
             onSearch(edtSearch.text.toString())
-            edtSearch.text.clear()
-            edtSearch.clearFocus()
+
         }
 
         edtSearch.setOnFocusChangeListener { _, hasFocus ->
@@ -152,7 +129,9 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
     }
 
     private fun onSearch(keyword: String) {
+        viewModel.insertWord(keyword)
         viewModel.onSearch(keyword)
+        viewModel.clearEdtAndFocus()
         hideKeyboard()
     }
 
