@@ -34,6 +34,12 @@ data class WordDaoModel(
                 word = word.word
             )
         }
+
+        fun wordForInsert(keyWord: String): WordDaoModel {
+            return WordDaoModel(
+                word = keyWord
+            )
+        }
     }
 }
 

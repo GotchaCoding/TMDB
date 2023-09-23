@@ -41,7 +41,7 @@ class SearchViewModel @Inject constructor(
         )
     }
 
-    val clearKeywordEvent: SingleLiveEvent<Void> = SingleLiveEvent()
+    val clearKeywordEvent: SingleLiveEvent<Unit> = SingleLiveEvent()
 
     private var searchJob: Job? = null
     private val searchDelayMillis: Long = 1000
@@ -88,10 +88,16 @@ class SearchViewModel @Inject constructor(
     }
 
 
-    fun insertWord(word: Word) {
+    fun insertWord(keyWord: String) {
         viewModelScope.launch {
             //최근 검색어 목록을 가져옴.    recentWords 객체의 값을 가변리스트로 변환
             val recentList = recentWords.value.orEmpty().toMutableList()
+
+            val word = Word(
+                word = keyWord,
+                viewType = Constants.VIEW_TYPE_WORD_RECORD,
+                id = Constants.KEY_RECYCLERVIEW_ID_WORD_RECORD
+            )
 
             //새로운 검색어를 추가
             recentList.add(0, word)
@@ -101,7 +107,7 @@ class SearchViewModel @Inject constructor(
                 val oldestWord = recentList.removeAt(recentList.size - 1)
                 repositoryRoom.deleteWord(WordDaoModel.of(oldestWord))
             }
-            repositoryRoom.insert(WordDaoModel.of(word))
+            repositoryRoom.insert(WordDaoModel.wordForInsert(keyWord))
         }
     }
 
@@ -116,19 +122,15 @@ class SearchViewModel @Inject constructor(
             return
         }
 
-        val word = Word(
-            word = keyWord,
-            viewType = Constants.VIEW_TYPE_WORD_RECORD,
-            id = Constants.KEY_RECYCLERVIEW_ID_WORD_RECORD
-        )
-        insertWord(word)
-        clearKeywordEvent.call()
-
         searchJob?.cancel() // 기존 검색작업 취소: 널이 아니면 실행(작업중이면 캔슬)
         searchJob = viewModelScope.launch {
             delay(searchDelayMillis)
             fetch(keyWord)
         }
+    }
+
+    fun clearEdtAndFocus(){
+        clearKeywordEvent.call()
     }
 
 }
