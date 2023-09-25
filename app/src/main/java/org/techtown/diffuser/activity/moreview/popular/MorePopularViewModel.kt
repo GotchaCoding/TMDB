@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.techtown.diffuser.Repository
+import org.techtown.diffuser.ServiceRepository
 import org.techtown.diffuser.Resource
 import org.techtown.diffuser.activity.BaseViewModel
 import org.techtown.diffuser.constants.Constants.VIEW_TYPE_COMMON_MORE
@@ -15,13 +15,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MorePopularViewModel @Inject constructor(
-    private val repository: Repository
+    private val serviceRepository: ServiceRepository
 ) : BaseViewModel() {
 
     fun fetch() {
         if (isLoading()) return
 
-        repository
+        serviceRepository
             .getPopular(page)
             .onEach { result ->
                 when (result) {

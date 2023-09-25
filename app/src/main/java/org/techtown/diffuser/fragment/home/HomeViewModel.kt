@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.techtown.diffuser.Repository
+import org.techtown.diffuser.ServiceRepository
 import org.techtown.diffuser.Resource
 import org.techtown.diffuser.activity.BaseViewModel
 import org.techtown.diffuser.constants.Constants
@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel  //뷰모델에서 hilt 주입을 사용하려면 어노테이션.
 class HomeViewModel @Inject constructor(
-    private val repository: Repository  // 생성자 주입은 RepositoryModule 부분에서 Repository  받아옴
+    private val serviceRepository: ServiceRepository  // 생성자 주입은 RepositoryModule 부분에서 Repository  받아옴
 ) : BaseViewModel() {
 
     init {
@@ -63,7 +63,7 @@ class HomeViewModel @Inject constructor(
 
 
     fun fetch() {
-        repository
+        serviceRepository
             .getPopular(page) //이벤트가 발생하고 있는 부분.  // repository는 RopositoryModule 에서 repositoryImpl를 주입받   // 실제로는 impl 인데 인터페이스 제약 걸려잇음.
             .onEach { result ->  // 위의 이벤트 발생부분에 대한 처리부분.  이벤트 발생결과는 callApi 의 결과이므로 Resource seal 클래스타입으로 리턴받음.
                 when (result) {
@@ -129,7 +129,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun fetchNowPlay() {
-        repository
+        serviceRepository
             .getNowPlay(page)
             .onEach { result ->
                 when (result) {
@@ -187,7 +187,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun fetchUpComming() {
-        repository
+        serviceRepository
             .getUpComming(page)
             .onEach { result ->
                 when (result) {

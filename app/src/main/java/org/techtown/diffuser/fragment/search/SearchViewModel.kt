@@ -11,8 +11,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.techtown.diffuser.Repository
-import org.techtown.diffuser.RepositoryRoom
+import org.techtown.diffuser.ServiceRepository
+import org.techtown.diffuser.RoomRepository
 import org.techtown.diffuser.Resource
 import org.techtown.diffuser.SingleLiveEvent
 import org.techtown.diffuser.activity.BaseViewModel
@@ -27,13 +27,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    private val repository: Repository,
-    private val repositoryRoom: RepositoryRoom
+    private val serviceRepository: ServiceRepository,
+    private val roomRepository: RoomRepository
 ) : BaseViewModel() {
     private val _toast: MutableLiveData<String> = MutableLiveData()
     val toast: LiveData<String> = _toast
 
-    val recentWords: LiveData<List<Word>> = repositoryRoom.recentWords.switchMap {
+    val recentWords: LiveData<List<Word>> = roomRepository.recentWords.switchMap {
         MutableLiveData(
             it.map {
                 Word.of(it)
@@ -47,7 +47,7 @@ class SearchViewModel @Inject constructor(
     private val searchDelayMillis: Long = 1000
 
     fun fetch(title: String) {
-        repository
+        serviceRepository
             .getSearch(title)
             .onEach { result ->
                 when (result) {
@@ -108,15 +108,15 @@ class SearchViewModel @Inject constructor(
             //최대 5개의 검색어만 유지
             if (recentList.size > 5) {
                 val oldestWord = recentList.removeAt(recentList.size - 1)
-                repositoryRoom.deleteWord(WordDaoModel.of(oldestWord))
+                roomRepository.deleteWord(WordDaoModel.of(oldestWord))
             }
-            repositoryRoom.insert(WordDaoModel.wordForInsert(keyWord))
+            roomRepository.insert(WordDaoModel.wordForInsert(keyWord))
         }
     }
 
     fun deleteSelectedWord(word: Word) {
         viewModelScope.launch {
-            repositoryRoom.deleteWord(word = WordDaoModel.of(word))
+            roomRepository.deleteWord(word = WordDaoModel.of(word))
         }
     }
 

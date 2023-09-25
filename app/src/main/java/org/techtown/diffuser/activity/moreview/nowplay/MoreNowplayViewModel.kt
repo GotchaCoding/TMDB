@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.techtown.diffuser.Repository
+import org.techtown.diffuser.ServiceRepository
 import org.techtown.diffuser.Resource
 import org.techtown.diffuser.activity.BaseViewModel
 import org.techtown.diffuser.constants.Constants
@@ -18,14 +18,14 @@ import javax.inject.Inject
 @HiltViewModel
 class MoreNowplayViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val repository: Repository
+    private val serviceRepository: ServiceRepository
 ) : BaseViewModel() {
 
     fun fetch() {
         if(isLoading()) return
 
         Log.e("kmh!!!", "page count : $page")
-        repository
+        serviceRepository
             .getNowPlay(page)
             .onEach { result ->
                 when (result) {

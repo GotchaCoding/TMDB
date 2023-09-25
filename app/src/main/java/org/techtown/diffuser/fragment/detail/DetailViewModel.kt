@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.techtown.diffuser.Repository
+import org.techtown.diffuser.ServiceRepository
 import org.techtown.diffuser.Resource
 import org.techtown.diffuser.constants.Constants
 import org.techtown.diffuser.model.CastRv
@@ -24,7 +24,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val repository: Repository
+    private val serviceRepository: ServiceRepository
 ) : ViewModel() {
     val movieId = savedStateHandle.get<Long>("movie_id") ?: 0
 
@@ -83,7 +83,7 @@ class DetailViewModel @Inject constructor(
     }
 
     fun fetch() {
-        repository.getDetail(
+        serviceRepository.getDetail(
             movieId
         ).onEach { result ->
             when (result) {
@@ -148,7 +148,7 @@ class DetailViewModel @Inject constructor(
     }
 
     fun fetchCast() {
-        repository.getCast(
+        serviceRepository.getCast(
             movieId
         ).onEach { result ->
             when (result) {
@@ -209,7 +209,7 @@ class DetailViewModel @Inject constructor(
     }
 
     fun fetchVideo() {
-        repository.getVideo(movieId).onEach { result ->
+        serviceRepository.getVideo(movieId).onEach { result ->
             when (result) {
                 is Resource.Loading -> {
 

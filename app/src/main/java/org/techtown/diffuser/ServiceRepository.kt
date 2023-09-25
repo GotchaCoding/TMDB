@@ -10,7 +10,7 @@ import org.techtown.diffuser.response.trend.TrendResponse
 import org.techtown.diffuser.response.upcomming.Upcomming
 import org.techtown.diffuser.response.video.VideoResponse
 
-interface Repository {
+interface ServiceRepository {
     fun getPopular(page: Int): Flow<Resource<PopularMoviesResponse>>  // 리턴타입으로 sealedClass Resource.Loading<BaseResoponse>  , Resouce.Success<BaseResponse> 등의 리턴을 받
     fun getNowPlay(page: Int): Flow<Resource<NowPlayingResponse>>
     fun getDetail(movieId: Long): Flow<Resource<DetailPage_3>>

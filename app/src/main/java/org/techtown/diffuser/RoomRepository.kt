@@ -3,7 +3,7 @@ package org.techtown.diffuser
 import androidx.lifecycle.LiveData
 import org.techtown.diffuser.room.WordDaoModel
 
-interface RepositoryRoom {
+interface RoomRepository {
 
     val recentWords: LiveData<List<WordDaoModel>>
     suspend fun insert(word: WordDaoModel)
