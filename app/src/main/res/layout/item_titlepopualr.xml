@@ -24,7 +24,7 @@
 
         <TextView
             android:id="@+id/tvTitle"
-            android:layout_width="340dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="#042326"
             android:paddingStart="16dp"
@@ -39,7 +39,7 @@
 
         <TextView
             android:id="@+id/tvMoreview"
-            android:layout_width="0dp"
+            android:layout_width="60dp"
             android:layout_height="0dp"
             android:background="@color/background"
             android:paddingTop="23dp"
@@ -48,7 +48,7 @@
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tvTitle"
+
             app:layout_constraintTop_toTopOf="parent"
             android:onClick="@{(view)->itemClickListener.onItemClick(view, titleModel.viewType, (Movie)null, titleModel.theMore )}"/>
 

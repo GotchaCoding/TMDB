@@ -56,7 +56,7 @@
 
         <TextView
             android:id="@+id/tvTitle_detail"
-            android:layout_width="285dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:ellipsize="end"
@@ -71,7 +71,7 @@
 
         <TextView
             android:id="@+id/tvOverview"
-            android:layout_width="289dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:text="@{detailTopModelItem.overview}"
