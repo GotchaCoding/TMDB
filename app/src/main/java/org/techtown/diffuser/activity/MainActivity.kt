@@ -16,6 +16,7 @@ import org.techtown.diffuser.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
 
+
     private lateinit var navController: NavController
     private lateinit var appBarConfiguration: AppBarConfiguration
 

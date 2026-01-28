@@ -224,6 +224,7 @@ class HomeViewModel @Inject constructor(
                                 )
                             } else {
                                 itemModel
+
                             }
                         }
                     }

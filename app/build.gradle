@@ -8,6 +8,12 @@ plugins {
     id 'com.google.firebase.crashlytics'
 }
 
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localProperties.load(new FileInputStream(localPropertiesFile))
+}
+
 android {
     namespace 'org.techtown.diffuser'
     compileSdk 36
@@ -16,8 +22,8 @@ android {
         applicationId "my_app.diffuser"
         minSdk 21
         targetSdk 35
-        versionCode 18
-        versionName "1.5.0"
+        versionCode 19
+        versionName "1.5.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -25,9 +31,9 @@ android {
     signingConfigs{
         release {
             storeFile file("/Users/mh/Desktop/keyStore/Untitled")
-            storePassword "${System.getenv('storePassword')}"
-            keyAlias "${System.getenv('keyAlias')}"
-            keyPassword "${System.getenv('keyPassword')}"
+            storePassword localProperties['storePassword'] ?: System.getenv('storePassword')
+            keyAlias localProperties['keyAlias'] ?: System.getenv('keyAlias')
+            keyPassword localProperties['keyPassword'] ?: System.getenv('keyPassword')
         }
     }
     buildTypes {
@@ -36,13 +42,13 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField 'String', 'TMDB_API_KEY', "\"${System.getenv('TMDB_API_KEY')}\""
+            buildConfigField 'String', 'TMDB_API_KEY', "\"${localProperties['TMDB_API_KEY'] ?: System.getenv('TMDB_API_KEY')}\""
             firebaseCrashlytics {
                 mappingFileUploadEnabled true
             }
         }
         debug {
-            buildConfigField 'String', 'TMDB_API_KEY', "\"${System.getenv('TMDB_API_KEY')}\""
+            buildConfigField 'String', 'TMDB_API_KEY', "\"${localProperties['TMDB_API_KEY'] ?: System.getenv('TMDB_API_KEY')}\""
             firebaseCrashlytics {
                 mappingFileUploadEnabled false
             }
@@ -90,8 +96,8 @@ dependencies {
 
     implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.14'
     implementation 'com.airbnb.android:lottie:6.5.0'
-    implementation 'com.google.dagger:hilt-android:2.52'
-    kapt 'com.google.dagger:hilt-compiler:2.52'
+    implementation 'com.google.dagger:hilt-android:2.54'
+    kapt 'com.google.dagger:hilt-compiler:2.54'
 
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1'
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
